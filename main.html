@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amigo — Smart Classroom Companion</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --cream: #F7F3EC;
+            --sage: #B9D5AF;
+            --sky: #A8CEDE;
+            --peach: #F0C5A0;
+            --mint: #A2D4C2;
+            --lemon: #E6DC98;
+            --dark: #161616;
+            --muted: #7A7A7A;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--cream);
+            color: var(--dark);
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+            cursor: auto;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            padding: 18px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: normal;
+        }
+
+        .nav-bg {
+            position: absolute;
+            inset: 0;
+            background: rgba(247, 243, 236, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(22, 22, 22, 0.06);
+        }
+
+        .nav-logo {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: 20px;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-mascot {
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-links a {
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            color: var(--dark);
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+            align-items: center;
+        }
+
+        .btn-login {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 9px 20px;
+            border-radius: 100px;
+            border: 1.5px solid rgba(22, 22, 22, 0.25);
+            background: transparent;
+            color: var(--dark);
+            cursor: none;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            border-color: var(--dark);
+            background: var(--dark);
+            color: var(--cream);
+        }
+
+        .btn-signup {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 9px 20px;
+            border-radius: 100px;
+            border: none;
+            background: var(--dark);
+            color: var(--cream);
+            cursor: none;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ─── HERO — Giant Mascot Centre ─── */
+        .hero {
+            min-height: 100svh;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* soft background orbs */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.35;
+            animation: drift 9s ease-in-out infinite alternate;
+        }
+
+        .orb1 {
+            width: 560px;
+            height: 560px;
+            background: var(--sage);
+            top: -160px;
+            right: -120px;
+        }
+
+        .orb2 {
+            width: 380px;
+            height: 380px;
+            background: var(--peach);
+            bottom: -60px;
+            left: -100px;
+            animation-delay: -4s;
+        }
+
+        .orb3 {
+            width: 280px;
+            height: 280px;
+            background: var(--sky);
+            top: 35%;
+            left: 25%;
+            animation-delay: -7s;
+        }
+
+        @keyframes drift {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(28px, 18px) scale(1.06);
+            }
+        }
+
+        /* HERO STAGE — wrap layout */
+        .hero-stage {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            padding: 60px 48px 0;
+            min-height: calc(100svh - 80px);
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        /* MASCOT CENTREPIECE */
+        .hero-mascot-wrap {
+            position: relative;
+            z-index: 10;
+            width: clamp(440px, 50vw, 720px);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-mascot-emoji {
+            display: block;
+            width: 100%;
+            height: auto;
+            animation: mascotFloat 4s ease-in-out infinite;
+            filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.18));
+            object-fit: contain;
+        }
+
+        @keyframes mascotFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-1deg);
+            }
+
+            50% {
+                transform: translateY(-22px) rotate(1deg);
+            }
+        }
+
+        /* TEXT AREA — left side */
+        .hero-text-orbit {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Left text block (top-left of mascot) */
+        .hero-left {
+            position: static;
+            display: block;
+            max-width: none;
+            animation: fadeUp 0.6s 0.1s ease both;
+            z-index: 12;
+            padding-top: 40px;
+        }
+
+        .hero-tagline {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: clamp(48px, 6vw, 90px);
+            letter-spacing: -2.5px;
+            line-height: 1.05;
+            color: var(--dark);
+            margin-bottom: 24px;
+        }
+
+        .hero-tagline em {
+            font-style: italic;
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--dark);
+        }
+
+        .hero-tagline .accent {
+            background: var(--sage);
+            -webkit-text-stroke: 0;
+            color: var(--dark);
+            padding: 2px 10px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .hero-sub {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 18px;
+            line-height: 1.75;
+            color: var(--muted);
+            max-width: 500px;
+            margin-bottom: 30px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        /* Right text block (bottom-right of mascot) */
+        .hero-right {
+            position: static;
+            display: block;
+            animation: fadeUp 0.6s 0.25s ease both;
+            z-index: 12;
+            clear: left;
+        }
+
+        .hero-stat-stack {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .hero-stat {
+            background: var(--white);
+            border: 1.5px solid var(--dark);
+            border-radius: 18px;
+            padding: 16px 18px;
+            box-shadow: 3px 3px 0 var(--dark);
+            transition: transform 0.2s;
+        }
+
+        .hero-stat:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 var(--dark);
+        }
+
+        .hero-stat-num {
+            font-family: 'Fraunces', serif;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .hero-badge-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .hero-pill {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 100px;
+            border: 1.5px solid rgba(22, 22, 22, 0.18);
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .hero-pill:hover {
+            border-color: var(--dark);
+            background: var(--lemon);
+        }
+
+        /* keep big-word class unused but not breaking */
+        .big-word {
+            display: none;
+        }
+
+        .row-top,
+        .row-mid,
+        .row-bot {
+            display: none;
+        }
+
+        /* SPEECH BUBBLE */
+        .speech-bubble {
+            position: absolute;
+            top: 10%;
+            right: 5%;
+            background: var(--white);
+            border: 1.5px solid var(--dark);
+            border-radius: 18px 18px 18px 4px;
+            padding: 14px 18px;
+            font-family: 'Fraunces', serif;
+            font-size: 13px;
+            font-weight: 800;
+            max-width: 180px;
+            line-height: 1.4;
+            box-shadow: 3px 3px 0 var(--dark);
+            animation: bubblePop 0.5s 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            white-space: nowrap;
+            z-index: 20;
+        }
+
+        .speech-bubble sub {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 10px;
+            font-weight: 400;
+            color: var(--muted);
+            display: block;
+            margin-top: 2px;
+            white-space: normal;
+        }
+
+        @keyframes bubblePop {
+            from {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* SPINNING BADGE */
+        .spin-badge {
+            position: absolute;
+            top: 10px;
+            right: 40px;
+            width: 90px;
+            height: 90px;
+            animation: spin 12s linear infinite;
+            z-index: 5;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spin-badge svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* FLOATING CARDS around mascot */
+        .float-card {
+            position: absolute;
+            background: var(--white);
+            border: 1.5px solid var(--dark);
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 3px 3px 0 var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            z-index: 15;
+        }
+
+        .fc1 {
+            top: 15%;
+            left: -5%;
+            animation: fcFloat 3.5s 0s ease-in-out infinite;
+        }
+
+        .fc2 {
+            bottom: 25%;
+            left: -8%;
+            animation: fcFloat 3.5s 1s ease-in-out infinite;
+        }
+
+        .fc3 {
+            bottom: 10%;
+            right: 5%;
+            animation: fcFloat 3.5s 1.8s ease-in-out infinite;
+        }
+
+        .fc-icon {
+            font-size: 18px;
+        }
+
+        @keyframes fcFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-9px);
+            }
+        }
+
+        /* RIGHT SIDE INFO (description + ctas) — row top right */
+        .hero-info-block {
+            max-width: 220px;
+            animation: fadeUp 0.7s 0.3s ease both;
+        }
+
+        .hero-info-block p {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--muted);
+            margin-bottom: 18px;
+        }
+
+        /* BOTTOM ROW: student count card + CTAs */
+        .hero-bottom-row {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px 36px;
+            margin-top: 8px;
+            animation: fadeUp 0.7s 0.5s ease both;
+        }
+
+        .student-count-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--white);
+            border: 1.5px solid var(--dark);
+            border-radius: 100px;
+            padding: 10px 18px;
+            box-shadow: 3px 3px 0 var(--dark);
+        }
+
+        .avatar-stack {
+            display: flex;
+        }
+
+        .av {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--white);
+            margin-left: -8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--sage);
+        }
+
+        .av:first-child {
+            margin-left: 0;
+        }
+
+        .av:nth-child(2) {
+            background: var(--sky);
+        }
+
+        .av:nth-child(3) {
+            background: var(--peach);
+        }
+
+        .count-info {
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .count-info span {
+            font-weight: 400;
+            color: var(--muted);
+            font-size: 10px;
+            display: block;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .cta-main {
+            background: var(--dark);
+            color: var(--cream);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: 100px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .cta-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+        }
+
+        .cta-ghost {
+            background: transparent;
+            color: var(--dark);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 14px 24px;
+            border-radius: 100px;
+            text-decoration: none;
+            border: 1.5px solid rgba(22, 22, 22, 0.2);
+            transition: all 0.2s;
+        }
+
+        .cta-ghost:hover {
+            border-color: var(--dark);
+        }
+
+        /* live badge */
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--dark);
+            color: var(--cream);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 6px 13px;
+            border-radius: 100px;
+            position: absolute;
+            top: calc(72px + 14px);
+            left: 40px;
+            z-index: 10;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: #5FE18A;
+            border-radius: 50%;
+            animation: livePulse 2s infinite;
+        }
+
+        @keyframes livePulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(95, 225, 138, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(95, 225, 138, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(95, 225, 138, 0);
+            }
+        }
+
+        /* MARQUEE */
+        .marquee-wrap {
+            border-top: 1.5px solid var(--dark);
+            border-bottom: 1.5px solid var(--dark);
+            background: var(--dark);
+            padding: 14px 0;
+            overflow: hidden;
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 48px;
+            white-space: nowrap;
+            width: max-content;
+            animation: scrollX 22s linear infinite;
+        }
+
+        .marquee-item {
+            font-family: 'DM Sans', sans-serif;
+            font-style: italic;
+            font-size: 15px;
+            font-weight: 400;
+            color: var(--cream);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .marquee-item::after {
+            content: '✦';
+            opacity: 0.3;
+            font-style: normal;
+        }
+
+        @keyframes scrollX {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* FEATURES SECTION — horizontal pill layout */
+        .features-section {
+            padding: 120px 48px;
+            position: relative;
+        }
+
+        .section-eyebrow {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-eyebrow::before {
+            content: '';
+            width: 28px;
+            height: 1.5px;
+            background: var(--muted);
+        }
+
+        .section-headline {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: clamp(36px, 5vw, 56px);
+            line-height: 1.0;
+            letter-spacing: -2px;
+            margin-bottom: 60px;
+        }
+
+        .section-headline em {
+            font-style: italic;
+            font-weight: 700;
+        }
+
+        /* Feature grid — no blocks, just lines */
+        .feat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: 1.5px solid var(--dark);
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--white);
+        }
+
+        .feat-item {
+            padding: 40px 36px;
+            border-bottom: 1.5px solid var(--dark);
+            border-right: 1.5px solid var(--dark);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+
+        .feat-item:nth-child(2n) {
+            border-right: none;
+        }
+
+        .feat-item:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
+
+        .feat-item:hover {
+            background: var(--cream);
+        }
+
+        .feat-emoji {
+            font-size: 32px;
+            margin-bottom: 16px;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .feat-item:hover .feat-emoji {
+            transform: scale(1.2) rotate(-5deg);
+        }
+
+        .feat-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .feat-desc {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--muted);
+        }
+
+        .feat-badge {
+            display: inline-block;
+            margin-top: 14px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 100px;
+            border: 1.5px solid var(--dark);
+        }
+
+        /* MASCOT SPOTLIGHT */
+        .mascot-spotlight {
+            padding: 120px 48px;
+            background: var(--dark);
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .spot-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 70% 50%, rgba(185, 213, 175, 0.12) 0%, transparent 60%);
+        }
+
+        .spot-left {
+            position: relative;
+            z-index: 1;
+        }
+
+        .spot-eyebrow {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: rgba(247, 243, 236, 0.4);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spot-eyebrow::before {
+            content: '';
+            width: 28px;
+            height: 1.5px;
+            background: rgba(247, 243, 236, 0.4);
+        }
+
+        .spot-headline {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: clamp(36px, 4.5vw, 52px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+            color: var(--cream);
+            margin-bottom: 24px;
+        }
+
+        .spot-headline em {
+            font-style: italic;
+            color: var(--sage);
+        }
+
+        .spot-body {
+            font-size: 15px;
+            line-height: 1.8;
+            color: rgba(247, 243, 236, 0.6);
+            margin-bottom: 36px;
+        }
+
+        .spot-features {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .spot-feat {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            background: rgba(247, 243, 236, 0.05);
+            border: 1px solid rgba(247, 243, 236, 0.1);
+            border-radius: 14px;
+            transition: background 0.2s;
+        }
+
+        .spot-feat:hover {
+            background: rgba(247, 243, 236, 0.08);
+        }
+
+        .spot-feat-icon {
+            font-size: 20px;
+        }
+
+        .spot-feat-text {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            color: rgba(247, 243, 236, 0.8);
+            font-weight: 500;
+        }
+
+        .spot-right {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .big-mascot {
+            font-size: 420px;
+            line-height: 1;
+            animation: mascotFloat 4s ease-in-out infinite;
+            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.5));
+            text-align: center;
+        }
+
+        /* TEAM */
+        .team-section {
+            padding: 120px 48px;
+            position: relative;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            margin-top: 56px;
+        }
+
+        .team-card {
+            padding: 0;
+            border: 1.5px solid rgba(22, 22, 22, 0.10);
+            border-radius: 28px;
+            background: var(--white);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            opacity: 0;
+            transform: translateY(30px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .team-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .team-card-header {
+            height: 100px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .team-card:nth-child(1) .team-card-header {
+            background: linear-gradient(135deg, var(--sage) 0%, #d4ecc8 100%);
+        }
+
+        .team-card:nth-child(2) .team-card-header {
+            background: linear-gradient(135deg, var(--sky) 0%, #c5e4f2 100%);
+        }
+
+        .team-card:nth-child(3) .team-card-header {
+            background: linear-gradient(135deg, var(--peach) 0%, #f5d8b8 100%);
+        }
+
+        .team-card:hover {
+            border-color: var(--dark);
+            box-shadow: 0 20px 50px rgba(22, 22, 22, 0.12);
+            transform: translateY(-6px);
+        }
+
+        .team-card-body {
+            padding: 0 28px 32px;
+            text-align: center;
+        }
+
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            margin: 0 auto;
+            border: 3px solid var(--white);
+            position: relative;
+            bottom: -40px;
+            box-shadow: 0 8px 24px rgba(22, 22, 22, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover .team-avatar {
+            transform: scale(1.08);
+        }
+
+        .ta1 {
+            background: var(--sage);
+        }
+
+        .ta2 {
+            background: var(--sky);
+        }
+
+        .ta3 {
+            background: var(--peach);
+        }
+
+        .team-name {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+            margin-top: 48px;
+        }
+
+        .team-role {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 18px;
+        }
+
+        .team-quote {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--muted);
+            font-style: italic;
+            position: relative;
+            padding: 0 8px;
+        }
+
+        .team-quote::before {
+            content: '"';
+            font-family: 'Fraunces', serif;
+            font-size: 48px;
+            font-weight: 900;
+            position: absolute;
+            top: -20px;
+            left: -4px;
+            opacity: 0.1;
+            line-height: 1;
+        }
+
+        .team-socials {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .team-social-link {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(22, 22, 22, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s;
+            background: var(--cream);
+        }
+
+        .team-social-link:hover {
+            border-color: var(--dark);
+            background: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        /* CONTACT */
+        .contact-section {
+            padding: 120px 48px;
+            background: var(--cream);
+            position: relative;
+        }
+
+        .contact-inner {
+            max-width: 600px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: left;
+            margin-top: 48px;
+        }
+
+        .field-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .field {
+            width: 100%;
+            background: var(--white);
+            border: 1.5px solid rgba(22, 22, 22, 0.15);
+            border-radius: 14px;
+            padding: 15px 18px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--dark);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            appearance: none;
+        }
+
+        .field:focus {
+            border-color: var(--dark);
+            box-shadow: 3px 3px 0 var(--dark);
+        }
+
+        textarea.field {
+            min-height: 110px;
+            resize: none;
+        }
+
+        .submit {
+            background: var(--dark);
+            color: var(--cream);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 17px;
+            border-radius: 100px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            margin-top: 4px;
+        }
+
+        .submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--white);
+            border: 1.5px solid var(--dark);
+            border-radius: 100px;
+            padding: 10px 18px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 2px 2px 0 var(--dark);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--dark);
+            padding: 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--cream);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            font-size: 12px;
+            color: rgba(247, 243, 236, 0.45);
+            text-decoration: none;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--cream);
+        }
+
+        .footer-copy {
+            font-size: 11px;
+            color: rgba(247, 243, 236, 0.2);
+            width: 100%;
+            text-align: center;
+            border-top: 1px solid rgba(247, 243, 236, 0.07);
+            padding-top: 24px;
+            margin-top: 8px;
+        }
+
+        /* SCROLL PROGRESS */
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2.5px;
+            background: var(--dark);
+            z-index: 999;
+            width: 0;
+            transition: width 0.05s linear;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(8px);
+            }
+        }
+
+        /* MOBILE */
+        @media(max-width:768px) {
+            nav {
+                padding: 16px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stage {
+                padding: 20px 20px 0;
+                min-height: unset;
+                padding-bottom: 0;
+            }
+
+            .hero-text-orbit {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .hero-left {
+                position: static;
+                transform: none;
+                align-items: center;
+                text-align: center;
+                max-width: 100%;
+                order: 1;
+            }
+
+            .hero-mascot-wrap {
+                order: 2;
+                margin: 0 auto;
+            }
+
+            .hero-right {
+                position: static;
+                transform: none;
+                align-items: center;
+                max-width: 100%;
+                order: 3;
+            }
+
+            .hero-sub {
+                max-width: 100%;
+            }
+
+            .hero-ctas {
+                justify-content: center;
+            }
+
+            .hero-mascot-emoji {
+                transform: scale(1.3);
+            }
+
+            .fc1,
+            .fc2 {
+                display: none;
+            }
+
+            .hero-stat-stack {
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .hero-stat {
+                flex: 1;
+            }
+
+            .hero-badge-row {
+                justify-content: center;
+            }
+
+            .hero-bottom-row {
+                padding: 0 16px 28px;
+                flex-direction: column;
+                gap: 16px;
+                align-items: center;
+            }
+
+            .spin-badge {
+                width: 64px;
+                height: 64px;
+                top: 6px;
+                right: 16px;
+            }
+
+            .live-badge {
+                left: 16px;
+            }
+
+            .feat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feat-item:nth-child(2n) {
+                border-right: none;
+            }
+
+            .feat-item:nth-last-child(-n+2) {
+                border-bottom: 1.5px solid var(--dark);
+            }
+
+            .feat-item:last-child {
+                border-bottom: none;
+            }
+
+            .mascot-spotlight {
+                grid-template-columns: 1fr;
+                padding: 80px 20px;
+            }
+
+            .big-mascot {
+                font-size: 120px;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .team-section,
+            .features-section,
+            .contact-section {
+                padding: 80px 20px;
+            }
+
+            footer {
+                padding: 36px 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="progress" id="progress"></div>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-bg"></div>
+        <div class="nav-logo"><span class="logo-mascot">🐼</span> Amigo</div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#mascot">Meet Amigo</a>
+            <a href="#team">Team</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="nav-actions">
+            <a href="#" class="btn-login">Log In</a>
+            <a href="#contact" class="btn-signup">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <div class="orb orb1"></div>
+            <div class="orb orb2"></div>
+            <div class="orb orb3"></div>
+        </div>
+
+        <!-- Live badge top left -->
+        <div class="live-badge">
+            <div class="live-dot"></div> Live in Classrooms
+        </div>
+
+        <!-- Spinning circular badge top right -->
+        <div class="spin-badge">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <path id="circle" d="M 50,50 m -35,0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" />
+                </defs>
+                <circle cx="50" cy="50" r="44" fill="var(--lemon)" stroke="var(--dark)" stroke-width="1.5" />
+                <text font-family="Outfit,sans-serif" font-size="10.5" font-weight="700" fill="var(--dark)"
+                    letter-spacing="2">
+                    <textPath href="#circle">AI CLASSROOM · AMIGO · SMART ·</textPath>
+                </text>
+                <text x="50" y="56" text-anchor="middle" font-size="18">🐼</text>
+            </svg>
+        </div>
+
+        <div class="hero-stage">
+
+            <div class="hero-text-orbit">
+
+                <!-- LEFT: tagline + description + CTAs -->
+                <div class="hero-left">
+                    <div class="hero-tagline">
+                        Your classroom,<br>
+                        only <em>smarter.</em>
+                    </div>
+                    <p class="hero-sub">Amigo bridges physical classrooms with intelligent learning — live Q&amp;A,
+                        quizzes &amp;
+                        analytics in one place.</p>
+                    <div class="hero-ctas">
+                        <a href="#features" class="cta-main">Explore features →</a>
+                        <a href="#contact" class="cta-ghost">Talk to us</a>
+                    </div>
+                </div>
+
+
+                <!-- RIGHT: stats + feature pills -->
+                <div class="hero-right">
+                    <div class="hero-badge-row">
+                        <div class="hero-pill">🧪 Quizzes</div>
+                        <div class="hero-pill">🙋 Live Q&amp;A</div>
+                        <div class="hero-pill">📈 Analytics</div>
+                        <div class="hero-pill">🎯 Gamified</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="hero-mascot-wrap">
+                <div class="speech-bubble">
+                    Hi! I'm Amigo
+                    <sub>Your smart classroom buddy</sub>
+                </div>
+                <img class="hero-mascot-emoji" src="amigo-mascot.png" alt="Amigo mascot panda">
+            </div>
+
+        </div>
+
+        <!-- Bottom bar: student count + scroll hint -->
+        <div class="hero-bottom-row">
+            <div class="student-count-card">
+                <div class="avatar-stack">
+                    <div class="av">😊</div>
+                    <div class="av">🧑</div>
+                    <div class="av">👩</div>
+                </div>
+                <div class="count-info">Built for Students<span>Smart classrooms · Made with ❤️</span></div>
+            </div>
+            <div style="font-size:22px;opacity:0.3;animation:bounce 2s ease-in-out infinite;">↓</div>
+        </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee-wrap">
+        <div class="marquee-track">
+            <div class="marquee-item">Live Q&amp;A</div>
+            <div class="marquee-item">Quiz Engine</div>
+            <div class="marquee-item">Analytics</div>
+            <div class="marquee-item">Gamified Learning</div>
+            <div class="marquee-item">Classroom Companion</div>
+            <div class="marquee-item">Student Dashboard</div>
+            <div class="marquee-item">Live Q&amp;A</div>
+            <div class="marquee-item">Quiz Engine</div>
+            <div class="marquee-item">Analytics</div>
+            <div class="marquee-item">Gamified Learning</div>
+            <div class="marquee-item">Classroom Companion</div>
+            <div class="marquee-item">Student Dashboard</div>
+        </div>
+    </div>
+
+    <!-- FEATURES -->
+    <section class="features-section" id="features">
+        <div class="section-eyebrow">What Amigo Does</div>
+        <h2 class="section-headline">Everything you need,<br><em>inside class.</em></h2>
+
+        <div class="feat-grid">
+            <div class="feat-item">
+                <span class="feat-emoji">🙋</span>
+                <div class="feat-title">Anonymous Q&amp;A</div>
+                <div class="feat-desc">Ask anything without raising your hand. Amigo queues it for your faculty — no
+                    awkwardness.</div>
+                <span class="feat-badge">Students</span>
+            </div>
+            <div class="feat-item">
+                <span class="feat-emoji">🧪</span>
+                <div class="feat-title">In-Class Quizzes</div>
+                <div class="feat-desc">Launch instant quizzes. See class performance live. Flag what to revisit.</div>
+                <span class="feat-badge">Faculty</span>
+            </div>
+            <div class="feat-item">
+                <span class="feat-emoji">📈</span>
+                <div class="feat-title">Learning Analytics</div>
+                <div class="feat-desc">Track progress over time. Visual, gamified, and genuinely useful for everyone.
+                </div>
+                <span class="feat-badge">Faculty + Students</span>
+            </div>
+            <div class="feat-item">
+                <span class="feat-emoji">🎯</span>
+                <div class="feat-title">Gamified Experience</div>
+                <div class="feat-desc">Earn points, climb leaderboards, and unlock rewards — learning feels like play.</div>
+                <span class="feat-badge">Students</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- MASCOT SPOTLIGHT -->
+    <section class="mascot-spotlight" id="mascot">
+        <div class="spot-bg"></div>
+        <div class="spot-left">
+            <div class="spot-eyebrow">Meet Amigo</div>
+            <h2 class="spot-headline">Your class-<br>room's <em>best<br>friend.</em></h2>
+            <p class="spot-body">Amigo isn't just a tool — it's a presence in your classroom. Always ready. Never
+                interrupting. Just quietly making everything better.</p>
+            <div class="spot-features">
+                <div class="spot-feat"><span class="spot-feat-icon">💬</span><span class="spot-feat-text">Answers doubts
+                        instantly, 24/7</span></div>
+                <div class="spot-feat"><span class="spot-feat-icon">🧠</span><span class="spot-feat-text">Learns your
+                        course as
+                        the semester goes</span></div>
+                <div class="spot-feat"><span class="spot-feat-icon">🔒</span><span class="spot-feat-text">Privacy-first
+                        — data
+                        stays in your institution</span></div>
+            </div>
+        </div>
+        <div class="spot-right">
+            <img src="amigo-mascot.png" alt="Amigo mascot"
+                style="width:clamp(300px,50vw,700px);height:auto;animation:mascotFloat 4s ease-in-out infinite;filter:drop-shadow(0 30px 60px rgba(0,0,0,0.4));object-fit:contain;">
+        </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="team-section" id="team">
+        <div class="section-eyebrow">The Team</div>
+        <h2 class="section-headline">Made by students,<br><em>for students.</em></h2>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-card-header">
+                    <div class="team-avatar ta1">👩‍💻</div>
+                </div>
+                <div class="team-card-body">
+                    <div class="team-name">Ananya</div>
+                    <div class="team-role">Lead Developer</div>
+                    <div class="team-quote">Building Amigo to make every classroom feel connected and alive.</div>
+                    <div class="team-socials">
+                        <a href="#" class="team-social-link">🔗</a>
+                        <a href="#" class="team-social-link">💼</a>
+                    </div>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-card-header">
+                    <div class="team-avatar ta2">👩‍🎨</div>
+                </div>
+                <div class="team-card-body">
+                    <div class="team-name">Manisha</div>
+                    <div class="team-role">Design Lead</div>
+                    <div class="team-quote">Great design isn't noticed — it's felt. That's what Amigo is about.</div>
+                    <div class="team-socials">
+                        <a href="#" class="team-social-link">🔗</a>
+                        <a href="#" class="team-social-link">💼</a>
+                    </div>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-card-header">
+                    <div class="team-avatar ta3">👩‍🔬</div>
+                </div>
+                <div class="team-card-body">
+                    <div class="team-name">Jayalakshmi</div>
+                    <div class="team-role">Product Lead</div>
+                    <div class="team-quote">Every feature we build starts from a real classroom problem.</div>
+                    <div class="team-socials">
+                        <a href="#" class="team-social-link">🔗</a>
+                        <a href="#" class="team-social-link">💼</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact-section" id="contact">
+        <div class="contact-inner">
+            <div class="section-eyebrow">Get In Touch</div>
+            <h2 class="section-headline">Bring Amigo to<br>your <em>campus.</em></h2>
+            <div class="contact-form">
+                <div>
+                    <label class="field-label">Your Name</label>
+                    <input class="field" type="text" placeholder="e.g. Priya Sharma">
+                </div>
+                <div>
+                    <label class="field-label">Email</label>
+                    <input class="field" type="email" placeholder="you@institution.edu">
+                </div>
+                <div>
+                    <label class="field-label">I am a...</label>
+                    <select class="field">
+                        <option>Student</option>
+                        <option>Faculty Member</option>
+                        <option>Institution / Admin</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="field-label">Message</label>
+                    <textarea class="field" placeholder="Tell us about your classroom..."></textarea>
+                </div>
+                <button class="submit">Send Message ✦</button>
+            </div>
+            <div class="contact-chips">
+                <div class="chip">✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                        data-cfemail="036b666f6f6c43626e6a646c2d6667762d6a6d">[email&#160;protected]</a></div>
+                <div class="chip">📍 Hyderabad, India</div>
+                <div class="chip">📞 +91 98765 43210</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">🐼 Amigo</div>
+        <div class="footer-links">
+            <a href="#home">Home</a>
+            <a href="#features">Features</a>
+            <a href="#mascot">Meet Amigo</a>
+            <a href="#team">Team</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-copy">©️ 2025 Amigo Technologies Pvt. Ltd. · All rights reserved.</div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script>
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const d = document.documentElement;
+            const p = (window.scrollY / (d.scrollHeight - d.clientHeight)) * 100;
+            document.getElementById('progress').style.width = p + '%';
+        });
+
+        // Scroll reveal
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                }
+            });
+        });
+        document.querySelectorAll('.team-card').forEach(c => obs.observe(c));
+    </script>
+</body>
+
+</html>

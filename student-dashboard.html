@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Amigo — Student Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --sage: #B8D4B0;
+    --sky: #B8D4E8;
+    --peach: #F2C9A0;
+    --mint: #A8D8C8;
+    --lemon: #E8DFA0;
+    --dark: #1A1A1A;
+    --dark2: #2D2D2D;
+    --soft-dark: #3A3A3A;
+    --text-muted: #6B6B6B;
+    --live-green: #22C55E;
+    --live-green-bg: #DCFCE7;
+    --live-green-border: #16A34A;
+    --doubt-blue: #3B82F6;
+    --doubt-blue-bg: #DBEAFE;
+    --doubt-blue-border: #2563EB;
+    --inactive-red: #EF4444;
+    --inactive-red-bg: #FEE2E2;
+    --inactive-red-border: #DC2626;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--dark);
+    z-index: 200;
+    transition: width 0.1s;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(26,26,26,0.08);
+  }
+
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--dark);
+  }
+
+  .nav-logo .dot {
+    width: 10px; height: 10px;
+    background: var(--sage);
+    border-radius: 50%;
+    border: 2px solid var(--dark);
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .student-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--dark);
+    color: var(--cream);
+    padding: 7px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .student-pill .avatar {
+    width: 24px; height: 24px;
+    background: var(--sage);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: var(--dark);
+  }
+
+  .nav-time {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    background: white;
+    border: 1.5px solid rgba(26,26,26,0.12);
+    padding: 6px 12px;
+    border-radius: 100px;
+  }
+
+  /* ─── MAIN LAYOUT ─── */
+  .dashboard-wrap {
+    padding: 90px 20px 60px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ─── HEADER ─── */
+  .dash-header {
+    margin-bottom: 32px;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .dash-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--dark);
+    color: var(--cream);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 14px;
+  }
+
+  .dash-tag .pulse-dot {
+    width: 6px; height: 6px;
+    background: var(--mint);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  .dash-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(30px, 8vw, 42px);
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 8px;
+  }
+
+  .dash-title em { font-style: italic; font-weight: 300; }
+
+  .dash-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* ─── STATS ROW ─── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.5s 0.1s ease both;
+  }
+
+  .stat-card {
+    background: white;
+    border: 1.5px solid var(--dark);
+    border-radius: 18px;
+    padding: 18px 16px;
+    box-shadow: 3px 3px 0 var(--dark);
+    text-align: center;
+  }
+
+  .stat-card .num {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-card .label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-card:nth-child(1) { background: var(--sage); }
+  .stat-card:nth-child(2) { background: var(--sky); }
+  .stat-card:nth-child(3) { background: var(--peach); }
+
+  /* ─── LEGEND ─── */
+  .legend-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    animation: fadeUp 0.5s 0.15s ease both;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--soft-dark);
+  }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .ld-green { background: var(--live-green); }
+  .ld-red { background: var(--inactive-red); }
+  .ld-blue { background: var(--doubt-blue); }
+
+  /* ─── TABLE WRAPPER ─── */
+  .table-wrap {
+    background: white;
+    border: 1.5px solid var(--dark);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 5px 5px 0 var(--dark);
+    animation: fadeUp 0.5s 0.2s ease both;
+  }
+
+  .table-top-bar {
+    padding: 18px 20px;
+    border-bottom: 1.5px solid rgba(26,26,26,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--cream);
+  }
+
+  .table-top-bar h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .filter-chips {
+    display: flex;
+    gap: 6px;
+  }
+
+  .filter-chip {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 100px;
+    border: 1.5px solid rgba(26,26,26,0.15);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--dark);
+  }
+
+  .filter-chip.active {
+    background: var(--dark);
+    color: var(--cream);
+    border-color: var(--dark);
+  }
+
+  .filter-chip:hover:not(.active) {
+    background: var(--cream);
+    border-color: var(--dark);
+  }
+
+  /* ─── TABLE ─── */
+  .course-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .course-table thead tr {
+    background: rgba(245,240,232,0.6);
+    border-bottom: 1.5px solid rgba(26,26,26,0.08);
+  }
+
+  .course-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .course-table th:last-child,
+  .course-table th:nth-last-child(2) {
+    text-align: center;
+  }
+
+  .course-table tbody tr {
+    border-bottom: 1px solid rgba(26,26,26,0.06);
+    transition: background 0.15s;
+  }
+
+  .course-table tbody tr:last-child { border-bottom: none; }
+  .course-table tbody tr:hover { background: rgba(245,240,232,0.5); }
+
+  .course-table td {
+    padding: 16px 16px;
+    vertical-align: middle;
+  }
+
+  /* ─── COURSE CELL ─── */
+  .course-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .course-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    border: 1.5px solid var(--dark);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    box-shadow: 2px 2px 0 var(--dark);
+  }
+
+  .course-name {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    margin-bottom: 2px;
+  }
+
+  .course-code {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* ─── FACULTY CELL ─── */
+  .faculty-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--dark);
+    margin-bottom: 2px;
+  }
+
+  .faculty-dept {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ─── SCHEDULE CELL ─── */
+  .schedule-time {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+
+  .schedule-days {
+    display: flex;
+    gap: 4px;
+  }
+
+  .day-pill {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 100px;
+    border: 1px solid rgba(26,26,26,0.15);
+    letter-spacing: 0.3px;
+    color: var(--soft-dark);
+  }
+
+  .day-pill.today {
+    background: var(--dark);
+    color: var(--cream);
+    border-color: var(--dark);
+  }
+
+  /* ─── STATUS BADGE ─── */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding: 5px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .status-badge .sdot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+
+  .badge-live {
+    background: var(--live-green-bg);
+    color: var(--live-green-border);
+    border: 1px solid #86EFAC;
+  }
+
+  .badge-live .sdot {
+    background: var(--live-green);
+    animation: pulse 1.5s infinite;
+  }
+
+  .badge-upcoming {
+    background: #FEF9C3;
+    color: #A16207;
+    border: 1px solid #FDE047;
+  }
+
+  .badge-upcoming .sdot { background: #EAB308; }
+
+  .badge-ended {
+    background: rgba(26,26,26,0.06);
+    color: var(--text-muted);
+    border: 1px solid rgba(26,26,26,0.1);
+  }
+
+  .badge-ended .sdot { background: var(--text-muted); }
+
+  /* ─── ACTION BUTTONS ─── */
+  .btn-col {
+    text-align: center;
+  }
+
+  .action-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 100px;
+    cursor: pointer;
+    border: 1.5px solid;
+    transition: all 0.18s;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+  }
+
+  /* JOIN — green when live, red when not */
+  .btn-join-live {
+    background: var(--live-green-bg);
+    color: var(--live-green-border);
+    border-color: var(--live-green-border);
+    box-shadow: 2px 2px 0 var(--live-green-border);
+  }
+
+  .btn-join-live:hover {
+    background: var(--live-green);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 3px 3px 0 var(--live-green-border);
+  }
+
+  .btn-join-inactive {
+    background: var(--inactive-red-bg);
+    color: var(--inactive-red-border);
+    border-color: var(--inactive-red-border);
+    box-shadow: 2px 2px 0 var(--inactive-red-border);
+    opacity: 0.75;
+    cursor: not-allowed;
+  }
+
+  /* POST CLASS DOUBT — green when session NOT ongoing, red when live */
+  .btn-doubt-available {
+    background: var(--live-green-bg);
+    color: var(--live-green-border);
+    border-color: var(--live-green-border);
+    box-shadow: 2px 2px 0 var(--live-green-border);
+  }
+
+  .btn-doubt-available:hover {
+    background: var(--live-green);
+    color: white;
+    transform: translateY(-1px);
+  }
+
+  .btn-doubt-unavailable {
+    background: var(--inactive-red-bg);
+    color: var(--inactive-red-border);
+    border-color: var(--inactive-red-border);
+    box-shadow: 2px 2px 0 var(--inactive-red-border);
+    opacity: 0.75;
+    cursor: not-allowed;
+  }
+
+  /* ─── ACTIONS COL WRAPPER (stacked on mobile) ─── */
+  .actions-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ─── MOBILE CARD VIEW ─── */
+  @media (max-width: 640px) {
+    .course-table, .course-table thead, .course-table tbody,
+    .course-table th, .course-table td, .course-table tr {
+      display: block;
+    }
+
+    .course-table thead { display: none; }
+
+    .course-table tbody tr {
+      border: 1.5px solid rgba(26,26,26,0.1);
+      border-radius: 16px;
+      margin: 12px 14px;
+      padding: 16px;
+      box-shadow: 2px 2px 0 rgba(26,26,26,0.08);
+    }
+
+    .course-table tbody tr:hover { background: white; }
+
+    .course-table td {
+      padding: 6px 0;
+      border: none;
+    }
+
+    .course-table td::before {
+      content: attr(data-label);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .course-table td:first-child::before { display: none; }
+
+    .btn-col { text-align: left; }
+
+    .actions-wrap {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    .stats-row {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .stat-card .num { font-size: 22px; }
+    .stat-card { padding: 14px 10px; }
+
+    .filter-chips { display: none; }
+  }
+
+  /* ─── FLOATING MASCOT ─── */
+  .floating-mascot {
+    position: fixed;
+    bottom: 24px; right: 20px;
+    width: 52px; height: 52px;
+    background: var(--dark);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 90;
+    border: 2px solid var(--dark);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+  }
+
+  .floating-mascot:hover { transform: scale(1.08); }
+
+  .mascot-tip {
+    position: fixed;
+    bottom: 86px; right: 20px;
+    background: var(--dark);
+    color: var(--cream);
+    font-size: 13px;
+    padding: 12px 16px;
+    border-radius: 16px 16px 4px 16px;
+    max-width: 220px;
+    line-height: 1.5;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: all 0.2s ease;
+    z-index: 90;
+  }
+
+  .mascot-tip.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+
+  /* ─── DOUBT MODAL ─── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,26,26,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--cream);
+    border: 1.5px solid var(--dark);
+    border-radius: 24px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 6px 6px 0 var(--dark);
+    transform: translateY(16px);
+    transition: transform 0.2s;
+  }
+
+  .modal-overlay.open .modal { transform: translateY(0); }
+
+  .modal-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .modal-label::before {
+    content: '';
+    display: block;
+    width: 20px; height: 1.5px;
+    background: var(--text-muted);
+  }
+
+  .modal-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+
+  .modal-course-info {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(26,26,26,0.08);
+  }
+
+  .modal textarea {
+    width: 100%;
+    background: white;
+    border: 1.5px solid rgba(26,26,26,0.2);
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--dark);
+    outline: none;
+    min-height: 110px;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .modal textarea:focus {
+    border-color: var(--dark);
+    box-shadow: 3px 3px 0 var(--dark);
+  }
+
+  .modal-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .modal-btn-cancel {
+    flex: 1;
+    background: transparent;
+    border: 1.5px solid rgba(26,26,26,0.2);
+    border-radius: 100px;
+    padding: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--dark);
+  }
+
+  .modal-btn-cancel:hover { border-color: var(--dark); background: rgba(26,26,26,0.05); }
+
+  .modal-btn-submit {
+    flex: 2;
+    background: var(--dark);
+    border: 1.5px solid var(--dark);
+    border-radius: 100px;
+    padding: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--cream);
+    transition: all 0.15s;
+  }
+
+  .modal-btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+
+  .divider { height: 1px; background: rgba(26,26,26,0.08); margin: 0 20px; }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    bottom: 90px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--dark);
+    color: var(--cream);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px 20px;
+    border-radius: 100px;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 300;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width:0%"></div>
+
+<!-- ─── NAVBAR ─── -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="dot"></div>
+    Amigo
+  </a>
+  <div class="nav-right">
+    <div class="nav-time" id="liveTime">--:-- --</div>
+    <div class="student-pill">
+      <div class="avatar">🎓</div>
+      Rohan K.
+    </div>
+  </div>
+</nav>
+
+<!-- ─── DASHBOARD ─── -->
+<div class="dashboard-wrap">
+
+  <!-- Header -->
+  <div class="dash-header">
+    <div class="dash-tag">
+      <div class="pulse-dot"></div>
+      Student Dashboard
+    </div>
+    <h1 class="dash-title">Your <em>enrolled</em><br>classes.</h1>
+    <p class="dash-sub">Semester 4 · B.Tech CSE · NIT Warangal</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="num">6</div>
+      <div class="label">Courses</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="liveCount">1</div>
+      <div class="label">Live Now</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">87%</div>
+      <div class="label">Attendance</div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend-row">
+    <div class="legend-item">
+      <div class="legend-dot ld-green"></div>
+      Button active / enabled
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot ld-red"></div>
+      Button inactive / disabled
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <div class="table-top-bar">
+      <h3>My Courses</h3>
+      <div class="filter-chips">
+        <button class="filter-chip active" onclick="filterCourses('all', this)">All</button>
+        <button class="filter-chip" onclick="filterCourses('live', this)">Live</button>
+        <button class="filter-chip" onclick="filterCourses('upcoming', this)">Upcoming</button>
+        <button class="filter-chip" onclick="filterCourses('ended', this)">Ended</button>
+      </div>
+    </div>
+
+    <table class="course-table" id="courseTable">
+      <thead>
+        <tr>
+          <th>Course</th>
+          <th>Faculty</th>
+          <th>Schedule</th>
+          <th>Status</th>
+          <th style="text-align:center">Join Class</th>
+          <th style="text-align:center">Post-Class Doubts</th>
+        </tr>
+      </thead>
+      <tbody id="courseBody">
+        <!-- Rows injected by JS -->
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ─── DOUBT MODAL ─── -->
+<div class="modal-overlay" id="doubtModal">
+  <div class="modal">
+    <div class="modal-label">Doubt Resolution</div>
+    <div class="modal-title">Post a Doubt 🙋</div>
+    <div class="modal-course-info" id="modalCourseInfo">Course · Faculty</div>
+    <textarea id="doubtText" placeholder="Describe your doubt clearly — Amigo AI will resolve it or forward to your faculty..."></textarea>
+    <div class="modal-btns">
+      <button class="modal-btn-cancel" onclick="closeDoubtModal()">Cancel</button>
+      <button class="modal-btn-submit" onclick="submitDoubt()">Submit Doubt ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FLOATING MASCOT ─── -->
+<div class="floating-mascot" id="mascotBtn" onclick="toggleTip()">🤖</div>
+<div class="mascot-tip" id="mascotTip">👋 Green JOIN = class is live! Green DOUBT = session ended, post your question now.</div>
+
+<!-- ─── TOAST ─── -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ─── DATA ───────────────────────────────────────────────
+  // status: 'live' | 'upcoming' | 'ended'
+  const courses = [
+    {
+      id: 1,
+      icon: '💻',
+      iconBg: '#B8D4B0',
+      name: 'Data Structures & Algorithms',
+      code: 'CS301',
+      faculty: 'Dr. Priya Menon',
+      dept: 'Computer Science',
+      days: ['Mon','Wed','Fri'],
+      time: '09:00 – 10:00 AM',
+      status: 'live'
+    },
+    {
+      id: 2,
+      icon: '📐',
+      iconBg: '#B8D4E8',
+      name: 'Engineering Mathematics III',
+      code: 'MA302',
+      faculty: 'Prof. Ramesh Iyer',
+      dept: 'Mathematics',
+      days: ['Tue','Thu'],
+      time: '11:00 – 12:00 PM',
+      status: 'upcoming'
+    },
+    {
+      id: 3,
+      icon: '⚡',
+      iconBg: '#F2C9A0',
+      name: 'Digital Electronics',
+      code: 'EC201',
+      faculty: 'Dr. Kavitha Reddy',
+      dept: 'Electronics',
+      days: ['Mon','Wed'],
+      time: '02:00 – 03:00 PM',
+      status: 'ended'
+    },
+    {
+      id: 4,
+      icon: '🧬',
+      iconBg: '#A8D8C8',
+      name: 'Operating Systems',
+      code: 'CS302',
+      faculty: 'Dr. Suresh Babu',
+      dept: 'Computer Science',
+      days: ['Tue','Thu','Sat'],
+      time: '03:00 – 04:00 PM',
+      status: 'upcoming'
+    },
+    {
+      id: 5,
+      icon: '📡',
+      iconBg: '#E8DFA0',
+      name: 'Computer Networks',
+      code: 'CS303',
+      faculty: 'Prof. Anita Sharma',
+      dept: 'Computer Science',
+      days: ['Mon','Fri'],
+      time: '10:00 – 11:00 AM',
+      status: 'ended'
+    },
+    {
+      id: 6,
+      icon: '🧪',
+      iconBg: '#F2C9A0',
+      name: 'Theory of Computation',
+      code: 'CS304',
+      faculty: 'Dr. Vijay Krishnan',
+      dept: 'Computer Science',
+      days: ['Wed','Fri'],
+      time: '04:00 – 05:00 PM',
+      status: 'ended'
+    }
+  ];
+
+  const TODAY_MAP = { 0:'Sun', 1:'Mon', 2:'Tue', 3:'Wed', 4:'Thu', 5:'Fri', 6:'Sat' };
+  const todayAbbr = TODAY_MAP[new Date().getDay()];
+
+  // ─── RENDER ─────────────────────────────────────────────
+  function renderTable(filter = 'all') {
+    const tbody = document.getElementById('courseBody');
+    tbody.innerHTML = '';
+
+    const filtered = filter === 'all' ? courses : courses.filter(c => c.status === filter);
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">No courses found for this filter.</td></tr>`;
+      return;
+    }
+
+    filtered.forEach((c, i) => {
+      const isLive = c.status === 'live';
+
+      // JOIN btn: green if live, red if not
+      const joinBtnClass = isLive ? 'btn-join-live' : 'btn-join-inactive';
+      const joinIcon = isLive ? '▶' : '🔒';
+      const joinTitle = isLive ? 'Join live session' : 'Session not live';
+      const joinDisabled = isLive ? '' : 'disabled title="Session is not live"';
+      const joinOnclick = isLive ? `onclick="joinClass(${c.id})"` : '';
+
+      // DOUBT btn: green if NOT live (session ended/upcoming, i.e., you can post), red if live
+      const doubtAvailable = !isLive;
+      const doubtBtnClass = doubtAvailable ? 'btn-doubt-available' : 'btn-doubt-unavailable';
+      const doubtIcon = doubtAvailable ? '💬' : '🔴';
+      const doubtDisabled = doubtAvailable ? '' : 'disabled title="Wait for session to end"';
+      const doubtOnclick = doubtAvailable ? `onclick="openDoubtModal(${c.id})"` : '';
+
+      // Status badge
+      let badgeHtml = '';
+      if (c.status === 'live') {
+        badgeHtml = `<span class="status-badge badge-live"><span class="sdot"></span>Live Now</span>`;
+      } else if (c.status === 'upcoming') {
+        badgeHtml = `<span class="status-badge badge-upcoming"><span class="sdot"></span>Upcoming</span>`;
+      } else {
+        badgeHtml = `<span class="status-badge badge-ended"><span class="sdot"></span>Ended</span>`;
+      }
+
+      // Days with today highlighted
+      const dayPills = c.days.map(d =>
+        `<span class="day-pill ${d === todayAbbr ? 'today' : ''}">${d}</span>`
+      ).join('');
+
+      tbody.innerHTML += `
+        <tr data-status="${c.status}" style="animation: fadeUp 0.4s ${i * 0.06}s ease both; opacity:0;">
+          <td data-label="Course">
+            <div class="course-cell">
+              <div class="course-icon" style="background:${c.iconBg}">${c.icon}</div>
+              <div>
+                <div class="course-name">${c.name}</div>
+                <div class="course-code">${c.code}</div>
+              </div>
+            </div>
+          </td>
+          <td data-label="Faculty">
+            <div class="faculty-name">${c.faculty}</div>
+            <div class="faculty-dept">${c.dept}</div>
+          </td>
+          <td data-label="Schedule">
+            <div class="schedule-time">${c.time}</div>
+            <div class="schedule-days">${dayPills}</div>
+          </td>
+          <td data-label="Status">${badgeHtml}</td>
+          <td class="btn-col" data-label="Join Class">
+            <div class="actions-wrap">
+              <button class="action-btn ${joinBtnClass}" ${joinDisabled} ${joinOnclick}>
+                ${joinIcon} Join
+              </button>
+            </div>
+          </td>
+          <td class="btn-col" data-label="Post-Class Doubts">
+            <div class="actions-wrap">
+              <button class="action-btn ${doubtBtnClass}" ${doubtDisabled} ${doubtOnclick}>
+                ${doubtIcon} Post Doubt
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+
+    // Re-trigger row animations
+    setTimeout(() => {
+      document.querySelectorAll('#courseBody tr').forEach(r => r.style.opacity = '');
+    }, 50);
+  }
+
+  // ─── FILTER ─────────────────────────────────────────────
+  function filterCourses(filter, btn) {
+    document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTable(filter);
+  }
+
+  // ─── JOIN CLASS ──────────────────────────────────────────
+  function joinClass(id) {
+    const c = courses.find(x => x.id === id);
+    showToast(`✅ Joining ${c.name}…`);
+  }
+
+  // ─── DOUBT MODAL ─────────────────────────────────────────
+  let activeDoubtCourse = null;
+
+  function openDoubtModal(id) {
+    activeDoubtCourse = courses.find(x => x.id === id);
+    document.getElementById('modalCourseInfo').textContent = `${activeDoubtCourse.name} · ${activeDoubtCourse.faculty}`;
+    document.getElementById('doubtText').value = '';
+    document.getElementById('doubtModal').classList.add('open');
+  }
+
+  function closeDoubtModal() {
+    document.getElementById('doubtModal').classList.remove('open');
+    activeDoubtCourse = null;
+  }
+
+  function submitDoubt() {
+    const text = document.getElementById('doubtText').value.trim();
+    if (!text) { showToast('⚠️ Please describe your doubt first.'); return; }
+    closeDoubtModal();
+    showToast(`📬 Doubt submitted for ${activeDoubtCourse ? activeDoubtCourse.code : 'course'} — Amigo is on it!`);
+  }
+
+  document.getElementById('doubtModal').addEventListener('click', function(e) {
+    if (e.target === this) closeDoubtModal();
+  });
+
+  // ─── MASCOT ──────────────────────────────────────────────
+  let tipVisible = false;
+  function toggleTip() {
+    tipVisible = !tipVisible;
+    document.getElementById('mascotTip').classList.toggle('show', tipVisible);
+    setTimeout(() => {
+      tipVisible = false;
+      document.getElementById('mascotTip').classList.remove('show');
+    }, 4000);
+  }
+
+  // ─── TOAST ───────────────────────────────────────────────
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ─── CLOCK ───────────────────────────────────────────────
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('liveTime').textContent = now.toLocaleTimeString('en-IN', {
+      hour: '2-digit', minute: '2-digit', hour12: true
+    });
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  // ─── PROGRESS BAR ────────────────────────────────────────
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const progress = (window.scrollY / (doc.scrollHeight - doc.clientHeight)) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+  });
+
+  // ─── INIT ────────────────────────────────────────────────
+  renderTable();
+</script>
+</body>
+</html>

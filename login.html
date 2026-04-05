@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Amigo</title>
+  <meta name="description" content="Log in to Amigo — your smart classroom companion. Faculty and student portal for NIT Warangal.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --cream: #F5F0E8;
+      --sage: #B8D4B0;
+      --sky: #B8D4E8;
+      --peach: #F2C9A0;
+      --mint: #A8D8C8;
+      --lemon: #E8DFA0;
+      --dark: #1A1A1A;
+      --dark2: #2D2D2D;
+      --soft-dark: #3A3A3A;
+      --text-muted: #6B6B6B;
+      --white: #FFFFFF;
+      --error: #E53E3E;
+      --error-bg: #FED7D7;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--dark);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(245, 240, 232, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+    }
+
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--dark);
+    }
+
+    .nav-logo .logo-mascot {
+      font-size: 20px;
+    }
+
+    .nav-back {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dark);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border: 1.5px solid rgba(26, 26, 26, 0.2);
+      border-radius: 100px;
+      transition: all 0.2s;
+    }
+
+    .nav-back:hover {
+      background: var(--dark);
+      color: var(--cream);
+      border-color: var(--dark);
+    }
+
+    /* ─── BACKGROUND ORBS ─── */
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.3;
+      animation: drift 10s ease-in-out infinite alternate;
+    }
+
+    .orb1 {
+      width: 500px;
+      height: 500px;
+      background: var(--sage);
+      top: -200px;
+      right: -100px;
+    }
+
+    .orb2 {
+      width: 350px;
+      height: 350px;
+      background: var(--peach);
+      bottom: -100px;
+      left: -80px;
+      animation-delay: -4s;
+    }
+
+    .orb3 {
+      width: 250px;
+      height: 250px;
+      background: var(--sky);
+      top: 40%;
+      left: 30%;
+      animation-delay: -7s;
+    }
+
+    @keyframes drift {
+      from {
+        transform: translate(0, 0xs) scale(1);
+      }
+
+      to {
+        transform: translate(30px, 20px) scale(1.06);
+      }
+    }
+
+    /* ─── LOGIN CONTAINER ─── */
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 24px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 460px;
+      background: var(--white);
+      border: 1.5px solid var(--dark);
+      border-radius: 28px;
+      padding: 48px 40px;
+      box-shadow: 6px 6px 0 var(--dark);
+      animation: cardPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes cardPop {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 180px;
+      height: 180px;
+      background: var(--sage);
+      border-radius: 50%;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    /* ─── CARD HEADER ─── */
+    .card-header {
+      text-align: center;
+      margin-bottom: 36px;
+      position: relative;
+    }
+
+    .card-mascot {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+      animation: mascotFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes mascotFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .card-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 28px;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .card-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ─── STEP INDICATOR ─── */
+    .step-indicator {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(26, 26, 26, 0.12);
+      transition: all 0.3s;
+    }
+
+    .step-dot.active {
+      background: var(--dark);
+      width: 24px;
+      border-radius: 100px;
+    }
+
+    .step-dot.done {
+      background: var(--sage);
+    }
+
+    /* ─── FORM STEPS ─── */
+    .step {
+      display: none;
+      animation: stepIn 0.35s ease both;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    @keyframes stepIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* ─── ROLE SELECTION ─── */
+    .role-options {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .role-btn {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 22px;
+      background: var(--cream);
+      border: 1.5px solid rgba(26, 26, 26, 0.12);
+      border-radius: 18px;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-align: left;
+    }
+
+    .role-btn:hover {
+      border-color: var(--dark);
+      box-shadow: 3px 3px 0 var(--dark);
+      transform: translateY(-2px);
+    }
+
+    .role-btn .role-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      border: 1.5px solid var(--dark);
+      box-shadow: 2px 2px 0 var(--dark);
+    }
+
+    .role-btn:first-child .role-icon {
+      background: var(--sky);
+    }
+
+    .role-btn:last-child .role-icon {
+      background: var(--sage);
+    }
+
+    .role-text h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 2px;
+    }
+
+    .role-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .role-arrow {
+      margin-left: auto;
+      opacity: 0.3;
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+
+    .role-btn:hover .role-arrow {
+      opacity: 1;
+      transform: translateX(3px);
+    }
+
+    /* ─── FORM FIELDS ─── */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--cream);
+      border: 1.5px solid rgba(26, 26, 26, 0.15);
+      border-radius: 14px;
+      padding: 15px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--dark);
+      box-shadow: 3px 3px 0 var(--dark);
+    }
+
+    .form-input.error {
+      border-color: var(--error);
+      box-shadow: 3px 3px 0 var(--error);
+    }
+
+    .form-input::placeholder {
+      color: rgba(26, 26, 26, 0.3);
+    }
+
+    .input-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .error-msg {
+      font-size: 12px;
+      color: var(--error);
+      margin-top: 8px;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: var(--error-bg);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    .error-msg.show {
+      display: flex;
+    }
+
+    /* ─── PASSWORD TOGGLE ─── */
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-wrap .form-input {
+      padding-right: 48px;
+    }
+
+    .toggle-pass {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      opacity: 0.4;
+      transition: opacity 0.2s;
+      padding: 4px;
+    }
+
+    .toggle-pass:hover {
+      opacity: 0.8;
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn-primary {
+      width: 100%;
+      background: var(--dark);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 16px;
+      border-radius: 100px;
+      border: 1.5px solid var(--dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-back-step {
+      width: 100%;
+      background: transparent;
+      color: var(--dark);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px;
+      border-radius: 100px;
+      border: 1.5px solid rgba(26, 26, 26, 0.15);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .btn-back-step:hover {
+      border-color: var(--dark);
+      background: var(--cream);
+    }
+
+    /* ─── ROLE BADGE (shown in step 2/3) ─── */
+    .selected-role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--dark);
+      color: var(--cream);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    /* ─── LOADING SPINNER ─── */
+    .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(245, 240, 232, 0.3);
+      border-top-color: var(--cream);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider-line {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .divider-line::before,
+    .divider-line::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(26, 26, 26, 0.1);
+    }
+
+    .divider-line span {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ─── FACULTY ACCOUNTS HINT ─── */
+    .accounts-list {
+      background: var(--cream);
+      border: 1px solid rgba(26, 26, 26, 0.08);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-top: 16px;
+    }
+
+    .accounts-list-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .account-item {
+      font-size: 12px;
+      color: var(--soft-dark);
+      padding: 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .account-item code {
+      font-family: 'DM Sans', monospace;
+      background: rgba(26, 26, 26, 0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    /* ─── FOOTER ─── */
+    .login-footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--text-muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-footer a {
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--dark);
+      color: var(--cream);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 12px 20px;
+      border-radius: 100px;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 300;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Mobile */
+    @media (max-width: 540px) {
+      nav {
+        padding: 14px 16px;
+      }
+
+      .login-card {
+        padding: 36px 24px;
+        border-radius: 22px;
+      }
+
+      .card-title {
+        font-size: 24px;
+      }
+
+      .role-btn {
+        padding: 16px 18px;
+      }
+
+      .role-btn .role-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- BG ORBS -->
+  <div class="bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a class="nav-logo" href="main.html">
+      <span class="logo-mascot">🐼</span> Amigo
+    </a>
+    <a class="nav-back" href="main.html">← Back to Home</a>
+  </nav>
+
+  <!-- LOGIN CARD -->
+  <div class="login-container">
+    <div class="login-card">
+
+      <!-- HEADER -->
+      <div class="card-header">
+        <span class="card-mascot">🐼</span>
+        <h1 class="card-title" id="cardTitle">Welcome to Amigo</h1>
+        <p class="card-subtitle" id="cardSubtitle">Select your role to continue</p>
+      </div>
+
+      <!-- STEP DOTS -->
+      <div class="step-indicator">
+        <div class="step-dot active" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+        <div class="step-dot" id="dot3"></div>
+      </div>
+
+      <!-- ─── STEP 1: Role Selection ─── -->
+      <div class="step active" id="step1">
+        <div class="role-options">
+          <button class="role-btn" id="btnStudent" onclick="selectRole('student')">
+            <div class="role-icon">🎓</div>
+            <div class="role-text">
+              <h3>I am a Student</h3>
+              <p>Access your enrolled classrooms&nbsp;& sessions</p>
+            </div>
+            <span class="role-arrow">→</span>
+          </button>
+          <button class="role-btn" id="btnFaculty" onclick="selectRole('faculty')">
+            <div class="role-icon">👨‍🏫</div>
+            <div class="role-text">
+              <h3>I am Faculty</h3>
+              <p>Manage classes, start sessions&nbsp;& view analytics</p>
+            </div>
+            <span class="role-arrow">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── STEP 2: Email ─── -->
+      <div class="step" id="step2">
+        <div class="selected-role-badge" id="roleBadge">🎓 Student</div>
+
+        <div class="form-group">
+          <label class="form-label" for="emailInput">Institutional Email</label>
+          <input class="form-input" id="emailInput" type="email" placeholder="yourname@student.nitw.ac.in"
+            autocomplete="email" autofocus>
+          <div class="input-hint" id="emailHint">
+            <span>🔒</span> <span id="emailHintText">Use your NIT Warangal student email (@student.nitw.ac.in)</span>
+          </div>
+          <div class="error-msg" id="emailError">
+            ⚠️ <span id="emailErrorText">Please enter a valid email address</span>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="btnEmailNext" onclick="handleEmailNext()">
+          Continue
+          <span>→</span>
+          <div class="spinner" id="emailSpinner"></div>
+        </button>
+        <button class="btn-back-step" onclick="goToStep(1)">← Choose a different role</button>
+      </div>
+
+      <!-- ─── STEP 3: Password ─── -->
+      <div class="step" id="step3">
+        <div class="selected-role-badge" id="roleBadge2">👨‍🏫 Faculty</div>
+
+        <div style="font-size:13px; color:var(--text-muted); margin-bottom:18px; display:flex; align-items:center; gap:6px;">
+          <span>📧</span> Signing in as <strong id="showEmail" style="color:var(--dark); margin-left:2px;">email@nitw.ac.in</strong>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="passwordInput" id="passwordLabel">Password</label>
+          <div class="password-wrap">
+            <input class="form-input" id="passwordInput" type="password" placeholder="Enter your password"
+              autocomplete="current-password">
+            <button class="toggle-pass" onclick="togglePassword()" type="button" title="Show password">👁️</button>
+          </div>
+          <div class="input-hint" id="passwordHint" style="display:none;">
+            <span>🆕</span> <span>First time? Create a password to set up your account.</span>
+          </div>
+          <div class="error-msg" id="passwordError">
+            ⚠️ <span id="passwordErrorText">Incorrect password. Please try again.</span>
+          </div>
+        </div>
+
+        <!-- Confirm password for first-time students -->
+        <div class="form-group" id="confirmPasswordGroup" style="display:none;">
+          <label class="form-label" for="confirmPasswordInput">Confirm Password</label>
+          <div class="password-wrap">
+            <input class="form-input" id="confirmPasswordInput" type="password" placeholder="Re-enter your password">
+          </div>
+        </div>
+
+        <button class="btn-primary" id="btnLogin" onclick="handleLogin()">
+          Log In
+          <span>✦</span>
+          <div class="spinner" id="loginSpinner"></div>
+        </button>
+        <button class="btn-back-step" onclick="goToStep(2)">← Change email</button>
+
+        <!-- Demo accounts hint -->
+        <div class="accounts-list" id="accountsHint">
+          <div class="accounts-list-title">Demo Faculty Accounts</div>
+          <div class="account-item">👩‍🏫 <code>dr.richards@nitw.ac.in</code> · password: <code>amigo123</code></div>
+          <div class="account-item">👨‍🏫 <code>prof.menon@nitw.ac.in</code> · password: <code>amigo123</code></div>
+          <div class="account-item">👨‍🏫 <code>dr.reddy@nitw.ac.in</code> · password: <code>amigo123</code></div>
+        </div>
+        <div class="accounts-list" id="studentAccountsHint" style="display:none; margin-top:10px;">
+          <div class="accounts-list-title">Demo Student Accounts</div>
+          <div class="account-item">🎓 <code>ananya.k@student.nitw.ac.in</code> · password: <code>student123</code></div>
+          <div class="account-item">🎓 <code>rahul.s@student.nitw.ac.in</code> · password: <code>student123</code></div>
+          <div class="account-item">🎓 <code>sneha.p@student.nitw.ac.in</code> · password: <code>student123</code></div>
+          <div class="account-item">🎓 <code>vikram.r@student.nitw.ac.in</code> · password: <code>student123</code></div>
+          <div class="account-item">🎓 <code>divya.g@student.nitw.ac.in</code> · password: <code>student123</code></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="login-footer">
+    © 2025 Amigo Technologies · <a href="main.html">Back to Home</a>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ─── STATE ─────────────────────────────────────────
+    let selectedRole = '';
+    let enteredEmail = '';
+    let currentStep = 1;
+    let isFirstTimeStudent = false;
+
+    // ─── DEMO FACULTY ACCOUNTS ────────────────────────
+    const facultyAccounts = {
+      'dr.richards@nitw.ac.in': {
+        password: 'amigo123',
+        name: 'Dr. Richards',
+        initials: 'DR',
+        department: 'Computer Science'
+      },
+      'prof.menon@nitw.ac.in': {
+        password: 'amigo123',
+        name: 'Prof. Priya Menon',
+        initials: 'PM',
+        department: 'Computer Science'
+      },
+      'dr.reddy@nitw.ac.in': {
+        password: 'amigo123',
+        name: 'Dr. Kavitha Reddy',
+        initials: 'KR',
+        department: 'Electronics'
+      }
+    };
+
+    // ─── HELPERS: localStorage classroom + student data ───
+    function getClassrooms() {
+      try { return JSON.parse(localStorage.getItem('amigo_classrooms') || '[]'); }
+      catch { return []; }
+    }
+
+    function getStudentAccounts() {
+      try { return JSON.parse(localStorage.getItem('amigo_student_accounts') || '{}'); }
+      catch { return {}; }
+    }
+
+    function saveStudentAccounts(accounts) {
+      localStorage.setItem('amigo_student_accounts', JSON.stringify(accounts));
+    }
+
+    // Check if a student email is enrolled in any classroom
+    function isStudentEnrolled(email) {
+      const classrooms = getClassrooms();
+      return classrooms.some(c => c.students && c.students.some(s => s.email.toLowerCase() === email));
+    }
+
+    // ─── STEP NAVIGATION ──────────────────────────────
+    function goToStep(step) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('step' + step).classList.add('active');
+
+      for (let i = 1; i <= 3; i++) {
+        const dot = document.getElementById('dot' + i);
+        dot.classList.remove('active', 'done');
+        if (i < step) dot.classList.add('done');
+        if (i === step) dot.classList.add('active');
+      }
+
+      if (step === 1) {
+        document.getElementById('cardTitle').textContent = 'Welcome to Amigo';
+        document.getElementById('cardSubtitle').textContent = 'Select your role to continue';
+      } else if (step === 2) {
+        document.getElementById('cardTitle').textContent = selectedRole === 'faculty' ? 'Faculty Login' : 'Student Login';
+        document.getElementById('cardSubtitle').textContent = 'Enter your institutional email';
+      } else if (step === 3) {
+        if (isFirstTimeStudent) {
+          document.getElementById('cardTitle').textContent = 'Set Your Password';
+          document.getElementById('cardSubtitle').textContent = 'Create a password for your account';
+        } else {
+          document.getElementById('cardTitle').textContent = 'Enter Password';
+          document.getElementById('cardSubtitle').textContent = 'Verify your identity to continue';
+        }
+      }
+
+      document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('show'));
+      document.querySelectorAll('.form-input').forEach(i => i.classList.remove('error'));
+      currentStep = step;
+
+      if (step === 2) {
+        setTimeout(() => document.getElementById('emailInput').focus(), 350);
+      } else if (step === 3) {
+        document.getElementById('passwordInput').value = '';
+        if (document.getElementById('confirmPasswordInput')) document.getElementById('confirmPasswordInput').value = '';
+        setTimeout(() => document.getElementById('passwordInput').focus(), 350);
+      }
+    }
+
+    // ─── ROLE SELECTION ───────────────────────────────
+    function selectRole(role) {
+      selectedRole = role;
+      document.getElementById('emailInput').value = '';
+
+      if (role === 'student') {
+        document.getElementById('roleBadge').innerHTML = '🎓 Student';
+        document.getElementById('emailHintText').textContent = 'Use your NIT Warangal student email (@student.nitw.ac.in)';
+        document.getElementById('emailInput').placeholder = 'yourname@student.nitw.ac.in';
+      } else {
+        document.getElementById('roleBadge').innerHTML = '👨‍🏫 Faculty';
+        document.getElementById('emailHintText').textContent = 'Faculty email must end with @nitw.ac.in';
+        document.getElementById('emailInput').placeholder = 'faculty.name@nitw.ac.in';
+      }
+
+      goToStep(2);
+    }
+
+    // ─── EMAIL VALIDATION ─────────────────────────────
+    function handleEmailNext() {
+      const email = document.getElementById('emailInput').value.trim().toLowerCase();
+      const emailError = document.getElementById('emailError');
+      const emailErrorText = document.getElementById('emailErrorText');
+      const emailInput = document.getElementById('emailInput');
+
+      emailError.classList.remove('show');
+      emailInput.classList.remove('error');
+
+      if (!email) {
+        emailErrorText.textContent = 'Please enter your email address';
+        emailError.classList.add('show');
+        emailInput.classList.add('error');
+        emailInput.focus();
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        emailErrorText.textContent = 'Please enter a valid email address';
+        emailError.classList.add('show');
+        emailInput.classList.add('error');
+        emailInput.focus();
+        return;
+      }
+
+      if (selectedRole === 'student') {
+        // Student: must be @student.nitw.ac.in
+        if (!email.endsWith('@student.nitw.ac.in')) {
+          emailErrorText.textContent = 'Student email must end with @student.nitw.ac.in';
+          emailError.classList.add('show');
+          emailInput.classList.add('error');
+          emailInput.focus();
+          return;
+        }
+
+        // Check if enrolled in any classroom
+        if (!isStudentEnrolled(email)) {
+          emailErrorText.textContent = 'This email is not enrolled in any classroom. Contact your faculty.';
+          emailError.classList.add('show');
+          emailInput.classList.add('error');
+          emailInput.focus();
+          return;
+        }
+
+        // Check if first-time or returning student
+        const accounts = getStudentAccounts();
+        isFirstTimeStudent = !accounts[email];
+
+        enteredEmail = email;
+        document.getElementById('showEmail').textContent = email;
+        document.getElementById('roleBadge2').innerHTML = '🎓 Student';
+
+        // Show/hide first-time UI
+        document.getElementById('passwordHint').style.display = isFirstTimeStudent ? 'flex' : 'none';
+        document.getElementById('confirmPasswordGroup').style.display = isFirstTimeStudent ? 'block' : 'none';
+        document.getElementById('passwordLabel').textContent = isFirstTimeStudent ? 'Create Password' : 'Password';
+        document.getElementById('passwordInput').placeholder = isFirstTimeStudent ? 'Create a password' : 'Enter your password';
+        document.getElementById('btnLogin').innerHTML = isFirstTimeStudent
+          ? 'Create Account <span>✦</span><div class="spinner" id="loginSpinner"></div>'
+          : 'Log In <span>✦</span><div class="spinner" id="loginSpinner"></div>';
+        document.getElementById('accountsHint').style.display = 'none';
+        document.getElementById('studentAccountsHint').style.display = 'block';
+
+        goToStep(3);
+
+      } else {
+        // Faculty: must be @nitw.ac.in
+        if (!email.endsWith('@nitw.ac.in')) {
+          emailErrorText.textContent = 'Faculty email must end with @nitw.ac.in';
+          emailError.classList.add('show');
+          emailInput.classList.add('error');
+          emailInput.focus();
+          return;
+        }
+
+        if (!facultyAccounts[email]) {
+          emailErrorText.textContent = 'No faculty account found with this email';
+          emailError.classList.add('show');
+          emailInput.classList.add('error');
+          emailInput.focus();
+          return;
+        }
+
+        enteredEmail = email;
+        document.getElementById('showEmail').textContent = email;
+        document.getElementById('roleBadge2').innerHTML = '👨‍🏫 Faculty';
+
+        // Faculty UI
+        isFirstTimeStudent = false;
+        document.getElementById('passwordHint').style.display = 'none';
+        document.getElementById('confirmPasswordGroup').style.display = 'none';
+        document.getElementById('passwordLabel').textContent = 'Password';
+        document.getElementById('passwordInput').placeholder = 'Enter your password';
+        document.getElementById('btnLogin').innerHTML = 'Log In <span>✦</span><div class="spinner" id="loginSpinner"></div>';
+        document.getElementById('accountsHint').style.display = 'block';
+        document.getElementById('studentAccountsHint').style.display = 'none';
+
+        goToStep(3);
+      }
+    }
+
+    // ─── PASSWORD + LOGIN ─────────────────────────────
+    function handleLogin() {
+      const password = document.getElementById('passwordInput').value;
+      const passError = document.getElementById('passwordError');
+      const passErrorText = document.getElementById('passwordErrorText');
+      const passInput = document.getElementById('passwordInput');
+
+      passError.classList.remove('show');
+      passInput.classList.remove('error');
+
+      if (!password) {
+        passErrorText.textContent = 'Please enter your password';
+        passError.classList.add('show');
+        passInput.classList.add('error');
+        passInput.focus();
+        return;
+      }
+
+      if (password.length < 4) {
+        passErrorText.textContent = 'Password must be at least 4 characters';
+        passError.classList.add('show');
+        passInput.classList.add('error');
+        passInput.focus();
+        return;
+      }
+
+      if (selectedRole === 'student') {
+        handleStudentLogin(password, passError, passErrorText, passInput);
+      } else {
+        handleFacultyLogin(password, passError, passErrorText, passInput);
+      }
+    }
+
+    // ─── STUDENT LOGIN ────────────────────────────────
+    function handleStudentLogin(password, passError, passErrorText, passInput) {
+      const accounts = getStudentAccounts();
+
+      if (isFirstTimeStudent) {
+        // First-time: confirm password
+        const confirmPass = document.getElementById('confirmPasswordInput').value;
+        if (password !== confirmPass) {
+          passErrorText.textContent = 'Passwords do not match';
+          passError.classList.add('show');
+          passInput.classList.add('error');
+          return;
+        }
+
+        // Create account
+        const localPart = enteredEmail.split('@')[0];
+        const name = localPart.replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+        // Find roll number from classrooms
+        const classrooms = getClassrooms();
+        let rollNo = '';
+        for (const cls of classrooms) {
+          const student = (cls.students || []).find(s => s.email.toLowerCase() === enteredEmail);
+          if (student) { rollNo = student.rollNo; break; }
+        }
+
+        accounts[enteredEmail] = { password, name, rollNo };
+        saveStudentAccounts(accounts);
+
+        finishStudentLogin(name);
+      } else {
+        // Returning: verify password
+        const account = accounts[enteredEmail];
+        if (!account || account.password !== password) {
+          passErrorText.textContent = 'Incorrect password. Please try again.';
+          passError.classList.add('show');
+          passInput.classList.add('error');
+          passInput.focus();
+          return;
+        }
+
+        finishStudentLogin(account.name);
+      }
+    }
+
+    function finishStudentLogin(name) {
+      const spinner = document.getElementById('loginSpinner');
+      const btn = document.getElementById('btnLogin');
+      spinner.style.display = 'block';
+      btn.disabled = true;
+      const sp = btn.querySelector('span');
+      if (sp) sp.style.display = 'none';
+
+      const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+
+      localStorage.setItem('amigo_role', 'student');
+      localStorage.setItem('amigo_email', enteredEmail);
+      localStorage.setItem('amigo_name', name);
+      localStorage.setItem('amigo_initials', initials);
+
+      showToast('✅ Welcome, ' + name + '!');
+      setTimeout(() => { window.location.href = 'student-dashboard.html'; }, 1200);
+    }
+
+    // ─── FACULTY LOGIN ────────────────────────────────
+    function handleFacultyLogin(password, passError, passErrorText, passInput) {
+      const account = facultyAccounts[enteredEmail];
+
+      if (!account || account.password !== password) {
+        passErrorText.textContent = 'Incorrect password. Please try again.';
+        passError.classList.add('show');
+        passInput.classList.add('error');
+        passInput.focus();
+        return;
+      }
+
+      const spinner = document.getElementById('loginSpinner');
+      const btn = document.getElementById('btnLogin');
+      spinner.style.display = 'block';
+      btn.disabled = true;
+      const sp = btn.querySelector('span');
+      if (sp) sp.style.display = 'none';
+
+      localStorage.setItem('amigo_role', 'faculty');
+      localStorage.setItem('amigo_email', enteredEmail);
+      localStorage.setItem('amigo_name', account.name);
+      localStorage.setItem('amigo_initials', account.initials);
+      localStorage.setItem('amigo_department', account.department);
+
+      showToast('✅ Welcome, ' + account.name + '!');
+      setTimeout(() => { window.location.href = 'faculty-dashboard.html'; }, 1200);
+    }
+
+    // ─── TOGGLE PASSWORD ──────────────────────────────
+    function togglePassword() {
+      const input = document.getElementById('passwordInput');
+      const btn = document.querySelector('.toggle-pass');
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        btn.textContent = '👁️';
+      }
+    }
+
+    // ─── TOAST ────────────────────────────────────────
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ─── ENTER KEY SUPPORT ────────────────────────────
+    document.getElementById('emailInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleEmailNext();
+    });
+
+    document.getElementById('passwordInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleLogin();
+    });
+  </script>
+</body>
+
+</html>

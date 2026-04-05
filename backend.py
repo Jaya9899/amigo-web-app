@@ -10,6 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 pipelines = {}
+active_sessions = set()
 
 def get_pipeline(course_id):
     if course_id not in pipelines:
@@ -21,7 +22,39 @@ def get_pipeline(course_id):
 
 @app.route('/')
 def index():
-    return jsonify({"status": "ok", "message": "Amigo AI Backend is running!", "session_id": SESSION_ID, "active_courses": list(pipelines.keys())})
+    return jsonify({
+        "status": "ok", 
+        "message": "Amigo AI Backend is running!", 
+        "session_id": SESSION_ID, 
+        "active_courses": list(pipelines.keys()),
+        "active_sessions": list(active_sessions)
+    })
+
+@app.route('/start_session', methods=['POST'])
+def start_session():
+    data = request.json
+    course_id = data.get("course_id", "default")
+    active_sessions.add(course_id)
+    print(f"--- Session started for Course ID: {course_id} ---")
+    return jsonify({"success": True, "course_id": course_id})
+
+@app.route('/end_session', methods=['POST'])
+def end_session():
+    data = request.json
+    course_id = data.get("course_id", "default")
+    if course_id in active_sessions:
+        active_sessions.remove(course_id)
+    print(f"--- Session ended for Course ID: {course_id} ---")
+    return jsonify({"success": True, "course_id": course_id})
+
+@app.route('/is_session_active', methods=['GET'])
+def is_session_active():
+    course_id = request.args.get("course_id", "default")
+    return jsonify({"active": course_id in active_sessions})
+
+@app.route('/active_sessions', methods=['GET'])
+def get_active_sessions():
+    return jsonify({"active_sessions": list(active_sessions)})
 
 @app.route('/set_topic', methods=['POST'])
 def set_topic():

@@ -765,15 +765,24 @@
     window.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
       const topic = params.get('topic');
+      const courseId = params.get('id') || 'default';
+      
       if (topic) {
         document.getElementById('className').textContent = topic;
         // Sync topic with backend
         fetch('http://localhost:5001/set_topic', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ topic: topic })
+          body: JSON.stringify({ topic: topic, course_id: courseId })
         }).catch(e => console.error('Failed to sync topic:', e));
       }
+
+      // Notify backend session started
+      fetch('http://localhost:5001/start_session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ course_id: courseId })
+      }).catch(e => console.error('Failed to start session on backend:', e));
 
       populateParticipants();
       // addInitialMessages(); // Removed initial mock messages
@@ -895,7 +904,18 @@
     // ── Exit ──
     function showExitConfirm() { document.getElementById('exitConfirm').classList.add('active'); }
     function hideExitConfirm() { document.getElementById('exitConfirm').classList.remove('active'); }
-    function endSession() {
+    async function endSession() {
+      const params = new URLSearchParams(window.location.search);
+      const courseId = params.get('id') || 'default';
+
+      try {
+        await fetch('http://localhost:5001/end_session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ course_id: courseId })
+        });
+      } catch(e) { console.error('Failed to end session on backend:', e); }
+
       clearInterval(timer);
       clearInterval(pollInt);
       window.location.href = 'faculty-dashboard.html';

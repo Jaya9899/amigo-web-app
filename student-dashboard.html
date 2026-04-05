@@ -122,7 +122,7 @@
   /* ─── MAIN LAYOUT ─── */
   .dashboard-wrap {
     padding: 90px 20px 60px;
-    max-width: 900px;
+    max-width: 980px;
     margin: 0 auto;
   }
 
@@ -320,10 +320,7 @@
     color: var(--text-muted);
   }
 
-  .course-table th:last-child,
-  .course-table th:nth-last-child(2) {
-    text-align: center;
-  }
+  .course-table th:nth-last-child(-n+3) { text-align: center; }
 
   .course-table tbody tr {
     border-bottom: 1px solid rgba(26,26,26,0.06);
@@ -334,7 +331,7 @@
   .course-table tbody tr:hover { background: rgba(245,240,232,0.5); }
 
   .course-table td {
-    padding: 16px 16px;
+    padding: 14px 16px;
     vertical-align: middle;
   }
 
@@ -392,6 +389,7 @@
   .schedule-days {
     display: flex;
     gap: 4px;
+    flex-wrap: wrap;
   }
 
   .day-pill {
@@ -456,15 +454,13 @@
   .badge-ended .sdot { background: var(--text-muted); }
 
   /* ─── ACTION BUTTONS ─── */
-  .btn-col {
-    text-align: center;
-  }
+  .btn-col { text-align: center; }
 
   .action-btn {
     font-family: 'DM Sans', sans-serif;
     font-size: 12px;
     font-weight: 600;
-    padding: 8px 14px;
+    padding: 7px 12px;
     border-radius: 100px;
     cursor: pointer;
     border: 1.5px solid;
@@ -472,11 +468,10 @@
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     text-decoration: none;
   }
 
-  /* JOIN — green when live, red when not */
   .btn-join-live {
     background: var(--live-green-bg);
     color: var(--live-green-border);
@@ -496,11 +491,10 @@
     color: var(--inactive-red-border);
     border-color: var(--inactive-red-border);
     box-shadow: 2px 2px 0 var(--inactive-red-border);
-    opacity: 0.75;
+    opacity: 0.7;
     cursor: not-allowed;
   }
 
-  /* POST CLASS DOUBT — green when session NOT ongoing, red when live */
   .btn-doubt-available {
     background: var(--live-green-bg);
     color: var(--live-green-border);
@@ -519,24 +513,46 @@
     color: var(--inactive-red-border);
     border-color: var(--inactive-red-border);
     box-shadow: 2px 2px 0 var(--inactive-red-border);
-    opacity: 0.75;
+    opacity: 0.7;
     cursor: not-allowed;
   }
 
-  /* ─── ACTIONS COL WRAPPER (stacked on mobile) ─── */
+  /* ─── MY DOUBTS BUTTON ─── */
+  .btn-my-doubts {
+    background: var(--sky);
+    color: #1A4A6B;
+    border-color: #5A9CC0;
+    box-shadow: 2px 2px 0 #5A9CC0;
+  }
+
+  .btn-my-doubts:hover {
+    background: #8FC4E0;
+    transform: translateY(-1px);
+    box-shadow: 3px 3px 0 #5A9CC0;
+  }
+
+  .btn-count-pill {
+    background: var(--dark);
+    color: var(--cream);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 100px;
+    margin-left: 2px;
+    font-weight: 700;
+  }
+
+  /* ─── ACTIONS COL WRAPPER ─── */
   .actions-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
   }
 
   /* ─── MOBILE CARD VIEW ─── */
-  @media (max-width: 640px) {
+  @media (max-width: 700px) {
     .course-table, .course-table thead, .course-table tbody,
-    .course-table th, .course-table td, .course-table tr {
-      display: block;
-    }
+    .course-table th, .course-table td, .course-table tr { display: block; }
 
     .course-table thead { display: none; }
 
@@ -549,11 +565,7 @@
     }
 
     .course-table tbody tr:hover { background: white; }
-
-    .course-table td {
-      padding: 6px 0;
-      border: none;
-    }
+    .course-table td { padding: 6px 0; border: none; }
 
     .course-table td::before {
       content: attr(data-label);
@@ -567,7 +579,6 @@
     }
 
     .course-table td:first-child::before { display: none; }
-
     .btn-col { text-align: left; }
 
     .actions-wrap {
@@ -576,14 +587,9 @@
       justify-content: flex-start;
     }
 
-    .stats-row {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .stat-card .num { font-size: 22px; }
     .stat-card { padding: 14px 10px; }
-
     .filter-chips { display: none; }
   }
 
@@ -613,7 +619,7 @@
     font-size: 13px;
     padding: 12px 16px;
     border-radius: 16px 16px 4px 16px;
-    max-width: 220px;
+    max-width: 240px;
     line-height: 1.5;
     opacity: 0;
     pointer-events: none;
@@ -624,7 +630,7 @@
 
   .mascot-tip.show { opacity: 1; transform: translateY(0); pointer-events: all; }
 
-  /* ─── DOUBT MODAL ─── */
+  /* ─── POST DOUBT MODAL ─── */
   .modal-overlay {
     position: fixed;
     inset: 0;
@@ -748,8 +754,163 @@
   }
 
   .modal-btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+  .modal-btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  .divider { height: 1px; background: rgba(26,26,26,0.08); margin: 0 20px; }
+  /* ─── MY DOUBTS MODAL ─── */
+  .dh-modal-inner {
+    background: var(--cream);
+    border: 1.5px solid var(--dark);
+    border-radius: 24px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 460px;
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 6px 6px 0 var(--dark);
+    transform: translateY(16px);
+    transition: transform 0.2s;
+  }
+
+  .modal-overlay.open .dh-modal-inner { transform: translateY(0); }
+
+  .dh-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 14px 0 16px;
+  }
+
+  .dh-tab {
+    flex: 1;
+    padding: 9px 10px;
+    border-radius: 100px;
+    border: 1.5px solid rgba(26,26,26,0.15);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+
+  .dh-tab.active-pending {
+    background: #FEF3C7;
+    border-color: #D97706;
+    color: #92400E;
+  }
+
+  .dh-tab.active-resolved {
+    background: var(--live-green-bg);
+    border-color: var(--live-green-border);
+    color: var(--live-green-border);
+  }
+
+  .dh-count {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 100px;
+  }
+
+  .dh-count-pending { background: #FDE68A; color: #92400E; }
+  .dh-count-resolved { background: #BBF7D0; color: #15803D; }
+
+  .dh-list {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    padding-right: 2px;
+  }
+
+  .dh-list::-webkit-scrollbar { width: 4px; }
+  .dh-list::-webkit-scrollbar-track { background: transparent; }
+  .dh-list::-webkit-scrollbar-thumb { background: rgba(26,26,26,0.15); border-radius: 2px; }
+
+  .dh-card {
+    background: white;
+    border: 1.5px solid rgba(26,26,26,0.1);
+    border-radius: 16px;
+    padding: 14px 16px;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  .dh-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .dh-date { font-size: 11px; color: var(--text-muted); }
+
+  .dh-status {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding: 3px 9px;
+    border-radius: 100px;
+  }
+
+  .dh-status-pending {
+    background: #FEF3C7;
+    color: #92400E;
+    border: 1px solid #FDE68A;
+  }
+
+  .dh-status-resolved {
+    background: var(--live-green-bg);
+    color: var(--live-green-border);
+    border: 1px solid #86EFAC;
+  }
+
+  .dh-text {
+    font-size: 13px;
+    color: var(--dark);
+    line-height: 1.55;
+  }
+
+  .dh-reply {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(26,26,26,0.08);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .dh-reply-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--sky);
+    border: 1.5px solid var(--dark);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--dark);
+    flex-shrink: 0;
+  }
+
+  .dh-reply-body { flex: 1; }
+  .dh-reply-who { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .dh-reply-text { font-size: 12px; color: var(--dark); line-height: 1.5; }
+
+  .dh-empty {
+    text-align: center;
+    padding: 32px 16px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .dh-empty-icon { font-size: 32px; margin-bottom: 10px; }
 
   /* ─── TOAST ─── */
   .toast {
@@ -781,7 +942,7 @@
 
 <!-- ─── NAVBAR ─── -->
 <nav>
-  <a class="nav-logo" href="#">
+  <a class="nav-logo" href="main.html">
     <div class="dot"></div>
     Amigo
   </a>
@@ -789,15 +950,15 @@
     <div class="nav-time" id="liveTime">--:-- --</div>
     <div class="student-pill">
       <div class="avatar">🎓</div>
-      Rohan K.
+      <span id="navStudentName">Student</span>
     </div>
+    <a href="login.html" style="text-decoration:none; color:var(--dark); font-size:12px; font-weight:500; padding:6px 14px; border:1.5px solid rgba(26,26,26,0.2); border-radius:100px; transition: all 0.2s;" onmouseover="this.style.background='var(--dark)';this.style.color='var(--cream)'" onmouseout="this.style.background='transparent';this.style.color='var(--dark)'">Logout</a>
   </div>
 </nav>
 
 <!-- ─── DASHBOARD ─── -->
 <div class="dashboard-wrap">
 
-  <!-- Header -->
   <div class="dash-header">
     <div class="dash-tag">
       <div class="pulse-dot"></div>
@@ -807,19 +968,17 @@
     <p class="dash-sub">Semester 4 · B.Tech CSE · NIT Warangal</p>
   </div>
 
-  <!-- Stats -->
   <div class="stats-row">
     <div class="stat-card">
-      <div class="num">6</div>
+      <div class="num" id="courseCount">0</div>
       <div class="label">Courses</div>
     </div>
     <div class="stat-card">
-      <div class="num" id="liveCount">1</div>
+      <div class="num" id="liveCount">0</div>
       <div class="label">Live Now</div>
     </div>
   </div>
 
-  <!-- Legend -->
   <div class="legend-row">
     <div class="legend-item">
       <div class="legend-dot ld-green"></div>
@@ -831,7 +990,6 @@
     </div>
   </div>
 
-  <!-- Table -->
   <div class="table-wrap">
     <div class="table-top-bar">
       <h3>My Courses</h3>
@@ -851,156 +1009,249 @@
           <th>Schedule</th>
           <th>Status</th>
           <th style="text-align:center">Join Class</th>
-          <th style="text-align:center">Post-Class Doubts</th>
+          <th style="text-align:center">Post Doubt</th>
+          <th style="text-align:center">My Doubts</th>
         </tr>
       </thead>
-      <tbody id="courseBody">
-        <!-- Rows injected by JS -->
-      </tbody>
+      <tbody id="courseBody"></tbody>
     </table>
   </div>
 
 </div>
 
-<!-- ─── DOUBT MODAL ─── -->
+<!-- ─── POST DOUBT MODAL ─── -->
 <div class="modal-overlay" id="doubtModal">
   <div class="modal">
     <div class="modal-label">Doubt Resolution</div>
     <div class="modal-title">Post a Doubt 🙋</div>
     <div class="modal-course-info" id="modalCourseInfo">Course · Faculty</div>
-    
-    <div style="display: flex; flex-direction: column; gap: 12px;">
+
+    <div style="display:flex; flex-direction:column; gap:12px;">
       <textarea id="doubtText" placeholder="Describe your doubt clearly — Amigo AI will resolve it or forward to your faculty..."></textarea>
-      
-      <div style="background: white; border: 1.5px solid rgba(26,26,26,0.1); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 10px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 14px;">📎</span>
-          <input type="file" id="doubtFile" style="font-size: 12px; color: var(--text-muted); width: 100%;">
+
+      <div style="background:white; border:1.5px solid rgba(26,26,26,0.1); border-radius:14px; padding:12px; display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px;">📎</span>
+          <input type="file" id="doubtFile" style="font-size:12px; color:var(--text-muted); width:100%;">
         </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 14px;">🔗</span>
-          <input type="text" id="doubtLink" placeholder="Reference Link (optional)" style="flex: 1; border: none; outline: none; font-size: 12px; font-family: 'DM Sans', sans-serif;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px;">🔗</span>
+          <input type="text" id="doubtLink" placeholder="Reference Link (optional)" style="flex:1; border:none; outline:none; font-size:12px; font-family:'DM Sans',sans-serif; color:var(--dark);">
         </div>
       </div>
     </div>
 
     <div class="modal-btns">
       <button class="modal-btn-cancel" onclick="closeDoubtModal()">Cancel</button>
-      <button class="modal-btn-submit" onclick="submitDoubt()">Submit Doubt ✦</button>
+      <button class="modal-btn-submit" id="doubtSubmitBtn" onclick="submitDoubt()">Submit Doubt ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MY DOUBTS MODAL ─── -->
+<div class="modal-overlay" id="myDoubtsModal">
+  <div class="dh-modal-inner">
+    <div class="modal-label">Doubt History</div>
+    <div class="modal-title">My Doubts 📋</div>
+    <div class="modal-course-info" id="myDoubtsCourseInfo">Course · Faculty</div>
+
+    <div class="dh-tabs">
+      <button class="dh-tab active-pending" id="dh-tab-pending" onclick="switchDoubtsTab('pending')">
+        Pending <span class="dh-count dh-count-pending" id="dh-count-pending">0</span>
+      </button>
+      <button class="dh-tab" id="dh-tab-resolved" onclick="switchDoubtsTab('resolved')">
+        Resolved <span class="dh-count dh-count-resolved" id="dh-count-resolved">0</span>
+      </button>
+    </div>
+
+    <div class="dh-list" id="dhList"></div>
+
+    <div class="modal-btns" style="margin-top:16px; flex-shrink:0;">
+      <button class="modal-btn-cancel" onclick="closeMyDoubts()">Close</button>
     </div>
   </div>
 </div>
 
 <!-- ─── FLOATING MASCOT ─── -->
 <div class="floating-mascot" id="mascotBtn" onclick="toggleTip()">🤖</div>
-<div class="mascot-tip" id="mascotTip">👋 Green JOIN = class is live! Green DOUBT = session ended, post your question now.</div>
+<div class="mascot-tip" id="mascotTip">👋 Green JOIN = class is live! Green DOUBT = session ended, post your question now. 📋 MY DOUBTS = view & track your questions!</div>
 
 <!-- ─── TOAST ─── -->
 <div class="toast" id="toast"></div>
 
 <script>
-  // ─── DATA ───────────────────────────────────────────────
-  // status: 'live' | 'upcoming' | 'ended'
-  const courses = [
-    {
-      id: 1,
-      icon: '💻',
-      iconBg: '#B8D4B0',
-      name: 'Software Engineering',
-      code: 'CS-402',
-      faculty: 'Dr. Priya Menon',
-      dept: 'Computer Science',
-      days: ['Mon','Wed','Fri'],
-      time: '09:00 – 10:00 AM',
-      status: 'ended'
-    },
-    {
-      id: 2,
-      icon: '📐',
-      iconBg: '#B8D4E8',
-      name: 'Artificial Intelligence',
-      code: 'CS-501',
-      faculty: 'Prof. Ramesh Iyer',
-      dept: 'Computer Science',
-      days: ['Tue','Thu'],
-      time: '11:00 – 12:00 PM',
-      status: 'upcoming'
-    },
-    {
-      id: 3,
-      icon: '⚡',
-      iconBg: '#F2C9A0',
-      name: 'Data Structures',
-      code: 'CS-201',
-      faculty: 'Dr. Kavitha Reddy',
-      dept: 'Computer Science',
-      days: ['Mon','Wed'],
-      time: '02:00 – 03:00 PM',
-      status: 'ended'
-    },
-    {
-      id: 4,
-      icon: '🧬',
-      iconBg: '#A8D8C8',
-      name: 'Computer Networks',
-      code: 'CS-304',
-      faculty: 'Dr. Suresh Babu',
-      dept: 'Computer Science',
-      days: ['Tue','Thu','Sat'],
-      time: '03:00 – 04:00 PM',
-      status: 'upcoming'
-    }
+  // ─── STATIC COURSES (fallback if no classrooms in localStorage) ─────────
+  const STATIC_COURSES = [
+    { id: 1, icon: '💻', iconBg: '#B8D4B0', name: 'Software Engineering', code: 'CS-402', faculty: 'Dr. Priya Menon', dept: 'Computer Science', days: ['Mon','Wed','Fri'], time: '09:00 – 10:00 AM', status: 'ended' },
+    { id: 2, icon: '📐', iconBg: '#B8D4E8', name: 'Artificial Intelligence', code: 'CS-501', faculty: 'Prof. Ramesh Iyer', dept: 'Computer Science', days: ['Tue','Thu'], time: '11:00 – 12:00 PM', status: 'upcoming' },
+    { id: 3, icon: '⚡', iconBg: '#F2C9A0', name: 'Data Structures', code: 'CS-201', faculty: 'Dr. Kavitha Reddy', dept: 'Computer Science', days: ['Mon','Wed'], time: '02:00 – 03:00 PM', status: 'ended' },
+    { id: 4, icon: '🧬', iconBg: '#A8D8C8', name: 'Computer Networks', code: 'CS-304', faculty: 'Dr. Suresh Babu', dept: 'Computer Science', days: ['Tue','Thu','Sat'], time: '03:00 – 04:00 PM', status: 'upcoming' }
   ];
 
-  const TODAY_MAP = { 0:'Sun', 1:'Mon', 2:'Tue', 3:'Wed', 4:'Thu', 5:'Fri', 6:'Sat' };
-  const todayAbbr = TODAY_MAP[new Date().getDay()];
+  const ICON_POOL  = ['💻','📐','⚡','🧬','📡','🧪','🔬','📚','🎨','🏗️'];
+  const BG_POOL    = ['#B8D4B0','#B8D4E8','#F2C9A0','#A8D8C8','#E8DFA0'];
+  const STATUS_OPT = ['live','upcoming','ended'];
+  const TODAY_MAP  = {0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'};
+  const todayAbbr  = TODAY_MAP[new Date().getDay()];
 
-  // ─── RENDER ─────────────────────────────────────────────
+  let courses = [];
+
+  // ─── LOCALSTORAGE HELPERS ────────────────────────────────
+  function getClassrooms() {
+    try { return JSON.parse(localStorage.getItem('amigo_classrooms') || '[]'); }
+    catch { return []; }
+  }
+
+  function getDoubts() {
+    try { return JSON.parse(localStorage.getItem('amigo_doubts') || '[]'); }
+    catch { return []; }
+  }
+
+  function saveDoubts(data) {
+    try { localStorage.setItem('amigo_doubts', JSON.stringify(data)); }
+    catch(e) { console.warn('localStorage unavailable', e); }
+  }
+
+  // ─── LOAD ENROLLED COURSES ───────────────────────────────
+  function loadCourses() {
+    const studentEmail = (localStorage.getItem('amigo_email') || '').toLowerCase();
+    const allClassrooms = getClassrooms();
+    const enrolled = allClassrooms.filter(cls =>
+      cls.students && cls.students.some(s => s.email.toLowerCase() === studentEmail)
+    );
+
+    if (enrolled.length > 0) {
+      courses = enrolled.map((cls, i) => ({
+        id: cls.id || ('cls_' + i),
+        icon: cls.icon || ICON_POOL[i % ICON_POOL.length],
+        iconBg: BG_POOL[i % BG_POOL.length],
+        name: cls.name,
+        code: cls.code,
+        faculty: cls.facultyName || 'Faculty',
+        dept: cls.department || 'Computer Science',
+        days: parseDays(cls.schedule),
+        time: parseTime(cls.schedule),
+        status: 'ended', // Default to ended, sync will update to live
+        classroomId: cls.id
+      }));
+    } else {
+      // Use static courses if not enrolled in any real classroom
+      courses = STATIC_COURSES;
+    }
+  }
+
+  // ─── SYNC ACTIVE SESSIONS ────────────────────────────────
+  async function syncActiveSessions() {
+    try {
+      const res = await fetch('http://localhost:5001/active_sessions');
+      const data = await res.json();
+      if (data.active_sessions) {
+        let changed = false;
+        courses.forEach(c => {
+          const isActive = data.active_sessions.includes(String(c.id)) || data.active_sessions.includes(String(c.classroomId));
+          const newStatus = isActive ? 'live' : 'ended';
+          if (c.status !== newStatus) {
+            c.status = newStatus;
+            changed = true;
+          }
+        });
+        if (changed) {
+          updateStats();
+          renderTable();
+        }
+      }
+    } catch (e) {
+      console.error('Failed to sync active sessions:', e);
+    }
+  }
+
+  function parseDays(schedule) {
+    if (!schedule) return [];
+    const part = schedule.split('•')[0] || schedule.split('·')[0] || schedule;
+    return ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].filter(d => part.includes(d));
+  }
+
+  function parseTime(schedule) {
+    if (!schedule) return 'No time set';
+    const p1 = schedule.split('•');
+    if (p1.length > 1) return p1[1].trim();
+    const p2 = schedule.split('·');
+    if (p2.length > 1) return p2[1].trim();
+    return schedule;
+  }
+
+  // ─── STATS ───────────────────────────────────────────────
+  function updateStats() {
+    document.getElementById('courseCount').textContent = courses.length;
+    document.getElementById('liveCount').textContent = courses.filter(c => c.status === 'live').length;
+  }
+
+  // ─── RENDER TABLE ────────────────────────────────────────
   function renderTable(filter = 'all') {
     const tbody = document.getElementById('courseBody');
     tbody.innerHTML = '';
 
     const filtered = filter === 'all' ? courses : courses.filter(c => c.status === filter);
 
-    if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">No courses found for this filter.</td></tr>`;
+    if (courses.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:48px 20px;color:var(--text-muted);">
+        <div style="font-size:40px;margin-bottom:12px;">📭</div>
+        <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-bottom:6px;color:var(--soft-dark);">No classrooms yet</div>
+        <div>You haven't been enrolled in any classroom by a faculty member yet.</div>
+      </td></tr>`;
       return;
     }
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">No courses found for this filter.</td></tr>`;
+      return;
+    }
+
+    const studentEmail = (localStorage.getItem('amigo_email') || '').toLowerCase();
+    const allDoubts = getDoubts();
 
     filtered.forEach((c, i) => {
       const isLive = c.status === 'live';
 
-      // JOIN btn: green if live, red if not
+      // JOIN button
       const joinBtnClass = isLive ? 'btn-join-live' : 'btn-join-inactive';
-      const joinIcon = isLive ? '▶' : '🔒';
-      const joinTitle = isLive ? 'Join live session' : 'Session not live';
-      const joinDisabled = isLive ? '' : 'disabled title="Session is not live"';
-      const joinOnclick = isLive ? `onclick="joinClass(${c.id})"` : '';
+      const joinIcon     = isLive ? '▶' : '🔒';
+      const joinDisabled = isLive ? '' : 'disabled';
+      const joinOnclick  = isLive ? `onclick="joinClass('${c.id}')"` : '';
 
-      // DOUBT btn: green if NOT live (session ended/upcoming, i.e., you can post), red if live
-      const doubtAvailable = !isLive;
-      const doubtBtnClass = doubtAvailable ? 'btn-doubt-available' : 'btn-doubt-unavailable';
-      const doubtIcon = doubtAvailable ? '💬' : '🔴';
-      const doubtDisabled = doubtAvailable ? '' : 'disabled title="Wait for session to end"';
-      const doubtOnclick = doubtAvailable ? `onclick="openDoubtModal(${c.id})"` : '';
+      // POST DOUBT button
+      const doubtOk      = !isLive;
+      const doubtClass   = doubtOk ? 'btn-doubt-available' : 'btn-doubt-unavailable';
+      const doubtIcon    = doubtOk ? '💬' : '🔴';
+      const doubtDisabled = doubtOk ? '' : 'disabled';
+      const doubtOnclick  = doubtOk ? `onclick="openDoubtModal('${c.id}')"` : '';
 
       // Status badge
       let badgeHtml = '';
-      if (c.status === 'live') {
-        badgeHtml = `<span class="status-badge badge-live"><span class="sdot"></span>Live Now</span>`;
-      } else if (c.status === 'upcoming') {
-        badgeHtml = `<span class="status-badge badge-upcoming"><span class="sdot"></span>Upcoming</span>`;
-      } else {
-        badgeHtml = `<span class="status-badge badge-ended"><span class="sdot"></span>Ended</span>`;
-      }
+      if (c.status === 'live')     badgeHtml = `<span class="status-badge badge-live"><span class="sdot"></span>Live Now</span>`;
+      else if (c.status === 'upcoming') badgeHtml = `<span class="status-badge badge-upcoming"><span class="sdot"></span>Upcoming</span>`;
+      else                         badgeHtml = `<span class="status-badge badge-ended"><span class="sdot"></span>Ended</span>`;
 
-      // Days with today highlighted
-      const dayPills = c.days.map(d =>
-        `<span class="day-pill ${d === todayAbbr ? 'today' : ''}">${d}</span>`
-      ).join('');
+      // Day pills
+      const dayPills = c.days.length > 0
+        ? c.days.map(d => `<span class="day-pill ${d === todayAbbr ? 'today' : ''}">${d}</span>`).join('')
+        : '<span style="font-size:11px;color:var(--text-muted);">—</span>';
+
+      // Doubt counts for this course
+      const myDoubts   = allDoubts.filter(d =>
+        (String(d.courseId) === String(c.id) || String(d.classId) === String(c.id)) &&
+        d.studentEmail && d.studentEmail.toLowerCase() === studentEmail
+      );
+      const totalCount   = myDoubts.length;
+      const pendingCount = myDoubts.filter(d => d.status === 'pending').length;
+      const resolvedCount= myDoubts.filter(d => d.status === 'resolved').length;
+
+      const countBadge = totalCount > 0
+        ? `<span class="btn-count-pill">${pendingCount > 0 ? pendingCount + ' pending' : resolvedCount + ' done'}</span>`
+        : '';
 
       tbody.innerHTML += `
-        <tr data-status="${c.status}" style="animation: fadeUp 0.4s ${i * 0.06}s ease both; opacity:0;">
+        <tr data-status="${c.status}" style="animation:fadeUp 0.4s ${i*0.06}s ease both; opacity:0;">
           <td data-label="Course">
             <div class="course-cell">
               <div class="course-icon" style="background:${c.iconBg}">${c.icon}</div>
@@ -1021,15 +1272,18 @@
           <td data-label="Status">${badgeHtml}</td>
           <td class="btn-col" data-label="Join Class">
             <div class="actions-wrap">
-              <button class="action-btn ${joinBtnClass}" ${joinDisabled} ${joinOnclick}>
-                ${joinIcon} Join
-              </button>
+              <button class="action-btn ${joinBtnClass}" ${joinDisabled} ${joinOnclick}>${joinIcon} Join</button>
             </div>
           </td>
-          <td class="btn-col" data-label="Post-Class Doubts">
+          <td class="btn-col" data-label="Post Doubt">
             <div class="actions-wrap">
-              <button class="action-btn ${doubtBtnClass}" ${doubtDisabled} ${doubtOnclick}>
-                ${doubtIcon} Post Doubt
+              <button class="action-btn ${doubtClass}" ${doubtDisabled} ${doubtOnclick}>${doubtIcon} Post Doubt</button>
+            </div>
+          </td>
+          <td class="btn-col" data-label="My Doubts">
+            <div class="actions-wrap">
+              <button class="action-btn btn-my-doubts" onclick="openMyDoubts('${c.id}')">
+                📋 My Doubts ${countBadge}
               </button>
             </div>
           </td>
@@ -1037,13 +1291,12 @@
       `;
     });
 
-    // Re-trigger row animations
     setTimeout(() => {
       document.querySelectorAll('#courseBody tr').forEach(r => r.style.opacity = '');
     }, 50);
   }
 
-  // ─── FILTER ─────────────────────────────────────────────
+  // ─── FILTER ──────────────────────────────────────────────
   function filterCourses(filter, btn) {
     document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -1052,34 +1305,29 @@
 
   // ─── JOIN CLASS ──────────────────────────────────────────
   async function joinClass(id) {
-    const c = courses.find(x => x.id === id);
+    const c = courses.find(x => String(x.id) === String(id));
+    if (!c) return;
     showToast(`✅ Joining ${c.name}…`);
-    
-    // Set the topic in the backend for relevancy filtering
     try {
       await fetch('http://localhost:5001/set_topic', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic: c.name })
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({topic: c.name})
       });
-      console.log(`Topic set to: ${c.name}`);
-    } catch (e) {
-      console.error('Failed to set topic:', e);
-    }
-
-    // Redirect to the classroom session page
-    // Using classroom-session.html (confirmed file exists)
+    } catch(e) { console.error('set_topic failed', e); }
     setTimeout(() => {
       window.location.href = `classroom-session.html?topic=${encodeURIComponent(c.name)}&id=${c.id}`;
     }, 1000);
   }
 
-  // ─── DOUBT MODAL ─────────────────────────────────────────
+  // ─── POST DOUBT MODAL ────────────────────────────────────
   let activeDoubtCourse = null;
 
   function openDoubtModal(id) {
-    activeDoubtCourse = courses.find(x => x.id === id);
-    document.getElementById('modalCourseInfo').textContent = `${activeDoubtCourse.name} · ${activeDoubtCourse.faculty}`;
+    activeDoubtCourse = courses.find(x => String(x.id) === String(id));
+    if (activeDoubtCourse) {
+      document.getElementById('modalCourseInfo').textContent = `${activeDoubtCourse.name} · ${activeDoubtCourse.faculty}`;
+    }
     document.getElementById('doubtText').value = '';
     document.getElementById('doubtFile').value = '';
     document.getElementById('doubtLink').value = '';
@@ -1092,60 +1340,204 @@
   }
 
   async function submitDoubt() {
-    const text = document.getElementById('doubtText').value.trim();
+    const text      = document.getElementById('doubtText').value.trim();
     const fileInput = document.getElementById('doubtFile');
     const linkInput = document.getElementById('doubtLink');
 
     if (!text) { showToast('⚠️ Please describe your doubt first.'); return; }
-    
-    const submitBtn = document.querySelector('.modal-btn-submit');
-    const originalText = submitBtn.textContent;
+
+    const submitBtn = document.getElementById('doubtSubmitBtn');
+    const origText  = submitBtn.textContent;
     submitBtn.textContent = 'Submitting...';
     submitBtn.disabled = true;
 
-    // Simulate file upload by taking the name
-    const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : null;
+    const fileName  = fileInput.files.length > 0 ? fileInput.files[0].name : null;
     const linkValue = linkInput.value.trim();
 
+    const studentEmail = (localStorage.getItem('amigo_email') || 'student@example.com').toLowerCase();
+    const studentName  = localStorage.getItem('amigo_name') || 'Student';
+    const now          = new Date().toISOString();
+
+    // ── Unified schema used by BOTH dashboards ──
+    const newDoubt = {
+      id:          'doubt_' + Date.now(),
+      // Teacher dashboard reads classId
+      classId:     activeDoubtCourse ? String(activeDoubtCourse.id) : null,
+      // Student dashboard reads courseId
+      courseId:    activeDoubtCourse ? activeDoubtCourse.id : null,
+      courseCode:  activeDoubtCourse ? activeDoubtCourse.code : 'N/A',
+      courseName:  activeDoubtCourse ? activeDoubtCourse.name : 'Unknown',
+      faculty:     activeDoubtCourse ? activeDoubtCourse.faculty : 'Faculty',
+      studentEmail,
+      studentName,
+      text,
+      fileUrl:     fileName || null,
+      link:        linkValue || null,
+      status:      'pending',
+      // Teacher dashboard reads createdAt
+      createdAt:   now,
+      // Keep submittedAt as alias
+      submittedAt: now,
+      // Teacher writes these; student reads them
+      resolution:  null,
+      resolvedAt:  null,
+      reply:       null,
+      repliedAt:   null,
+      repliedBy:   null
+    };
+
+    // Save to localStorage immediately (offline-first)
+    const allDoubts = getDoubts();
+    allDoubts.push(newDoubt);
+    saveDoubts(allDoubts);
+
+    // Also try the backend
     try {
       const res = await fetch('http://localhost:5001/submit_doubts', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          doubt: text,
-          topic: activeDoubtCourse ? activeDoubtCourse.name : undefined,
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          doubt:     text,
+          topic:     activeDoubtCourse ? activeDoubtCourse.name : undefined,
           course_id: activeDoubtCourse ? activeDoubtCourse.code : 'default',
-          file_url: fileName,
-          link: linkValue || null
+          file_url:  fileName,
+          link:      linkValue || null
         })
       });
 
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        showToast('❌ Server error: ' + (err.error || res.statusText));
-        return;
+      if (res.ok) {
+        const data = await res.json();
+        if (!data.accepted) {
+          // Server filtered it — remove from localStorage
+          const updated = getDoubts().filter(d => d.id !== newDoubt.id);
+          saveDoubts(updated);
+          showToast('❌ Filtered: ' + (data.reason || 'not relevant'));
+          submitBtn.textContent = origText;
+          submitBtn.disabled = false;
+          return;
+        }
       }
-
-      const data = await res.json();
-
-      if (data.accepted) {
-        showToast(`📬 Doubt submitted for ${activeDoubtCourse ? activeDoubtCourse.code : 'course'} — Amigo is on it!`);
-        closeDoubtModal();
-      } else {
-        showToast('❌ Filtered: ' + (data.reason || 'not relevant'));
-      }
-
-    } catch (e) {
-      showToast('❌ Cannot reach server — is backend.py running?');
-      console.error(e);
-    } finally {
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
+    } catch(e) {
+      // Offline or server down — doubt is already saved locally, that's fine
+      console.warn('Backend unreachable, doubt saved locally.');
     }
+
+    showToast(`📬 Doubt submitted for ${activeDoubtCourse ? activeDoubtCourse.code : 'course'} — Amigo is on it!`);
+    closeDoubtModal();
+    renderTable();
+
+    submitBtn.textContent = origText;
+    submitBtn.disabled = false;
   }
 
   document.getElementById('doubtModal').addEventListener('click', function(e) {
     if (e.target === this) closeDoubtModal();
+  });
+
+  // ─── MY DOUBTS MODAL ─────────────────────────────────────
+  let activeMyDoubtsCourse = null;
+  let myDoubtsTab = 'pending';
+
+  function openMyDoubts(id) {
+    activeMyDoubtsCourse = courses.find(x => String(x.id) === String(id));
+    myDoubtsTab = 'pending';
+    renderMyDoubts();
+    document.getElementById('myDoubtsModal').classList.add('open');
+  }
+
+  function closeMyDoubts() {
+    document.getElementById('myDoubtsModal').classList.remove('open');
+    activeMyDoubtsCourse = null;
+  }
+
+  function switchDoubtsTab(tab) {
+    myDoubtsTab = tab;
+    renderMyDoubts();
+  }
+
+  function renderMyDoubts() {
+    const c = activeMyDoubtsCourse;
+    if (!c) return;
+
+    const studentEmail = (localStorage.getItem('amigo_email') || '').toLowerCase();
+    const allDoubts    = getDoubts();
+
+    // Match by both courseId and classId (handles both static and dynamic courses)
+    const myDoubts = allDoubts.filter(d =>
+      (String(d.courseId) === String(c.id) || String(d.classId) === String(c.id)) &&
+      d.studentEmail && d.studentEmail.toLowerCase() === studentEmail
+    );
+
+    const pending  = myDoubts.filter(d => d.status === 'pending');
+    const resolved = myDoubts.filter(d => d.status === 'resolved');
+
+    // Update header info
+    document.getElementById('myDoubtsCourseInfo').textContent = `${c.name} · ${c.faculty}`;
+
+    // Update tab counts
+    document.getElementById('dh-count-pending').textContent  = pending.length;
+    document.getElementById('dh-count-resolved').textContent = resolved.length;
+
+    // Update tab active states
+    const tabPending  = document.getElementById('dh-tab-pending');
+    const tabResolved = document.getElementById('dh-tab-resolved');
+    tabPending.className  = 'dh-tab' + (myDoubtsTab === 'pending'  ? ' active-pending'  : '');
+    tabResolved.className = 'dh-tab' + (myDoubtsTab === 'resolved' ? ' active-resolved' : '');
+
+    const list = myDoubtsTab === 'pending' ? pending : resolved;
+    const listEl = document.getElementById('dhList');
+
+    if (list.length === 0) {
+      listEl.innerHTML = `
+        <div class="dh-empty">
+          <div class="dh-empty-icon">${myDoubtsTab === 'pending' ? '🎉' : '📭'}</div>
+          ${myDoubtsTab === 'pending'
+            ? "No pending doubts — you're all caught up!"
+            : 'No resolved doubts yet. Post a doubt to get started.'}
+        </div>`;
+      return;
+    }
+
+    listEl.innerHTML = list.map((d, i) => {
+      const dateStr = new Date(d.submittedAt || d.createdAt).toLocaleString('en-IN', {
+        day: 'numeric', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+
+      // Faculty reply: check both field names (reply = student schema, resolution = teacher schema)
+      const replyText = d.reply || d.resolution || null;
+      const replyWho  = d.repliedBy || d.faculty || 'Faculty';
+      const replyTime = d.repliedAt || d.resolvedAt || null;
+
+      const replyHtml = replyText ? `
+        <div class="dh-reply">
+          <div class="dh-reply-avatar">${replyWho.split(' ').filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+          <div class="dh-reply-body">
+            <div class="dh-reply-who">${replyWho}${replyTime ? ' · ' + new Date(replyTime).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : ''}</div>
+            <div class="dh-reply-text">${escapeHtml(replyText)}</div>
+          </div>
+        </div>` : '';
+
+      const fileHtml = d.fileUrl ? `<div style="font-size:11px;color:var(--text-muted);margin-top:6px;">📎 ${escapeHtml(d.fileUrl)}</div>` : '';
+      const linkHtml = d.link   ? `<div style="font-size:11px;margin-top:4px;"><a href="${escapeHtml(d.link)}" target="_blank" style="color:#3B82F6;">🔗 Reference link</a></div>` : '';
+
+      return `
+        <div class="dh-card" style="animation-delay:${i*0.06}s">
+          <div class="dh-card-top">
+            <span class="dh-date">${dateStr}</span>
+            <span class="dh-status ${d.status === 'pending' ? 'dh-status-pending' : 'dh-status-resolved'}">
+              ${d.status === 'pending' ? 'Pending' : 'Resolved'}
+            </span>
+          </div>
+          <div class="dh-text">${escapeHtml(d.text)}</div>
+          ${fileHtml}${linkHtml}
+          ${replyHtml}
+        </div>`;
+    }).join('');
+  }
+
+  document.getElementById('myDoubtsModal').addEventListener('click', function(e) {
+    if (e.target === this) closeMyDoubts();
   });
 
   // ─── MASCOT ──────────────────────────────────────────────
@@ -1156,7 +1548,7 @@
     setTimeout(() => {
       tipVisible = false;
       document.getElementById('mascotTip').classList.remove('show');
-    }, 4000);
+    }, 4500);
   }
 
   // ─── TOAST ───────────────────────────────────────────────
@@ -1166,33 +1558,50 @@
     t.textContent = msg;
     t.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
   }
 
   // ─── CLOCK ───────────────────────────────────────────────
   function updateClock() {
-    const now = new Date();
-    document.getElementById('liveTime').textContent = now.toLocaleTimeString('en-IN', {
+    document.getElementById('liveTime').textContent = new Date().toLocaleTimeString('en-IN', {
       hour: '2-digit', minute: '2-digit', hour12: true
     });
   }
   updateClock();
   setInterval(updateClock, 30000);
 
-  // ─── PROGRESS BAR ────────────────────────────────────────
+  // ─── SCROLL PROGRESS ─────────────────────────────────────
   window.addEventListener('scroll', () => {
     const doc = document.documentElement;
-    const progress = (window.scrollY / (doc.scrollHeight - doc.clientHeight)) * 100;
-    document.getElementById('progressBar').style.width = progress + '%';
+    const pct = (window.scrollY / (doc.scrollHeight - doc.clientHeight)) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
   });
 
+  // ─── ESCAPE HTML ─────────────────────────────────────────
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ─── AUTH ────────────────────────────────────────────────
+  try {
+    const savedRole = localStorage.getItem('amigo_role');
+    const savedName = localStorage.getItem('amigo_name');
+    if (savedRole === 'student' && savedName) {
+      const parts = savedName.split(' ');
+      document.getElementById('navStudentName').textContent =
+        parts.length > 1 ? parts[0] + ' ' + parts[1][0] + '.' : parts[0];
+    }
+  } catch(e) {}
+
   // ─── INIT ────────────────────────────────────────────────
+  loadCourses();
+  updateStats();
   renderTable();
-</script>
-</body>
-</html>
-�─────
-  renderTable();
+  syncActiveSessions();
+  setInterval(syncActiveSessions, 5000);
 </script>
 </body>
 </html>

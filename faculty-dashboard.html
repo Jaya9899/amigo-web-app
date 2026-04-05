@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Faculty Dashboard — Amigo</title>
+  <meta name="description" content="Amigo Faculty Dashboard — manage classrooms, enroll students, and start sessions.">
   <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;700&display=swap"
     rel="stylesheet">
@@ -20,52 +21,46 @@
       --dark2: #2D2D2D;
       --soft-dark: #3A3A3A;
       --text-muted: #6B6B6B;
+      --white: #FFFFFF;
+      --error: #E53E3E;
+      --error-bg: #FED7D7;
+      --success: #38A169;
+      --success-bg: #C6F6D5;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--cream);
       color: var(--dark);
       font-family: 'DM Sans', sans-serif;
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
     /* ─── NAVBAR ─── */
     nav {
-      position: fixed;
+      position: sticky;
       top: 0;
-      left: 0;
-      right: 0;
       z-index: 100;
       padding: 16px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(245, 240, 232, 0.85);
-      backdrop-filter: blur(12px);
+      background: rgba(245, 240, 232, 0.95);
+      backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(26, 26, 26, 0.08);
     }
 
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
 
     .mascot-avatar-small {
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
       background: var(--sage);
       border-radius: 50%;
       border: 1.5px solid var(--dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 20px;
       box-shadow: 2px 2px 0 var(--dark);
     }
@@ -80,11 +75,7 @@
       gap: 8px;
     }
 
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
 
     .user-profile {
       font-size: 14px;
@@ -95,50 +86,180 @@
     }
 
     .user-avatar {
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       background: var(--dark);
       color: var(--cream);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-weight: 700;
       font-size: 14px;
     }
 
+    .nav-btn {
+      text-decoration: none;
+      color: var(--dark);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border: 1.5px solid rgba(26,26,26,0.2);
+      border-radius: 100px;
+      transition: all 0.2s;
+      cursor: pointer;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
+
+    .nav-btn-primary {
+      background: var(--dark);
+      color: var(--cream);
+      border-color: var(--dark);
+    }
+
+    .nav-btn-primary:hover {
+      background: var(--dark2);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
     /* ─── MAIN LAYOUT ─── */
     main {
-      padding: 100px 24px 60px;
+      padding: 40px 24px 60px;
       max-width: 1200px;
       margin: 0 auto;
-      min-height: 100svh;
     }
 
-    .view {
-      display: none;
-      animation: fadeIn 0.4s ease forwards;
-    }
-
-    .view.active {
-      display: block;
-    }
+    .view { display: none; animation: fadeIn 0.4s ease forwards; }
+    .view.active { display: block; }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .view-header {
-      margin-bottom: 40px;
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
+
+    /* ─── FIRST-TIME HERO ─── */
+    .first-time-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      text-align: center;
+      animation: fadeUp 0.6s ease both;
+      padding: 40px 20px;
+    }
+
+    .hero-illustration {
+      font-size: 100px;
+      margin-bottom: 24px;
+      animation: mascotFloat 4s ease-in-out infinite;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.08));
+    }
+
+    @keyframes mascotFloat {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-14px) rotate(1deg); }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--dark);
+      color: var(--cream);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      background: var(--mint);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+    }
+
+    .hero-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: clamp(32px, 6vw, 52px);
+      letter-spacing: -2px;
+      line-height: 1.08;
+      margin-bottom: 16px;
+      max-width: 500px;
+    }
+
+    .hero-title em { font-style: italic; font-weight: 300; }
+    .hero-title .accent { background: var(--sage); padding: 2px 10px; border-radius: 8px; display: inline-block; }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 440px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    .hero-create-btn {
+      background: var(--dark);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      padding: 18px 40px;
+      border-radius: 100px;
+      border: 1.5px solid var(--dark);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s;
+      box-shadow: 5px 5px 0 var(--dark2);
+    }
+
+    .hero-create-btn:hover { transform: translateY(-3px); box-shadow: 7px 9px 0 var(--dark2); }
+    .hero-create-btn:active { transform: translateY(0); box-shadow: 3px 3px 0 var(--dark2); }
+
+    .hero-features { display: flex; gap: 24px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
+
+    .hero-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--soft-dark);
+      font-weight: 500;
+    }
+
+    .hero-feature-icon {
+      width: 32px; height: 32px;
+      background: var(--white);
+      border: 1.5px solid rgba(26,26,26,0.12);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+
+    /* ─── CLASSES VIEW ─── */
+    .view-header { margin-bottom: 40px; }
 
     .view-title {
       font-family: 'Fraunces', serif;
@@ -148,13 +269,9 @@
       margin-bottom: 8px;
     }
 
-    .view-subtitle {
-      font-size: 15px;
-      color: var(--soft-dark);
-      line-height: 1.6;
-    }
+    .view-subtitle { font-size: 15px; color: var(--soft-dark); line-height: 1.6; }
 
-    /* ─── CLASSES GRID (VIEW 1) ─── */
+    /* ─── CLASSES GRID ─── */
     .classes-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -173,10 +290,7 @@
       flex-direction: column;
     }
 
-    .class-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 6px 8px 0 var(--dark);
-    }
+    .class-card:hover { transform: translateY(-4px); box-shadow: 6px 8px 0 var(--dark); }
 
     .card-cover {
       height: 100px;
@@ -188,27 +302,16 @@
       position: relative;
     }
 
-    .card-cover.sage {
-      background: var(--sage);
-    }
-
-    .card-cover.sky {
-      background: var(--sky);
-    }
-
-    .card-cover.peach {
-      background: var(--peach);
-    }
-
-    .card-cover.mint {
-      background: var(--mint);
-    }
+    .card-cover.sage { background: var(--sage); }
+    .card-cover.sky { background: var(--sky); }
+    .card-cover.peach { background: var(--peach); }
+    .card-cover.mint { background: var(--mint); }
+    .card-cover.lemon { background: var(--lemon); }
 
     .card-code {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      background: rgba(255, 255, 255, 0.4);
+      top: 16px; right: 16px;
+      background: rgba(255,255,255,0.4);
       padding: 4px 10px;
       border-radius: 100px;
       font-size: 11px;
@@ -216,45 +319,22 @@
       border: 1px solid var(--dark);
     }
 
-    .card-title {
-      font-family: 'Fraunces', serif;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--dark);
-      line-height: 1.2;
-    }
+    .card-title { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--dark); line-height: 1.2; }
 
-    .card-body {
-      padding: 20px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .card-meta {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
+    .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .card-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
 
     .card-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-top: 1px solid rgba(26, 26, 26, 0.1);
+      border-top: 1px solid rgba(26,26,26,0.1);
       padding-top: 16px;
     }
 
-    .student-count {
-      font-size: 13px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .student-count { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
 
-    /* ─── CLASS DETAIL (VIEW 2) ─── */
+    /* ─── CLASS DETAIL ─── */
     .back-btn {
       display: inline-flex;
       align-items: center;
@@ -268,12 +348,10 @@
       border: 1.5px solid var(--dark);
       border-radius: 100px;
       transition: all 0.2s;
+      background: transparent;
     }
 
-    .back-btn:hover {
-      background: var(--dark);
-      color: var(--cream);
-    }
+    .back-btn:hover { background: var(--dark); color: var(--cream); }
 
     .detail-header {
       background: var(--sky);
@@ -289,20 +367,13 @@
     .detail-header::after {
       content: '';
       position: absolute;
-      top: -50px;
-      right: -50px;
-      width: 200px;
-      height: 200px;
-      background: rgba(255, 255, 255, 0.2);
+      top: -50px; right: -50px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.2);
       border-radius: 50%;
     }
 
-    .detail-actions {
-      display: flex;
-      gap: 16px;
-      margin-top: 24px;
-      flex-wrap: wrap;
-    }
+    .detail-actions { display: flex; gap: 16px; margin-top: 24px; flex-wrap: wrap; }
 
     .btn {
       font-family: 'DM Sans', sans-serif;
@@ -316,27 +387,13 @@
       gap: 10px;
       transition: all 0.2s;
       border: 1.5px solid var(--dark);
+      text-decoration: none;
     }
 
-    .btn-primary {
-      background: var(--dark);
-      color: var(--lemon);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-secondary {
-      background: white;
-      color: var(--dark);
-    }
-
-    .btn-secondary:hover {
-      background: var(--dark);
-      color: white;
-    }
+    .btn-primary { background: var(--dark); color: var(--lemon); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+    .btn-secondary { background: white; color: var(--dark); }
+    .btn-secondary:hover { background: var(--dark); color: white; }
 
     .section-title {
       font-family: 'Fraunces', serif;
@@ -348,7 +405,55 @@
       gap: 10px;
     }
 
-    /* ANALYTICS SECTION */
+    /* ─── ENROLLED STUDENTS TABLE ─── */
+    .students-section { margin-top: 32px; }
+
+    .students-table-wrap {
+      background: var(--white);
+      border: 1.5px solid var(--dark);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 3px 3px 0 var(--dark);
+    }
+
+    .students-table { width: 100%; border-collapse: collapse; }
+
+    .students-table thead tr {
+      background: rgba(245,240,232,0.6);
+      border-bottom: 1.5px solid rgba(26,26,26,0.1);
+    }
+
+    .students-table th {
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .students-table td {
+      padding: 14px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(26,26,26,0.06);
+    }
+
+    .students-table tbody tr:last-child td { border-bottom: none; }
+    .students-table tbody tr:hover { background: rgba(245,240,232,0.4); }
+
+    .student-roll {
+      font-family: 'DM Sans', monospace;
+      font-weight: 700;
+      font-size: 13px;
+      background: rgba(26,26,26,0.06);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .student-email { font-size: 13px; color: var(--soft-dark); }
+
+    /* ─── STAT CARDS ─── */
     .analytics-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -373,102 +478,503 @@
       margin-bottom: 8px;
     }
 
-    .stat-value {
-      font-family: 'Fraunces', serif;
-      font-size: 36px;
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 8px;
-    }
+    .stat-value { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 900; line-height: 1; margin-bottom: 8px; }
+    .stat-desc { font-size: 13px; color: var(--soft-dark); }
 
-    .stat-desc {
-      font-size: 13px;
-      color: var(--soft-dark);
-    }
-
-    .ai-summary {
-      background: var(--lemon);
-      border: 1.5px solid var(--dark);
-      border-radius: 20px;
-      padding: 24px;
+    /* ─── MODAL ─── */
+    .modal-overlay {
       display: flex;
-      gap: 20px;
-      box-shadow: 4px 4px 0 var(--dark);
-      margin-bottom: 48px;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 20px;
+      min-height: 100vh;
+      background: rgba(26, 26, 26, 0.55);
     }
 
-    .ai-icon {
-      width: 48px;
-      height: 48px;
-      background: var(--dark);
-      color: var(--lemon);
+    .modal {
+      background: var(--cream);
+      border: 1.5px solid var(--dark);
+      border-radius: 28px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 580px;
+      box-shadow: 8px 8px 0 var(--dark);
+      position: relative;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(26,26,26,0.15);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.15s;
+    }
+
+    .modal-close:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
+
+    .modal-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-eyebrow::before { content: ''; width: 22px; height: 1.5px; background: var(--text-muted); }
+
+    .modal-title { font-family: 'Fraunces', serif; font-weight: 900; font-size: 26px; letter-spacing: -0.8px; margin-bottom: 4px; }
+    .modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.5; }
+    .modal-divider { height: 1px; background: rgba(26,26,26,0.08); margin: 24px 0; }
+
+    /* Form */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+    .form-row.full { grid-template-columns: 1fr; }
+    .form-group { margin-bottom: 0; }
+
+    .form-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      background: var(--white);
+      border: 1.5px solid rgba(26,26,26,0.15);
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus { border-color: var(--dark); box-shadow: 3px 3px 0 var(--dark); }
+    .form-input::placeholder { color: rgba(26,26,26,0.3); }
+    .form-input.error { border-color: var(--error); box-shadow: 3px 3px 0 var(--error); }
+
+    /* Students entry */
+    .students-entry-section { margin-top: 8px; }
+
+    .students-entry-title {
+      font-family: 'Fraunces', serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .students-entry-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; }
+
+    .student-entry-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 36px;
+      gap: 10px;
+      align-items: start;
+      margin-bottom: 10px;
+      animation: fadeIn 0.2s ease both;
+    }
+
+    .student-entry-row .form-input { padding: 11px 14px; font-size: 13px; border-radius: 12px; }
+
+    .remove-student-btn {
+      width: 36px; height: 42px;
       border-radius: 12px;
+      border: 1.5px solid rgba(26,26,26,0.12);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.15s;
+      color: var(--error);
+    }
+
+    .remove-student-btn:hover { background: var(--error-bg); border-color: var(--error); }
+
+    .add-student-btn {
+      width: 100%;
+      background: transparent;
+      border: 1.5px dashed rgba(26,26,26,0.2);
+      border-radius: 14px;
+      padding: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--soft-dark);
+      cursor: pointer;
+      transition: all 0.15s;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
+      gap: 6px;
+      margin-top: 6px;
     }
 
-    .ai-content h3 {
-      font-family: 'Fraunces', serif;
+    .add-student-btn:hover { border-color: var(--dark); background: rgba(26,26,26,0.03); }
+
+    .student-count-badge {
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--sage);
+      padding: 3px 10px;
+      border-radius: 100px;
+      border: 1px solid var(--dark);
+    }
+
+    .modal-actions { display: flex; gap: 12px; margin-top: 28px; }
+
+    .modal-btn-cancel {
+      flex: 1;
+      background: transparent;
+      border: 1.5px solid rgba(26,26,26,0.2);
+      border-radius: 100px;
+      padding: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--dark);
+    }
+
+    .modal-btn-cancel:hover { border-color: var(--dark); background: rgba(26,26,26,0.04); }
+
+    .modal-btn-create {
+      flex: 2;
+      background: var(--dark);
+      border: 1.5px solid var(--dark);
+      border-radius: 100px;
+      padding: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--cream);
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .modal-btn-create:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+    .modal-btn-create:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .modal-error {
+      font-size: 12px;
+      color: var(--error);
+      background: var(--error-bg);
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-top: 12px;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+
+    .modal-error.show { display: flex; }
+
+    /* ─── TOAST ─── */
+    .toast-wrap {
+      position: sticky;
+      bottom: 32px;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 400;
+    }
+
+    .toast {
+      background: var(--dark);
+      color: var(--cream);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 14px 24px;
+      border-radius: 100px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s;
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ─── EMPTY STATE ─── */
+    .empty-grid-message { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+    .empty-grid-message .emoji { font-size: 48px; margin-bottom: 16px; }
+
+    /* Scrollbar */
+    .modal::-webkit-scrollbar { width: 6px; }
+    .modal::-webkit-scrollbar-track { background: transparent; }
+    .modal::-webkit-scrollbar-thumb { background: rgba(26,26,26,0.15); border-radius: 3px; }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 600px) {
+      .modal { padding: 28px 20px; border-radius: 22px; }
+      .form-row { grid-template-columns: 1fr; }
+      .student-entry-row { grid-template-columns: 1fr 1fr 36px; }
+      .hero-features { flex-direction: column; align-items: center; }
+      .nav-right .home-link { display: none; }
+    }
+
+    /* ─── DOUBT RESOLUTION ─── */
+    .btn-doubt {
+      background: var(--peach);
+      color: var(--dark);
+      border-color: var(--dark);
+      position: relative;
+    }
+
+    .btn-doubt:hover { background: var(--dark); color: var(--cream); }
+
+    .doubt-badge-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--error);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 100px;
+      padding: 0 5px;
+      margin-left: 2px;
+    }
+
+    .doubt-pending-count {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--error);
+      color: white;
+      padding: 3px 10px;
+      border-radius: 100px;
+      letter-spacing: 0;
+    }
+
+    /* Doubt card */
+    .doubt-card {
+      background: var(--white);
+      border: 1.5px solid var(--dark);
+      border-radius: 18px;
+      padding: 22px 24px;
+      margin-bottom: 14px;
+      box-shadow: 3px 3px 0 var(--dark);
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      animation: fadeIn 0.3s ease both;
+    }
+
+    .doubt-card-icon {
+      width: 40px; height: 40px;
+      min-width: 40px;
+      background: var(--lemon);
+      border: 1.5px solid var(--dark);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
       font-size: 18px;
+    }
+
+    .doubt-card-body { flex: 1; min-width: 0; }
+
+    .doubt-card-meta {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .doubt-card-text { font-size: 15px; line-height: 1.65; color: var(--dark); margin-bottom: 8px; word-break: break-word; }
+
+    /* Student name badge on doubt card */
+    .doubt-student-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--sky);
+      border: 1px solid rgba(26,26,26,0.15);
+      border-radius: 100px;
+      padding: 2px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--dark);
       margin-bottom: 8px;
     }
 
-    .ai-content p {
-      font-size: 14px;
-      line-height: 1.6;
-      color: var(--dark2);
-    }
+    .doubt-card-time { font-size: 12px; color: var(--text-muted); }
 
-    /* PREVIOUS SESSIONS */
-    .session-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .session-item {
-      background: white;
+    .resolve-btn {
+      flex-shrink: 0;
+      background: var(--dark);
+      color: var(--cream);
       border: 1.5px solid var(--dark);
-      border-radius: 16px;
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
+      border-radius: 100px;
+      padding: 10px 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
+      gap: 7px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .resolve-btn:hover {
+      background: var(--success);
+      border-color: var(--success);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(56,161,105,0.3);
+    }
+
+    /* Resolved doubt card */
+    .resolved-doubt-card {
+      background: rgba(198, 246, 213, 0.3);
+      border: 1.5px solid rgba(56,161,105,0.25);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 10px;
+      animation: fadeIn 0.3s ease both;
+    }
+
+    .resolved-doubt-q { font-size: 14px; color: var(--soft-dark); line-height: 1.6; margin-bottom: 10px; }
+    .resolved-doubt-student { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
+    .resolved-divider { height: 1px; background: rgba(56,161,105,0.2); margin: 10px 0; }
+
+    .resolved-answer-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--success);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .resolved-answer-text { font-size: 14px; color: var(--dark); line-height: 1.65; }
+    .resolved-meta { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+
+    /* Empty state */
+    .doubts-empty {
+      text-align: center;
+      padding: 48px 20px;
+      border: 2px dashed rgba(26,26,26,0.15);
+      border-radius: 18px;
+    }
+
+    /* Resolved toggle */
+    .resolved-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1.5px solid rgba(26,26,26,0.15);
+      border-radius: 100px;
+      padding: 10px 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--soft-dark);
+      cursor: pointer;
       transition: all 0.2s;
     }
 
-    .session-item:hover {
-      background: var(--cream);
+    .resolved-toggle-btn:hover { border-color: var(--dark); background: rgba(26,26,26,0.03); }
+
+    .doubt-resolved-count {
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(56,161,105,0.15);
+      color: var(--success);
+      padding: 2px 9px;
+      border-radius: 100px;
     }
 
-    .session-info h4 {
-      font-family: 'Fraunces', serif;
-      font-size: 16px;
+    .toggle-chevron { transition: transform 0.25s; }
+    .toggle-chevron.open { transform: rotate(180deg); }
+    .resolved-list { animation: fadeIn 0.3s ease both; }
+
+    /* Resolve modal */
+    .resolve-modal { max-width: 540px; }
+
+    .doubt-preview-card {
+      background: rgba(232, 223, 160, 0.25);
+      border: 1.5px solid rgba(26,26,26,0.12);
+      border-radius: 14px;
+      padding: 16px 18px;
       margin-bottom: 4px;
     }
 
-    .session-info p {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .session-btn {
-      font-size: 12px;
+    .doubt-preview-label {
+      font-size: 10px;
       font-weight: 700;
-      padding: 8px 16px;
-      border-radius: 100px;
-      border: 1.5px solid var(--dark);
-      background: transparent;
-      cursor: pointer;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .session-btn:hover {
-      background: var(--dark);
-      color: var(--cream);
+    .doubt-preview-student {
+      font-size: 12px;
+      color: var(--dark);
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
+
+    .doubt-preview-text { font-size: 15px; line-height: 1.65; color: var(--dark); margin-bottom: 8px; }
+    .doubt-preview-time { font-size: 11px; color: var(--text-muted); }
+
+    .resolution-textarea { border-radius: 14px; resize: vertical; min-height: 120px; line-height: 1.6; }
+
+    /* Attachments in doubt card */
+    .doubt-attachment {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 6px;
+    }
+
+    .doubt-attachment a { color: #3B82F6; text-decoration: none; }
+    .doubt-attachment a:hover { text-decoration: underline; }
   </style>
 </head>
 
@@ -478,523 +984,768 @@
   <nav>
     <div class="nav-left">
       <div class="mascot-avatar-small">🤖</div>
-      <a class="nav-logo" href="faculty-dashboard.html">
-        Amigo <span
-          style="font-family:'DM Sans', sans-serif; font-size:14px; font-weight:400; color:var(--text-muted);">Faculty</span>
-      </a>
+      <div class="nav-logo">
+        Amigo <span style="font-family:'DM Sans', sans-serif; font-size:14px; font-weight:400; color:var(--text-muted);">Faculty</span>
+      </div>
     </div>
     <div class="nav-right">
-      <a href="index.html"
-        style="text-decoration:none; color:var(--dark); font-size:14px; font-weight:500; margin-right:12px;">Home</a>
+      <a href="main.html" class="nav-btn home-link">Home</a>
+      <button class="nav-btn nav-btn-primary" id="navCreateBtn" style="display:none;" onclick="openCreateModal()">
+        ＋ Create Classroom
+      </button>
       <div class="user-profile">
-        <div class="user-avatar">DR</div>
-        Dr. Richards
+        <div class="user-avatar" id="navAvatar">DR</div>
+        <span id="navName">Dr. Richards</span>
       </div>
+      <a href="login.html" class="nav-btn" onclick="localStorage.removeItem('amigo_role')">Logout</a>
     </div>
   </nav>
 
   <main>
+
+    <!-- VIEW 0: First-Time Hero -->
+    <div id="view-first-time" class="view">
+      <div class="first-time-hero">
+        <div class="hero-illustration">🏫</div>
+        <div class="hero-badge"><div class="dot"></div>Welcome, Faculty</div>
+        <h1 class="hero-title">Create your<br>first <span class="accent">classroom</span></h1>
+        <p class="hero-sub">Set up a classroom, enroll your students by roll number & email, and start conducting smart sessions with Amigo.</p>
+        <button class="hero-create-btn" onclick="openCreateModal()">
+          ＋ Create Classroom
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+        </button>
+        <div class="hero-features">
+          <div class="hero-feature"><div class="hero-feature-icon">📋</div>Enroll students</div>
+          <div class="hero-feature"><div class="hero-feature-icon">🎥</div>Start sessions</div>
+          <div class="hero-feature"><div class="hero-feature-icon">📊</div>AI analytics</div>
+        </div>
+      </div>
+    </div>
+
     <!-- VIEW 1: All Classes -->
-    <div id="view-classes" class="view active">
+    <div id="view-classes" class="view">
       <div class="view-header">
         <h1 class="view-title">My Classrooms</h1>
         <p class="view-subtitle">Select a class to manage sessions, schedule work, and view AI analytics.</p>
       </div>
-
-      <div class="classes-grid">
-        <!-- Class Card 1 -->
-        <div class="class-card" onclick="openClass('Software Engineering', 'CS-402', 'sky')">
-          <div class="card-cover sky">
-            <div class="card-code">CS-402</div>
-            <div class="card-title">Software<br>Engineering</div>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">Mon, Wed • 10:00 AM</div>
-            <div class="card-footer">
-              <div class="student-count">👥 48 Students</div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14m-7-7 7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- Class Card 2 -->
-        <div class="class-card" onclick="openClass('Artificial Intelligence', 'CS-501', 'sage')">
-          <div class="card-cover sage">
-            <div class="card-code">CS-501</div>
-            <div class="card-title">Artificial<br>Intelligence</div>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">Tue, Thu • 1:00 PM</div>
-            <div class="card-footer">
-              <div class="student-count">👥 35 Students</div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14m-7-7 7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- Class Card 3 -->
-        <div class="class-card" onclick="openClass('Data Structures', 'CS-201', 'peach')">
-          <div class="card-cover peach">
-            <div class="card-code">CS-201</div>
-            <div class="card-title">Data<br>Structures</div>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">Mon, Wed • 2:30 PM</div>
-            <div class="card-footer">
-              <div class="student-count">👥 120 Students</div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14m-7-7 7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- Class Card 4 -->
-        <div class="class-card" onclick="openClass('Computer Networks', 'CS-304', 'mint')">
-          <div class="card-cover mint">
-            <div class="card-code">CS-304</div>
-            <div class="card-title">Computer<br>Networks</div>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">Fri • 9:00 AM</div>
-            <div class="card-footer">
-              <div class="student-count">👥 55 Students</div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14m-7-7 7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="classes-grid" id="classesGrid"></div>
     </div>
 
     <!-- VIEW 2: Class Detail -->
     <div id="view-class-detail" class="view">
-      <div class="back-btn" onclick="goBack()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 12H5m7 7-7-7 7-7" />
-        </svg>
+      <button class="back-btn" onclick="goBack()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5m7 7-7-7 7-7"/></svg>
         Back to Classrooms
-      </div>
+      </button>
 
       <div class="detail-header" id="detail-header-card">
         <h1 class="view-title" id="detail-title">Software Engineering</h1>
         <p class="view-subtitle" id="detail-code">CS-402 • Fall Semester</p>
-
+        <p class="view-subtitle" id="detail-schedule" style="margin-top:4px;opacity:0.7;"></p>
         <div class="detail-actions">
           <a href="session.html" class="btn btn-primary" style="text-decoration:none;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="5 3 19 12 5 21 5 3" />
-            </svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             Start Session
           </a>
           <button class="btn btn-secondary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             Schedule Work
           </button>
-        </div>
-      </div>
-
-
-      <!-- Placeholder for AI-generated graphs and reports -->
-      <div class="analytics-grid" style="display: block;">
-        <div class="stat-card"
-          style="text-align: center; padding: 60px 20px; border: 2px dashed rgba(26,26,26,0.2); background: transparent; box-shadow: none;">
-          <div class="ai-icon"
-            style="margin: 0 auto 16px; background: transparent; color: var(--text-muted); border: 1.5px solid rgba(26,26,26,0.2); font-size: 24px; padding: 12px; display: inline-flex;">
-            📊</div>
-          <h3 style="font-family:'Fraunces', serif; font-size: 18px; margin-bottom: 8px; color: var(--soft-dark);">AI
-            Analytics Processing...</h3>
-          <p style="font-size: 14px; color: var(--text-muted); max-width: 300px; margin: 0 auto; line-height: 1.6;">
-            Detailed bar graphs and session insights generated by Amigo will appear here after the class ends.
-          </p>
-        </div>
-      </div>
-
-      <div style="margin-top: 16px; margin-bottom: 48px;">
-        <a href="previous-analytics.html" class="btn btn-secondary" style="display: inline-flex;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 8v4l3 3" />
-            <circle cx="12" cy="12" r="10" />
-          </svg>
-          View Previous Analytics
-        </a>
-      </div>
-
-      <!-- Inline Doubts Section -->
-      <div id="inline-doubts-area" style="margin-top: 48px; border-top: 1.5px solid rgba(26,26,26,0.1); padding-top: 32px;">
-        <h2 class="section-title">
-          🙋 Pending Student Doubts
-        </h2>
-        <div id="doubts-container" class="session-list">
-          <div class="stat-card" style="text-align: center; padding: 40px; border: 1.5px solid rgba(26,26,26,0.1); background: white;">
-            <p style="color: var(--text-muted);">Loading student doubts...</p>
-          </div>
-        </div>
-
-        <!-- Resolved Doubts Toggle -->
-        <div style="margin-top: 32px; border-top: 1.5px solid rgba(26,26,26,0.08); padding-top: 24px;">
-          <button class="btn btn-secondary" onclick="toggleResolvedSection()" style="width: 100%; justify-content: space-between;">
-            <span>✅ View Resolved Doubts</span>
-            <svg id="resolved-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s;">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
+          <button class="btn btn-doubt" onclick="scrollToDoubts()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Doubt Resolution
+            <span class="doubt-badge-btn" id="pendingBadgeBtn" style="display:none">0</span>
           </button>
-          <div id="resolved-container" class="session-list" style="display: none; margin-top: 16px;">
-            <!-- Resolved items here -->
+        </div>
+      </div>
+
+      <!-- Enrolled Students -->
+      <div class="students-section">
+        <h2 class="section-title">👥 Enrolled Students <span id="detailStudentCount" class="student-count-badge">0</span></h2>
+        <div class="students-table-wrap">
+          <table class="students-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Roll Number</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody id="detailStudentsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Analytics -->
+      <div style="margin-top:40px;">
+        <h2 class="section-title">✨ Recent Class Analytics</h2>
+        <div class="analytics-grid" style="display:block;">
+          <div class="stat-card" style="text-align:center; padding:60px 20px; border:2px dashed rgba(26,26,26,0.2); background:transparent; box-shadow:none;">
+            <div style="font-size:36px; margin-bottom:12px;">📊</div>
+            <h3 style="font-family:'Fraunces',serif; font-size:18px; margin-bottom:8px; color:var(--soft-dark);">AI Analytics Processing...</h3>
+            <p style="font-size:14px; color:var(--text-muted); max-width:300px; margin:0 auto; line-height:1.6;">Detailed bar graphs and session insights generated by Amigo will appear here after the class ends.</p>
           </div>
         </div>
       </div>
 
+      <!-- ─── DOUBT RESOLUTION SECTION ─── -->
+      <div id="doubts-section" style="margin-top:48px; padding-top:8px;">
+
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+          <h2 class="section-title" style="margin-bottom:0;">
+            💬 Doubt Resolution
+            <span class="doubt-pending-count" id="pendingCountLabel" style="display:none"></span>
+          </h2>
+          <span style="font-size:13px; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Students submit doubts from their dashboard
+          </span>
+        </div>
+
+        <!-- Pending doubts -->
+        <div id="pendingDoubtsList"></div>
+
+        <!-- Empty pending state -->
+        <div id="noDoubtsMsg" class="doubts-empty" style="display:none;">
+          <div style="font-size:36px; margin-bottom:12px;">🎉</div>
+          <h3 style="font-family:'Fraunces',serif; font-size:18px; margin-bottom:6px; color:var(--soft-dark);">All clear!</h3>
+          <p style="font-size:14px; color:var(--text-muted); line-height:1.6;">No pending doubts right now. Students' questions will appear here after they post them from the student dashboard.</p>
+        </div>
+
+        <!-- Resolved toggle -->
+        <div style="margin-top:32px;">
+          <button class="resolved-toggle-btn" id="resolvedToggleBtn" onclick="toggleResolved()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Resolved Doubts
+            <span class="doubt-resolved-count" id="resolvedCountBadge">0</span>
+            <svg class="toggle-chevron" id="resolvedChevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="resolvedDoubtsList" class="resolved-list" style="display:none; margin-top:12px;"></div>
+        </div>
+      </div>
+    </div><!-- end view-class-detail -->
+
+    <!-- VIEW 3: Create Classroom Modal -->
+    <div id="view-modal" class="view">
+      <div class="modal-overlay" id="createModal" onclick="overlayClick(event)">
+        <div class="modal">
+          <button class="modal-close" onclick="closeCreateModal()">✕</button>
+          <div class="modal-eyebrow">New Classroom</div>
+          <div class="modal-title">Create Classroom 🎓</div>
+          <div class="modal-sub">Set up your class and enroll students. Students will use their email to log in.</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="className">Classroom Name</label>
+              <input class="form-input" id="className" type="text" placeholder="e.g. Software Engineering">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="classCode">Course Code</label>
+              <input class="form-input" id="classCode" type="text" placeholder="e.g. CS-402">
+            </div>
+          </div>
+
+          <div class="form-row full">
+            <div class="form-group">
+              <label class="form-label" for="classSchedule">Schedule</label>
+              <input class="form-input" id="classSchedule" type="text" placeholder="e.g. Mon, Wed • 10:00 AM">
+            </div>
+          </div>
+
+          <div class="modal-divider"></div>
+
+          <div class="students-entry-section">
+            <div class="students-entry-title">
+              👥 Enroll Students
+              <span class="student-count-badge" id="modalStudentCount">0 students</span>
+            </div>
+            <p class="students-entry-sub">Enter roll number and institutional email for each student.</p>
+            <div id="studentEntries"></div>
+            <button class="add-student-btn" onclick="addStudentRow()">＋ Add Student</button>
+          </div>
+
+          <div class="modal-error" id="modalError">⚠️ <span id="modalErrorText">Please fill in all required fields</span></div>
+
+          <div class="modal-actions">
+            <button class="modal-btn-cancel" onclick="closeCreateModal()">Cancel</button>
+            <button class="modal-btn-create" id="btnCreateClass" onclick="createClassroom()">Create Classroom ✦</button>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- VIEW 4: Resolve Doubt Modal -->
+    <div id="view-resolve-modal" class="view">
+      <div class="modal-overlay" id="resolveModalOverlay" onclick="resolveOverlayClick(event)">
+        <div class="modal resolve-modal">
+          <button class="modal-close" onclick="closeResolveModal()">✕</button>
+          <div class="modal-eyebrow">Student Doubt</div>
+          <div class="modal-title">Write a Resolution ✍️</div>
+          <div class="modal-sub">Your response will be visible to the student who posted this doubt.</div>
+
+          <div class="doubt-preview-card">
+            <div class="doubt-preview-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Student's Doubt
+            </div>
+            <div class="doubt-preview-student" id="resolveDoubtStudent">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Student
+            </div>
+            <p class="doubt-preview-text" id="resolveDoubtText"></p>
+            <div class="doubt-preview-time" id="resolveDoubtTime"></div>
+          </div>
+
+          <div class="modal-divider"></div>
+
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="resolutionText">Your Resolution</label>
+            <textarea
+              class="form-input resolution-textarea"
+              id="resolutionText"
+              placeholder="Type your explanation or solution here..."
+              rows="5"
+              oninput="updateCharCount()"
+            ></textarea>
+            <div style="text-align:right; font-size:11px; color:var(--text-muted); margin-top:6px;">
+              <span id="charCount">0</span> characters
+            </div>
+          </div>
+
+          <div class="modal-error" id="resolveError">⚠️ <span>Please write a resolution before submitting.</span></div>
+
+          <div class="modal-actions">
+            <button class="modal-btn-cancel" onclick="closeResolveModal()">Cancel</button>
+            <button class="modal-btn-create" onclick="submitResolution()" style="background:var(--success); border-color:var(--success);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Mark as Resolved
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 
-  <!-- Resolution Modal -->
-  <div class="modal-overlay" id="resModal">
-    <div class="modal" style="max-width: 500px; z-index: 1001;">
-      <div class="modal-title">Resolve Student Doubt 🎓</div>
-      <div id="resDoubtText" style="font-size: 14px; color: var(--soft-dark); background: var(--sky); padding: 12px; border-radius: 12px; margin-bottom: 20px; border: 1.5px solid var(--dark);">"Doubt text goes here"</div>
-      
-      <div style="display: flex; flex-direction: column; gap: 16px;">
-        <textarea id="resText" placeholder="Type your explanation here..." style="width:100%; min-height:100px; padding:12px; border-radius:12px; border:1.5px solid var(--dark); font-family:inherit;"></textarea>
-        
-        <div style="display: flex; gap: 10px; align-items: center; background: white; padding: 12px; border-radius: 12px; border: 1.5px solid rgba(0,0,0,0.1);">
-          <span title="Upload File">📎</span>
-          <input type="file" id="resFile" style="font-size: 12px;">
-        </div>
-
-        <div id="voice-recorder" style="background: var(--lemon); padding: 12px; border-radius: 12px; border: 1.5px solid var(--dark); display: flex; align-items: center; justify-content: space-between;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <button id="recordBtn" class="session-btn" style="background: white; width: 40px; height: 40px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center;">🎤</button>
-            <span id="recordStatus" style="font-size: 12px; font-weight: 600;">Record Voice Message</span>
-          </div>
-          <audio id="audioPlayback" controls style="display: none; height: 30px; max-width: 150px;"></audio>
-        </div>
-      </div>
-
-      <div class="modal-btns" style="margin-top: 24px;">
-        <button class="modal-btn-cancel" onclick="closeResModal()">Cancel</button>
-        <button class="modal-btn-submit" onclick="submitResolution()" style="background: var(--dark); color: white;">Submit Resolution ✦</button>
-      </div>
-    </div>
+  <div class="toast-wrap">
+    <div class="toast" id="toast"></div>
   </div>
 
   <script>
-    const viewClasses = document.getElementById('view-classes');
-    const viewDetail = document.getElementById('view-class-detail');
-    const detailTitle = document.getElementById('detail-title');
-    const detailCode = document.getElementById('detail-code');
-    const detailHeaderCard = document.getElementById('detail-header-card');
-    const doubtsContainer = document.getElementById('doubts-container');
-    const resolvedContainer = document.getElementById('resolved-container');
-    let currentCourseCode = null;
-    let activeDoubtText = null;
+    // ─── STATE ─────────────────────────────────────────────
+    const COLORS = ['sage', 'sky', 'peach', 'mint', 'lemon'];
+    const ICONS  = ['💻', '📐', '⚡', '🧬', '📡', '🧪', '🔬', '📚', '🎨', '🏗️'];
+    const STORAGE_KEY = 'amigo_classrooms';
+    const DOUBTS_KEY  = 'amigo_doubts';
 
-    // Media Recorder variables
-    let mediaRecorder;
-    let audioChunks = [];
-    let audioBlob = null;
+    let _memoryStore   = [];
+    let _currentClassId = null;
+    let _resolveDoubtId = null;
+    let _resolvedOpen   = false;
 
-    async function fetchDoubts(courseId) {
-      currentCourseCode = courseId;
-      doubtsContainer.innerHTML = `
-        <div class="stat-card" style="text-align: center; padding: 40px;">
-          <p style="color: var(--text-muted);">Loading doubts for ${courseId}...</p>
-        </div>
-      `;
+    // ─── STORAGE HELPERS ──────────────────────────────────
+    function getClassrooms() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+      catch(e) { return _memoryStore; }
+    }
 
-      try {
-        const response = await fetch(`http://localhost:5001/get_doubts?course_id=${encodeURIComponent(courseId)}`);
-        const data = await response.json();
+    function saveClassrooms(data) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+      catch(e) { _memoryStore = data; }
+    }
 
-        if (data.success) {
-          renderDoubts(data);
-        } else {
-          doubtsContainer.innerHTML = `<p style="color: red; padding: 20px;">Failed to load doubts.</p>`;
-        }
-      } catch (error) {
-        console.error('Error fetching doubts:', error);
-        doubtsContainer.innerHTML = `<p style="color: var(--text-muted); padding: 20px;">No doubts found or server is offline.</p>`;
+    function getFacultyEmail() {
+      try { return localStorage.getItem('amigo_email') || 'faculty@nitw.ac.in'; }
+      catch(e) { return 'faculty@nitw.ac.in'; }
+    }
+
+    function getFacultyName() {
+      try { return localStorage.getItem('amigo_name') || 'Faculty'; }
+      catch(e) { return 'Faculty'; }
+    }
+
+    function getMyClassrooms() {
+      const email = getFacultyEmail();
+      return getClassrooms().filter(c => !c.facultyEmail || c.facultyEmail === email);
+    }
+
+    // ─── DOUBTS STORAGE ───────────────────────────────────
+    function getDoubts() {
+      try { return JSON.parse(localStorage.getItem(DOUBTS_KEY) || '[]'); }
+      catch(e) { return []; }
+    }
+
+    function saveDoubts(data) {
+      try { localStorage.setItem(DOUBTS_KEY, JSON.stringify(data)); }
+      catch(e) { /* silently ignore */ }
+    }
+
+    // Match doubts for a class using BOTH classId and courseId
+    // (student dashboard saves courseId; this is the unified cross-match)
+    function getDoubtsForClass(classId) {
+      return getDoubts().filter(d =>
+        String(d.classId) === String(classId) ||
+        String(d.courseId) === String(classId)
+      );
+    }
+
+    // ─── VIEW SWITCHING ───────────────────────────────────
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ─── DASHBOARD ────────────────────────────────────────
+    function renderDashboard() {
+      const myClasses  = getMyClassrooms();
+      const navCreateBtn = document.getElementById('navCreateBtn');
+      if (myClasses.length === 0) {
+        showView('view-first-time');
+        navCreateBtn.style.display = 'none';
+      } else {
+        showView('view-classes');
+        navCreateBtn.style.display = 'inline-flex';
+        renderClassCards(myClasses);
       }
     }
 
-    function renderDoubts(data) {
-      if (data.clusters.length === 0 && data.unclustered.length === 0) {
-        doubtsContainer.innerHTML = `
-          <div class="stat-card" style="text-align: center; padding: 40px; border: 1.5px dashed rgba(26,26,26,0.2); background: transparent; box-shadow: none;">
-            <p style="color: var(--text-muted);">No student doubts submitted for this class yet.</p>
+    function renderClassCards(classes) {
+      const grid = document.getElementById('classesGrid');
+      grid.innerHTML = '';
+      classes.forEach((cls, i) => {
+        const color = cls.color || COLORS[i % COLORS.length];
+        const studentCount = cls.students ? cls.students.length : 0;
+        const pendingDoubts = getDoubtsForClass(cls.id).filter(d => d.status === 'pending').length;
+
+        const card = document.createElement('div');
+        card.className = 'class-card';
+        card.style.animation = `fadeIn 0.4s ${i * 0.08}s ease both`;
+        card.style.opacity = '0';
+        card.onclick = () => openClass(cls);
+
+        card.innerHTML = `
+          <div class="card-cover ${color}">
+            <div class="card-code">${cls.code}</div>
+            <div class="card-title">${cls.name}</div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              ${cls.schedule || 'No schedule set'}
+              ${pendingDoubts > 0 ? `<span style="margin-left:8px; background:var(--error); color:white; font-size:10px; font-weight:700; padding:2px 8px; border-radius:100px;">${pendingDoubts} doubt${pendingDoubts > 1 ? 's' : ''}</span>` : ''}
+            </div>
+            <div class="card-footer">
+              <div class="student-count">👥 ${studentCount} Student${studentCount !== 1 ? 's' : ''}</div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+            </div>
           </div>
         `;
-        resolvedContainer.innerHTML = `<p style="text-align:center; padding: 20px; color: var(--text-muted);">No resolved doubts yet.</p>`;
-        return;
-      }
-
-      let pendingHtml = '';
-      let resolvedHtml = '';
-
-      // Helper to render a doubt item
-      const createDoubtItem = (d, isResolved) => {
-        return `
-          <div class="session-item" style="margin-bottom: 12px; flex-direction: column; align-items: flex-start; gap: 10px; border-left: 4px solid ${isResolved ? 'var(--live-green)' : 'var(--inactive-red)'};">
-            <div style="display: flex; justify-content: space-between; width: 100%;">
-              <div class="session-info">
-                <span style="font-size: 10px; font-weight: 700; background: ${isResolved ? 'var(--live-green-bg)' : 'var(--sky)'}; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block;">
-                  ${isResolved ? 'RESOLVED DOUBT' : 'PENDING DOUBT'}
-                </span>
-                <h4 style="font-weight: 500;">${d.text}</h4>
-              </div>
-              ${!isResolved ? `<button class="session-btn" style="background: var(--dark); color: white;" onclick="openResModal('${d.text.replace(/'/g, "\\'")}')">Resolve Now</button>` : ''}
-            </div>
-            
-            <!-- Student Attachments -->
-            ${d.file_url || d.link ? `
-              <div style="display: flex; gap: 12px; padding-left: 4px;">
-                ${d.file_url ? `<span style="font-size: 11px; background: var(--cream); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05);">📎 Attachment: <strong>${d.file_url}</strong></span>` : ''}
-                ${d.link ? `<a href="${d.link.startsWith('http') ? d.link : 'https://' + d.link}" target="_blank" style="font-size: 11px; color: #3B82F6; font-weight: 500;">🔗 View Link</a>` : ''}
-              </div>
-            ` : ''}
-
-            <!-- Teacher Resolution (if already resolved elsewhere) -->
-            ${isResolved ? `
-              <div style="width: 100%; margin-top: 8px; padding: 12px; background: var(--live-green-bg); border-radius: 12px; border: 1px solid var(--live-green-border);">
-                <div style="font-size: 11px; font-weight: 700; color: var(--live-green-border); margin-bottom: 6px;">TEACHER'S RESPONSE</div>
-                <p style="font-size: 13px; color: var(--dark2); margin-bottom: 8px;">${d.resolution_text || 'No textual response provided.'}</p>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                  ${d.resolution_file_url ? `<span style="font-size: 11px; background: white; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--live-green-border);">📎 ${d.resolution_file_url}</span>` : ''}
-                  ${d.resolution_audio_url ? `<div style="display: flex; align-items: center; gap: 6px; font-size: 11px; background: white; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--live-green-border);">🔊 Voice Message Recorded</div>` : ''}
-                </div>
-              </div>
-            ` : ''}
-          </div>
-        `;
-      };
-
-      // Process Clusters
-      data.clusters.forEach(cluster => {
-        // Find if all/any are pending
-        const clusterPending = cluster.doubts.filter(d => d.status === 'pending');
-        const clusterResolved = cluster.doubts.filter(d => d.status === 'resolved');
-
-        if (clusterPending.length > 0) {
-          pendingHtml += `
-            <div class="session-item" style="flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 16px; border-left: 4px solid var(--peach);">
-              <div style="display: flex; justify-content: space-between; width: 100%;">
-                <div class="session-info">
-                  <span style="font-size: 10px; font-weight: 700; background: var(--peach); padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block;">AI CLUSTERED (PENDING)</span>
-                  <h4>${cluster.summary}</h4>
-                  <p>${clusterPending.length} pending, ${clusterResolved.length} resolved in this group</p>
-                </div>
-                <button class="session-btn" onclick="toggleDoubtDetails('cluster-${cluster.cluster_id}')">Expand Cluster</button>
-              </div>
-              <div id="cluster-${cluster.cluster_id}" style="display: none; width: 100%; padding-top: 12px; border-top: 1px solid rgba(26,26,26,0.05);">
-                ${cluster.doubts.map(d => createDoubtItem(d, d.status === 'resolved')).join('')}
-              </div>
-            </div>
-          `;
-        } else if (clusterResolved.length > 0) {
-          // Fully resolved cluster
-          resolvedHtml += `
-            <div class="session-item" style="flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 16px; border-left: 4px solid var(--live-green);">
-              <div style="display: flex; justify-content: space-between; width: 100%;">
-                <div class="session-info">
-                  <span style="font-size: 10px; font-weight: 700; background: var(--live-green-bg); padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block;">RESOLVED CLUSTER</span>
-                  <h4>${cluster.summary}</h4>
-                  <p>All ${cluster.count} doubts in this group are resolved</p>
-                </div>
-                <button class="session-btn" onclick="toggleDoubtDetails('res-cluster-${cluster.cluster_id}')">View Details</button>
-              </div>
-              <div id="res-cluster-${cluster.cluster_id}" style="display: none; width: 100%; padding-top: 12px; border-top: 1px solid rgba(26,26,26,0.05);">
-                ${cluster.doubts.map(d => createDoubtItem(d, true)).join('')}
-              </div>
-            </div>
-          `;
-        }
+        grid.appendChild(card);
       });
 
-      // Process Unclustered
-      data.unclustered.forEach(d => {
-        if (d.status === 'resolved') {
-          resolvedHtml += createDoubtItem(d, true);
-        } else {
-          pendingHtml += createDoubtItem(d, false);
-        }
-      });
-
-      doubtsContainer.innerHTML = pendingHtml || `<p style="text-align:center; padding: 20px; color: var(--text-muted);">No pending doubts! All caught up. 🎉</p>`;
-      resolvedContainer.innerHTML = resolvedHtml || `<p style="text-align:center; padding: 20px; color: var(--text-muted);">No resolved doubts yet.</p>`;
+      setTimeout(() => {
+        grid.querySelectorAll('.class-card').forEach(c => c.style.opacity = '');
+      }, 50);
     }
 
-    // Modal Control
-    function openResModal(doubtText) {
-      activeDoubtText = doubtText;
-      document.getElementById('resDoubtText').textContent = `"${doubtText}"`;
-      document.getElementById('resText').value = '';
-      document.getElementById('resFile').value = '';
-      
-      // Reset recorder
-      audioBlob = null;
-      document.getElementById('audioPlayback').style.display = 'none';
-      document.getElementById('recordStatus').textContent = 'Record Voice Message';
-      document.getElementById('recordBtn').textContent = '🎤';
+    // ─── OPEN CLASS DETAIL ─────────────────────────────────
+    function openClass(cls) {
+      const color = cls.color || 'sky';
+      const bgMap = { sage: 'var(--sage)', sky: 'var(--sky)', peach: 'var(--peach)', mint: 'var(--mint)', lemon: 'var(--lemon)' };
 
-      document.getElementById('resModal').classList.add('open');
-    }
-
-    function closeResModal() {
-      document.getElementById('resModal').classList.remove('open');
-    }
-
-    async function submitResolution() {
-      const resText = document.getElementById('resText').value.trim();
-      const resFile = document.getElementById('resFile').files[0];
-      
-      if (!resText && !resFile && !audioBlob) {
-        alert('Please provide some form of resolution (text, file, or voice).');
-        return;
+      _currentClassId = cls.id;
+      const startSessionBtn = document.querySelector('.detail-actions a.btn-primary');
+      if (startSessionBtn) {
+        startSessionBtn.href = `session.html?topic=${encodeURIComponent(cls.name)}&id=${cls.id}`;
       }
 
-      const submitBtn = document.querySelector('#resModal .modal-btn-submit');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Submitting...';
+      document.getElementById('detail-title').textContent  = cls.name;
+      document.getElementById('detail-code').textContent   = cls.code + ' • Semester';
+      document.getElementById('detail-schedule').textContent = cls.schedule || '';
+      document.getElementById('detail-header-card').style.background = bgMap[color] || 'var(--sky)';
 
-      try {
-        const response = await fetch('http://localhost:5001/resolve_doubt', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            course_id: currentCourseCode,
-            doubt_text: activeDoubtText,
-            resolution_text: resText,
-            resolution_file: resFile ? resFile.name : null,
-            resolution_audio: audioBlob ? 'voice_resolution.wav' : null // Simulated
-          })
+      const students = cls.students || [];
+      document.getElementById('detailStudentCount').textContent = students.length;
+
+      const tbody = document.getElementById('detailStudentsBody');
+      tbody.innerHTML = '';
+      if (students.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:24px; color:var(--text-muted);">No students enrolled yet</td></tr>';
+      } else {
+        students.forEach((s, i) => {
+          tbody.innerHTML += `
+            <tr>
+              <td style="font-size:13px;color:var(--text-muted);">${i + 1}</td>
+              <td><span class="student-roll">${s.rollNo}</span></td>
+              <td class="student-email">${s.email}</td>
+            </tr>
+          `;
         });
+      }
 
-        const data = await response.json();
-        if (data.success) {
-          closeResModal();
-          fetchDoubts(currentCourseCode); // Refresh list
-        } else {
-          alert('Error resolving doubt.');
+      _resolvedOpen = false;
+      document.getElementById('resolvedDoubtsList').style.display = 'none';
+      document.getElementById('resolvedChevron').classList.remove('open');
+
+      showView('view-class-detail');
+      renderDoubts(cls.id);
+    }
+
+    function goBack() { renderDashboard(); }
+
+    // ─── CREATE CLASSROOM MODAL ───────────────────────────
+    let studentRowCount = 0;
+
+    function openCreateModal() {
+      document.getElementById('className').value    = '';
+      document.getElementById('classCode').value    = '';
+      document.getElementById('classSchedule').value = '';
+      document.getElementById('studentEntries').innerHTML = '';
+      document.getElementById('modalError').classList.remove('show');
+      studentRowCount = 0;
+      addStudentRow();
+      addStudentRow();
+      showView('view-modal');
+      setTimeout(() => document.getElementById('className').focus(), 100);
+    }
+
+    function closeCreateModal() { renderDashboard(); }
+
+    function overlayClick(e) {
+      if (e.target === document.getElementById('createModal')) closeCreateModal();
+    }
+
+    function addStudentRow() {
+      studentRowCount++;
+      const container = document.getElementById('studentEntries');
+      const row = document.createElement('div');
+      row.className = 'student-entry-row';
+      row.id = 'srow-' + studentRowCount;
+      row.innerHTML = `
+        <input class="form-input sr-roll" type="text" placeholder="Roll No." oninput="updateStudentCount()">
+        <input class="form-input sr-email" type="email" placeholder="student@student.nitw.ac.in" oninput="updateStudentCount()">
+        <button class="remove-student-btn" onclick="removeStudentRow('srow-${studentRowCount}')" title="Remove student">✕</button>
+      `;
+      container.appendChild(row);
+      updateStudentCount();
+      row.querySelector('.sr-roll').focus();
+    }
+
+    function removeStudentRow(id) {
+      const row = document.getElementById(id);
+      if (row) {
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(-10px)';
+        setTimeout(() => { row.remove(); updateStudentCount(); }, 150);
+      }
+    }
+
+    function updateStudentCount() {
+      let filled = 0;
+      document.querySelectorAll('.student-entry-row').forEach(r => {
+        if (r.querySelector('.sr-roll').value.trim() && r.querySelector('.sr-email').value.trim()) filled++;
+      });
+      document.getElementById('modalStudentCount').textContent = filled + ' student' + (filled !== 1 ? 's' : '');
+    }
+
+    function createClassroom() {
+      const name     = document.getElementById('className').value.trim();
+      const code     = document.getElementById('classCode').value.trim();
+      const schedule = document.getElementById('classSchedule').value.trim();
+      const errorEl  = document.getElementById('modalError');
+      const errorText= document.getElementById('modalErrorText');
+      errorEl.classList.remove('show');
+
+      if (!name || !code) {
+        errorText.textContent = 'Please enter both a classroom name and course code.';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      const rows = document.querySelectorAll('.student-entry-row');
+      const students = [];
+      let hasError = false;
+
+      rows.forEach(r => {
+        const roll  = r.querySelector('.sr-roll').value.trim();
+        const email = r.querySelector('.sr-email').value.trim().toLowerCase();
+        if (!roll && !email) return;
+        if (!roll || !email) {
+          hasError = true;
+          errorText.textContent = 'Each student must have both a roll number and email.';
+          if (!roll)  r.querySelector('.sr-roll').classList.add('error');
+          if (!email) r.querySelector('.sr-email').classList.add('error');
+          return;
         }
-      } catch (err) {
-        console.error(err);
-        alert('Server error.');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Resolution ✦';
-      }
-    }
-
-    // Audio Recording Logic
-    const recordBtn = document.getElementById('recordBtn');
-    const recordStatus = document.getElementById('recordStatus');
-    const audioPlayback = document.getElementById('audioPlayback');
-
-    recordBtn.addEventListener('click', async () => {
-      if (!mediaRecorder || mediaRecorder.state === 'inactive') {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          mediaRecorder = new MediaRecorder(stream);
-          audioChunks = [];
-
-          mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
-          mediaRecorder.onstop = () => {
-            audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-            const audioUrl = URL.createObjectURL(audioBlob);
-            audioPlayback.src = audioUrl;
-            audioPlayback.style.display = 'block';
-            recordStatus.textContent = 'Voice Message Recorded!';
-          };
-
-          mediaRecorder.start();
-          recordBtn.textContent = '⏹';
-          recordBtn.style.color = 'red';
-          recordStatus.textContent = 'Recording... (Click to stop)';
-        } catch (err) {
-          console.error('Microphone access denied:', err);
-          alert('Could not access microphone.');
+        if (!email.endsWith('@student.nitw.ac.in')) {
+          hasError = true;
+          errorText.textContent = 'Student emails must end with @student.nitw.ac.in';
+          r.querySelector('.sr-email').classList.add('error');
+          return;
         }
-      } else {
-        mediaRecorder.stop();
-        recordBtn.textContent = '🎤';
-        recordBtn.style.color = 'var(--dark)';
-      }
-    });
+        r.querySelector('.sr-roll').classList.remove('error');
+        r.querySelector('.sr-email').classList.remove('error');
+        students.push({ rollNo: roll.toUpperCase(), email });
+      });
 
-    function toggleResolvedSection() {
-      const container = document.getElementById('resolved-container');
-      const arrow = document.getElementById('resolved-arrow');
-      if (container.style.display === 'none') {
-        container.style.display = 'block';
-        arrow.style.transform = 'rotate(180deg)';
-      } else {
-        container.style.display = 'none';
-        arrow.style.transform = 'rotate(0deg)';
-      }
-    }
-
-    function toggleDoubtDetails(id) {
-      const el = document.getElementById(id);
-      if (el.style.display === 'none') {
-        el.style.display = 'block';
-      } else {
-        el.style.display = 'none';
-      }
-    }
-
-    function openClass(title, code, colorClass) {
-      // Clear current course state
-      currentCourseCode = code;
-      
-      // Update Detail UI
-      detailTitle.textContent = title;
-      detailCode.textContent = code + ' • Fall Semester';
-
-      // Update Start Session link
-      const startBtn = document.querySelector('#view-class-detail .btn-primary');
-      if (startBtn) {
-        startBtn.href = `session.html?topic=${encodeURIComponent(title)}&id=${encodeURIComponent(code)}`;
+      if (hasError) { errorEl.classList.add('show'); return; }
+      if (students.length === 0) {
+        errorText.textContent = 'Please add at least one student to the classroom.';
+        errorEl.classList.add('show');
+        return;
       }
 
-      // Update background color based on class
-      detailHeaderCard.className = 'detail-header'; // reset
-      const getBg = (cClass) => {
-        if (cClass === 'sage') return 'var(--sage)';
-        if (cClass === 'sky') return 'var(--sky)';
-        if (cClass === 'peach') return 'var(--peach)';
-        if (cClass === 'mint') return 'var(--mint)';
-        return 'var(--sky)';
+      const classrooms  = getClassrooms();
+      const colorIndex  = classrooms.length % COLORS.length;
+
+      const newClass = {
+        id:          'cls_' + Date.now(),
+        name,
+        code:        code.toUpperCase(),
+        schedule,
+        color:       COLORS[colorIndex],
+        icon:        ICONS[classrooms.length % ICONS.length],
+        facultyEmail: getFacultyEmail(),
+        facultyName:  getFacultyName(),
+        students,
+        createdAt:   new Date().toISOString()
       };
-      detailHeaderCard.style.background = getBg(colorClass);
 
-      // Fetch doubts but DON'T show modal yet (just to get count)
-      fetchDoubts(code);
-
-      // Toggle Views
-      viewClasses.classList.remove('active');
-      viewDetail.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      classrooms.push(newClass);
+      saveClassrooms(classrooms);
+      closeCreateModal();
+      showToast(`✅ "${name}" created with ${students.length} student${students.length !== 1 ? 's' : ''}!`);
+      renderDashboard();
     }
 
-    function goBack() {
-      viewDetail.classList.remove('active');
-      viewClasses.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    // ─── DOUBT RESOLUTION ─────────────────────────────────
+    function timeAgo(iso) {
+      if (!iso) return '';
+      const diff = Date.now() - new Date(iso).getTime();
+      const mins = Math.floor(diff / 60000);
+      if (mins < 1)  return 'just now';
+      if (mins < 60) return mins + 'm ago';
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24)  return hrs + 'h ago';
+      return Math.floor(hrs / 24) + 'd ago';
     }
-  </script>
-</body>
 
-</html>
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function renderDoubts(classId) {
+      _currentClassId = classId;
+
+      const all     = getDoubtsForClass(classId);
+      const pending  = all.filter(d => d.status === 'pending');
+      const resolved = all.filter(d => d.status === 'resolved');
+
+      // Badge in header button
+      const badge      = document.getElementById('pendingBadgeBtn');
+      const countLabel = document.getElementById('pendingCountLabel');
+      if (pending.length > 0) {
+        badge.textContent = pending.length;
+        badge.style.display = 'inline-flex';
+        countLabel.textContent = pending.length + ' pending';
+        countLabel.style.display = 'inline-flex';
+      } else {
+        badge.style.display = 'none';
+        countLabel.style.display = 'none';
+      }
+
+      document.getElementById('resolvedCountBadge').textContent = resolved.length;
+
+      // Render pending
+      const pendingList = document.getElementById('pendingDoubtsList');
+      const noMsg       = document.getElementById('noDoubtsMsg');
+
+      if (pending.length === 0) {
+        pendingList.innerHTML = '';
+        noMsg.style.display = 'block';
+      } else {
+        noMsg.style.display = 'none';
+        pendingList.innerHTML = '';
+
+        pending.forEach((d, i) => {
+          const card = document.createElement('div');
+          card.className = 'doubt-card';
+          card.style.animationDelay = (i * 0.07) + 's';
+
+          // Show student name if available
+          const studentDisplay = d.studentName
+            ? `<div class="doubt-student-badge">👤 ${escapeHtml(d.studentName)}</div>`
+            : '';
+
+          // Attachments
+          const fileHtml = d.fileUrl
+            ? `<div class="doubt-attachment">📎 <span>${escapeHtml(d.fileUrl)}</span></div>`
+            : '';
+          const linkHtml = d.link
+            ? `<div class="doubt-attachment">🔗 <a href="${escapeHtml(d.link)}" target="_blank" rel="noopener">Reference link</a></div>`
+            : '';
+
+          card.innerHTML = `
+            <div class="doubt-card-icon">❓</div>
+            <div class="doubt-card-body">
+              <div class="doubt-card-meta">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                ${timeAgo(d.createdAt || d.submittedAt)}
+                <span style="opacity:.4">•</span>
+                ${d.courseCode || ''}
+              </div>
+              ${studentDisplay}
+              <p class="doubt-card-text">${escapeHtml(d.text)}</p>
+              ${fileHtml}${linkHtml}
+              <div class="doubt-card-time">Posted ${new Date(d.createdAt || d.submittedAt).toLocaleString('en-IN', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+            </div>
+            <button class="resolve-btn" onclick="openResolveModal('${d.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Resolve
+            </button>
+          `;
+          pendingList.appendChild(card);
+        });
+      }
+
+      renderResolvedList(resolved);
+    }
+
+    function renderResolvedList(resolved) {
+      const list = document.getElementById('resolvedDoubtsList');
+      if (!_resolvedOpen) return;
+      list.innerHTML = '';
+      if (resolved.length === 0) {
+        list.innerHTML = '<div style="padding:20px; text-align:center; font-size:14px; color:var(--text-muted);">No resolved doubts yet.</div>';
+        return;
+      }
+      resolved.forEach((d, i) => {
+        const card = document.createElement('div');
+        card.className = 'resolved-doubt-card';
+        card.style.animationDelay = (i * 0.05) + 's';
+        const studentDisplay = d.studentName
+          ? `<div class="resolved-doubt-student">👤 ${escapeHtml(d.studentName)}</div>`
+          : '';
+        card.innerHTML = `
+          <p class="resolved-doubt-q">${escapeHtml(d.text)}</p>
+          ${studentDisplay}
+          <div class="resolved-divider"></div>
+          <div class="resolved-answer-label">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Faculty Resolution
+          </div>
+          <p class="resolved-answer-text">${escapeHtml(d.resolution || d.reply || '')}</p>
+          <div class="resolved-meta">Resolved ${timeAgo(d.resolvedAt || d.repliedAt)} by ${escapeHtml(d.repliedBy || getFacultyName())}</div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function toggleResolved() {
+      _resolvedOpen = !_resolvedOpen;
+      const list    = document.getElementById('resolvedDoubtsList');
+      const chevron = document.getElementById('resolvedChevron');
+      list.style.display = _resolvedOpen ? 'block' : 'none';
+      chevron.classList.toggle('open', _resolvedOpen);
+      if (_resolvedOpen && _currentClassId) {
+        renderResolvedList(getDoubtsForClass(_currentClassId).filter(d => d.status === 'resolved'));
+      }
+    }
+
+    function scrollToDoubts() {
+      document.getElementById('doubts-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ─── RESOLVE MODAL ────────────────────────────────────
+    function openResolveModal(doubtId) {
+      const doubt = getDoubts().find(d => d.id === doubtId);
+      if (!doubt) return;
+
+      _resolveDoubtId = doubtId;
+
+      // Show student name in modal
+      const studentEl = document.getElementById('resolveDoubtStudent');
+      studentEl.innerHTML = doubt.studentName
+        ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> ${escapeHtml(doubt.studentName)}`
+        : `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Anonymous Student`;
+
+      document.getElementById('resolveDoubtText').textContent = doubt.text;
+      document.getElementById('resolveDoubtTime').textContent  = 'Asked ' + timeAgo(doubt.createdAt || doubt.submittedAt);
+      document.getElementById('resolutionText').value = '';
+      document.getElementById('charCount').textContent = '0';
+      document.getElementById('resolveError').classList.remove('show');
+
+      showView('view-resolve-modal');
+      setTimeout(() => document.getElementById('resolutionText').focus(), 100);
+    }
+
+    function closeResolveModal() {
+      _resolveDoubtId = null;
+      showView('view-class-detail');
+    }
+
+    function resolveOverlayClick(e) {
+      if (e.target === document.getElementById('resolveModalOverlay')) closeResolveModal();
+    }
+
+    function updateCharCount() {
+      document.getElementById('charCount').textContent = document.getElementById('resolutionText').value.length;
+    }
+
+    function submitResolution() {
+      const text  = document.getElementById('resolutionText').value.trim();
+      const errEl = document.getElementById('resolveError');
+      if (!text) { errEl.classList.add('show'); return; }
+      errEl.classList.remove('show');
+
+      const all = getDoubts();
+      const idx = all.findIndex(d => d.id === _resolveDoubtId);
+      if (idx === -1) return;
+
+      const facultyName = getFacultyName();
+      const now = new Date().toISOString();
+
+      // ── Write ALL fields — both teacher schema and student schema ──
+      all[idx].status     = 'resolved';
+      // Teacher dashboard reads:
+      all[idx].resolution = text;
+      all[idx].resolvedAt = now;
+      // Student dashboard reads:
+      all[idx].reply      = text;
+      all[idx].repliedAt  = now;
+      all[idx].repliedBy  = facultyName;
+
+      saveDoubts(all);
+
+      closeResolveModal();
+      showToast('✅ Doubt resolved — student will see your reply instantly!');
+      if (_currentClassId) renderDoubts(_currentClassId);
+    }
+
+    // ─── TOAST ────────────────────────────────────────────
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ─── INIT ─────────────────────────────────────────────
+    try {
+      const savedName     = localStorage.getItem('amigo_name');
+      const savedInitials = localStorage.getItem('amigo_initials');
+      if (savedName) {
+        document.getElementById('navAvatar').textContent = savedInitials || savedName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+        document.getElementById('navName').textContent   = savedName;
+      }
+    } catch(e) {}
+
+    renderDashboard();
   </script>
 </body>
 

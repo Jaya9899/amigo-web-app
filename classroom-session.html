@@ -1104,6 +1104,23 @@
   let currentCourseId = null;
   let currentTopic = 'A classroom lecture about a specific academic subject';
 
+  // ─── AUTO-EXIT POLLING ──────────────────────────────────
+  async function checkSessionStatus() {
+    if (!currentCourseId) return;
+    try {
+      const res = await fetch(`http://localhost:5001/is_session_active?course_id=${currentCourseId}`);
+      const data = await res.json();
+      if (data.active === false) {
+        showToast('🛑 Session has ended. Redirecting...');
+        setTimeout(() => {
+          window.location.href = 'student-dashboard.html';
+        }, 2000);
+      }
+    } catch (e) {
+      console.error('Failed to check session status:', e);
+    }
+  }
+
   // ─── INITIALIZATION ─────────────────────────────────────
   window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
@@ -1118,6 +1135,9 @@
       if (currentCourseId) {
         // In a real app, we might fetch course details here
         document.getElementById('sessionMeta').textContent = `Course ID: ${currentCourseId} · B.Tech CSE · Section A`;
+        
+        // Start polling for session status
+        setInterval(checkSessionStatus, 5000);
       }
 
       // Also notify backend in case it restarted or for robustness

@@ -6,3 +6,37 @@ Total Rejected: 0
 --- ACCEPTED DOUBTS CLUSTERS ---
 --- UNCLUSTERED ---
  - what is software engineering? (file: None, link: None)
+
+--- Course: default ---
+Total Accepted: 1
+Total Rejected: 0
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is software engineering? (file: None, link: None)
+
+--- Course: default ---
+Total Accepted: 1
+Total Rejected: 1
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is software engineering? (file: None, link: None)
+
+--- Course: default ---
+Total Accepted: 2
+Total Rejected: 1
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is software engineering? (file: None, link: None)
+ - what is engineering? (file: None, link: None)
+
+--- Course: CS-402 ---
+Total Accepted: 2
+Total Rejected: 0
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is software engineering? (file: None, link: None)
+ - what is engineering? (file: None, link: None)

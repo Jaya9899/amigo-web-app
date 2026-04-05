@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seed Database — Amigo</title>
+  <meta name="description" content="Seed the Amigo mini database with faculty and student demo accounts.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --cream: #F5F0E8;
+      --sage: #B8D4B0;
+      --sky: #B8D4E8;
+      --peach: #F2C9A0;
+      --mint: #A8D8C8;
+      --lemon: #E8DFA0;
+      --dark: #1A1A1A;
+      --dark2: #2D2D2D;
+      --soft-dark: #3A3A3A;
+      --text-muted: #6B6B6B;
+      --white: #FFFFFF;
+      --success: #38A169;
+      --success-bg: #C6F6D5;
+      --error: #E53E3E;
+      --error-bg: #FED7D7;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--dark);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      padding: 0 20px 60px;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 16px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(245, 240, 232, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+      margin-bottom: 32px;
+    }
+
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--dark);
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      color: var(--dark);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border: 1.5px solid rgba(26, 26, 26, 0.2);
+      border-radius: 100px;
+      transition: all 0.2s;
+      cursor: pointer;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover {
+      background: var(--dark);
+      color: var(--cream);
+      border-color: var(--dark);
+    }
+
+    /* ─── HEADER ─── */
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--dark);
+      color: var(--cream);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+
+    .page-badge .dot {
+      width: 6px; height: 6px;
+      background: var(--mint);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+    }
+
+    .page-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: clamp(32px, 6vw, 48px);
+      letter-spacing: -2px;
+      line-height: 1.08;
+      margin-bottom: 12px;
+    }
+
+    .page-title em { font-style: italic; font-weight: 300; }
+    .page-title .accent {
+      background: var(--sage);
+      padding: 2px 10px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .page-sub {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ─── STATUS BANNER ─── */
+    .status-banner {
+      max-width: 700px;
+      margin: 0 auto 40px;
+      padding: 20px 24px;
+      border-radius: 18px;
+      border: 1.5px solid;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+
+    .status-banner.success {
+      background: var(--success-bg);
+      border-color: var(--success);
+    }
+
+    .status-banner.error {
+      background: var(--error-bg);
+      border-color: var(--error);
+    }
+
+    .status-icon { font-size: 28px; }
+
+    .status-text h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .status-text p {
+      font-size: 13px;
+      color: var(--soft-dark);
+    }
+
+    /* ─── ACTIONS ROW ─── */
+    .actions-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.5s 0.15s ease both;
+    }
+
+    .action-btn {
+      background: var(--dark);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 100px;
+      border: 1.5px solid var(--dark);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .action-btn.secondary {
+      background: transparent;
+      color: var(--dark);
+    }
+
+    .action-btn.secondary:hover {
+      background: var(--dark);
+      color: var(--cream);
+    }
+
+    .action-btn.danger {
+      background: var(--error);
+      border-color: var(--error);
+    }
+
+    .action-btn.danger:hover {
+      background: #C53030;
+      border-color: #C53030;
+    }
+
+    /* ─── SECTION ─── */
+    .section {
+      max-width: 900px;
+      margin: 0 auto 48px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .section-icon {
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      border: 1.5px solid var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 2px 2px 0 var(--dark);
+    }
+
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 24px;
+      letter-spacing: -0.5px;
+    }
+
+    .section-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ─── TABLE ─── */
+    .data-table-wrap {
+      background: var(--white);
+      border: 1.5px solid var(--dark);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 4px 4px 0 var(--dark);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table thead tr {
+      background: rgba(245, 240, 232, 0.6);
+      border-bottom: 1.5px solid rgba(26, 26, 26, 0.1);
+    }
+
+    .data-table th {
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .data-table td {
+      padding: 16px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(26, 26, 26, 0.06);
+    }
+
+    .data-table tbody tr:last-child td { border-bottom: none; }
+
+    .data-table tbody tr:hover { background: rgba(245, 240, 232, 0.4); }
+
+    .mono {
+      font-family: 'DM Sans', monospace;
+      background: rgba(26, 26, 26, 0.06);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .role-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: 1px solid;
+    }
+
+    .role-pill.faculty {
+      background: var(--sky);
+      border-color: #7BB3D4;
+      color: #2B6CB0;
+    }
+
+    .role-pill.student {
+      background: var(--sage);
+      border-color: #8AB880;
+      color: #276749;
+    }
+
+    .name-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar-sm {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+      flex-shrink: 0;
+      border: 1.5px solid var(--dark);
+    }
+
+    .avatar-sm.fac { background: var(--sky); color: var(--dark); }
+    .avatar-sm.stu { background: var(--sage); color: var(--dark); }
+
+    /* ─── CLASSROOM CARDS ─── */
+    .classroom-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .cls-card {
+      background: var(--white);
+      border: 1.5px solid var(--dark);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 3px 3px 0 var(--dark);
+      transition: transform 0.2s;
+    }
+
+    .cls-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .cls-card-header {
+      padding: 18px 20px;
+      border-bottom: 1.5px solid var(--dark);
+      position: relative;
+    }
+
+    .cls-card-header.sage { background: var(--sage); }
+    .cls-card-header.sky { background: var(--sky); }
+    .cls-card-header.peach { background: var(--peach); }
+    .cls-card-header.mint { background: var(--mint); }
+    .cls-card-header.lemon { background: var(--lemon); }
+
+    .cls-card-code {
+      position: absolute;
+      top: 12px; right: 14px;
+      background: rgba(255, 255, 255, 0.4);
+      padding: 3px 8px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      border: 1px solid var(--dark);
+    }
+
+    .cls-card-name {
+      font-family: 'Fraunces', serif;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .cls-card-body {
+      padding: 16px 20px;
+    }
+
+    .cls-card-info {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cls-card-students {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(26, 26, 26, 0.08);
+    }
+
+    .cls-student-row {
+      font-size: 12px;
+      padding: 4px 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .cls-student-row .roll {
+      font-weight: 700;
+      background: rgba(26, 26, 26, 0.06);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    .cls-student-row .email {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--dark);
+      color: var(--cream);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 12px 20px;
+      border-radius: 100px;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 300;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 600px) {
+      .data-table th, .data-table td { padding: 12px 14px; font-size: 12px; }
+      .classroom-cards { grid-template-columns: 1fr; }
+      .actions-row { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a class="nav-logo" href="main.html">
+      🐼 Amigo
+    </a>
+    <div style="display:flex; gap:10px;">
+      <a class="nav-btn" href="login.html">Go to Login →</a>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="page-badge">
+      <div class="dot"></div>
+      Database Setup
+    </div>
+    <h1 class="page-title">Seed the <em>mini</em><br><span class="accent">database</span></h1>
+    <p class="page-sub">
+      Populate the Amigo app with 3 faculty accounts, 5 student accounts, and pre-built classrooms with student enrollments.
+    </p>
+  </div>
+
+  <!-- STATUS BANNER -->
+  <div class="status-banner success" id="statusBanner" style="display:none;">
+    <div class="status-icon" id="statusIcon">✅</div>
+    <div class="status-text">
+      <h3 id="statusTitle">Database seeded successfully!</h3>
+      <p id="statusSub">All accounts and classrooms are ready. You can now log in.</p>
+    </div>
+  </div>
+
+  <!-- ACTION BUTTONS -->
+  <div class="actions-row">
+    <button class="action-btn" id="seedBtn" onclick="seedDatabase()">
+      🌱 Seed Database Now
+    </button>
+    <button class="action-btn danger" onclick="clearDatabase()">
+      🗑️ Clear All Data
+    </button>
+    <a class="action-btn secondary" href="login.html">
+      🔑 Go to Login
+    </a>
+  </div>
+
+  <!-- ═══════ FACULTY ACCOUNTS ═══════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background: var(--sky);">👨‍🏫</div>
+      <div>
+        <div class="section-title">Faculty Accounts (3)</div>
+        <div class="section-sub">Hard-coded credentials — same password for all</div>
+      </div>
+    </div>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Department</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>
+              <div class="name-cell">
+                <div class="avatar-sm fac">DR</div>
+                Dr. Richards
+              </div>
+            </td>
+            <td><span class="mono">dr.richards@nitw.ac.in</span></td>
+            <td><span class="mono">amigo123</span></td>
+            <td>Computer Science</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>
+              <div class="name-cell">
+                <div class="avatar-sm fac">PM</div>
+                Prof. Priya Menon
+              </div>
+            </td>
+            <td><span class="mono">prof.menon@nitw.ac.in</span></td>
+            <td><span class="mono">amigo123</span></td>
+            <td>Computer Science</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>
+              <div class="name-cell">
+                <div class="avatar-sm fac">KR</div>
+                Dr. Kavitha Reddy
+              </div>
+            </td>
+            <td><span class="mono">dr.reddy@nitw.ac.in</span></td>
+            <td><span class="mono">amigo123</span></td>
+            <td>Electronics</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════ STUDENT ACCOUNTS ═══════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background: var(--sage);">🎓</div>
+      <div>
+        <div class="section-title">Student Accounts (5)</div>
+        <div class="section-sub">Pre-registered with passwords — enrolled in classrooms</div>
+      </div>
+    </div>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Roll No.</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Enrolled In</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>
+              <div class="name-cell">
+                <div class="avatar-sm stu">AK</div>
+                Ananya Kumar
+              </div>
+            </td>
+            <td><span class="mono">22CS1001</span></td>
+            <td><span class="mono">ananya.k@student.nitw.ac.in</span></td>
+            <td><span class="mono">student123</span></td>
+            <td>SE, DBMS, DSA</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>
+              <div class="name-cell">
+                <div class="avatar-sm stu">RS</div>
+                Rahul Sharma
+              </div>
+            </td>
+            <td><span class="mono">22CS1002</span></td>
+            <td><span class="mono">rahul.s@student.nitw.ac.in</span></td>
+            <td><span class="mono">student123</span></td>
+            <td>SE, DBMS, Signals</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>
+              <div class="name-cell">
+                <div class="avatar-sm stu">SP</div>
+                Sneha Patel
+              </div>
+            </td>
+            <td><span class="mono">22CS1003</span></td>
+            <td><span class="mono">sneha.p@student.nitw.ac.in</span></td>
+            <td><span class="mono">student123</span></td>
+            <td>SE, DSA, Signals</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>
+              <div class="name-cell">
+                <div class="avatar-sm stu">VR</div>
+                Vikram Reddy
+              </div>
+            </td>
+            <td><span class="mono">22EC1001</span></td>
+            <td><span class="mono">vikram.r@student.nitw.ac.in</span></td>
+            <td><span class="mono">student123</span></td>
+            <td>DBMS, Signals</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>
+              <div class="name-cell">
+                <div class="avatar-sm stu">DG</div>
+                Divya Gupta
+              </div>
+            </td>
+            <td><span class="mono">22CS1004</span></td>
+            <td><span class="mono">divya.g@student.nitw.ac.in</span></td>
+            <td><span class="mono">student123</span></td>
+            <td>SE, DBMS, DSA</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════ CLASSROOMS ═══════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background: var(--peach);">🏫</div>
+      <div>
+        <div class="section-title">Classrooms (4)</div>
+        <div class="section-sub">Pre-built classrooms with enrolled students</div>
+      </div>
+    </div>
+    <div class="classroom-cards" id="classroomCards">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ═══════════════════════════════════════════════
+    //  MINI DATABASE DEFINITION
+    // ═══════════════════════════════════════════════
+
+    // Faculty accounts (these are hard-coded in login.html's JS — stored here for reference)
+    const FACULTY = [
+      {
+        email: 'dr.richards@nitw.ac.in',
+        password: 'amigo123',
+        name: 'Dr. Richards',
+        initials: 'DR',
+        department: 'Computer Science'
+      },
+      {
+        email: 'prof.menon@nitw.ac.in',
+        password: 'amigo123',
+        name: 'Prof. Priya Menon',
+        initials: 'PM',
+        department: 'Computer Science'
+      },
+      {
+        email: 'dr.reddy@nitw.ac.in',
+        password: 'amigo123',
+        name: 'Dr. Kavitha Reddy',
+        initials: 'KR',
+        department: 'Electronics'
+      }
+    ];
+
+    // Student accounts
+    const STUDENTS = [
+      {
+        email: 'ananya.k@student.nitw.ac.in',
+        password: 'student123',
+        name: 'Ananya Kumar',
+        rollNo: '22CS1001'
+      },
+      {
+        email: 'rahul.s@student.nitw.ac.in',
+        password: 'student123',
+        name: 'Rahul Sharma',
+        rollNo: '22CS1002'
+      },
+      {
+        email: 'sneha.p@student.nitw.ac.in',
+        password: 'student123',
+        name: 'Sneha Patel',
+        rollNo: '22CS1003'
+      },
+      {
+        email: 'vikram.r@student.nitw.ac.in',
+        password: 'student123',
+        name: 'Vikram Reddy',
+        rollNo: '22EC1001'
+      },
+      {
+        email: 'divya.g@student.nitw.ac.in',
+        password: 'student123',
+        name: 'Divya Gupta',
+        rollNo: '22CS1004'
+      }
+    ];
+
+    // Classrooms (4 classrooms across 3 faculty)
+    const CLASSROOMS = [
+      {
+        id: 'cls_seed_001',
+        name: 'Software Engineering',
+        code: 'CS-402',
+        schedule: 'Mon, Wed • 10:00 AM',
+        color: 'sage',
+        icon: '💻',
+        facultyEmail: 'dr.richards@nitw.ac.in',
+        facultyName: 'Dr. Richards',
+        department: 'Computer Science',
+        students: [
+          { rollNo: '22CS1001', email: 'ananya.k@student.nitw.ac.in' },
+          { rollNo: '22CS1002', email: 'rahul.s@student.nitw.ac.in' },
+          { rollNo: '22CS1003', email: 'sneha.p@student.nitw.ac.in' },
+          { rollNo: '22CS1004', email: 'divya.g@student.nitw.ac.in' }
+        ],
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: 'cls_seed_002',
+        name: 'Database Management Systems',
+        code: 'CS-301',
+        schedule: 'Tue, Thu • 11:30 AM',
+        color: 'sky',
+        icon: '📐',
+        facultyEmail: 'prof.menon@nitw.ac.in',
+        facultyName: 'Prof. Priya Menon',
+        department: 'Computer Science',
+        students: [
+          { rollNo: '22CS1001', email: 'ananya.k@student.nitw.ac.in' },
+          { rollNo: '22CS1002', email: 'rahul.s@student.nitw.ac.in' },
+          { rollNo: '22EC1001', email: 'vikram.r@student.nitw.ac.in' },
+          { rollNo: '22CS1004', email: 'divya.g@student.nitw.ac.in' }
+        ],
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: 'cls_seed_003',
+        name: 'Data Structures & Algorithms',
+        code: 'CS-201',
+        schedule: 'Mon, Wed, Fri • 2:00 PM',
+        color: 'peach',
+        icon: '⚡',
+        facultyEmail: 'dr.richards@nitw.ac.in',
+        facultyName: 'Dr. Richards',
+        department: 'Computer Science',
+        students: [
+          { rollNo: '22CS1001', email: 'ananya.k@student.nitw.ac.in' },
+          { rollNo: '22CS1003', email: 'sneha.p@student.nitw.ac.in' },
+          { rollNo: '22CS1004', email: 'divya.g@student.nitw.ac.in' }
+        ],
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: 'cls_seed_004',
+        name: 'Signals & Systems',
+        code: 'EC-301',
+        schedule: 'Tue, Thu • 9:00 AM',
+        color: 'mint',
+        icon: '📡',
+        facultyEmail: 'dr.reddy@nitw.ac.in',
+        facultyName: 'Dr. Kavitha Reddy',
+        department: 'Electronics',
+        students: [
+          { rollNo: '22CS1002', email: 'rahul.s@student.nitw.ac.in' },
+          { rollNo: '22CS1003', email: 'sneha.p@student.nitw.ac.in' },
+          { rollNo: '22EC1001', email: 'vikram.r@student.nitw.ac.in' }
+        ],
+        createdAt: new Date().toISOString()
+      }
+    ];
+
+    // ═══════════════════════════════════════════════
+    //  SEED / CLEAR FUNCTIONS
+    // ═══════════════════════════════════════════════
+
+    function seedDatabase() {
+      // 1. Save classrooms
+      localStorage.setItem('amigo_classrooms', JSON.stringify(CLASSROOMS));
+
+      // 2. Save student accounts (with passwords pre-set)
+      const studentAccounts = {};
+      STUDENTS.forEach(s => {
+        studentAccounts[s.email] = {
+          password: s.password,
+          name: s.name,
+          rollNo: s.rollNo
+        };
+      });
+      localStorage.setItem('amigo_student_accounts', JSON.stringify(studentAccounts));
+
+      // 3. Clear any existing login session
+      localStorage.removeItem('amigo_role');
+      localStorage.removeItem('amigo_email');
+      localStorage.removeItem('amigo_name');
+      localStorage.removeItem('amigo_initials');
+      localStorage.removeItem('amigo_department');
+
+      // Show success
+      const banner = document.getElementById('statusBanner');
+      banner.style.display = 'flex';
+      banner.className = 'status-banner success';
+      document.getElementById('statusIcon').textContent = '✅';
+      document.getElementById('statusTitle').textContent = 'Database seeded successfully!';
+      document.getElementById('statusSub').textContent = `${FACULTY.length} faculty + ${STUDENTS.length} students + ${CLASSROOMS.length} classrooms created. You can now log in.`;
+      banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      showToast('🌱 Database seeded with all accounts and classrooms!');
+      renderClassroomCards();
+    }
+
+    function clearDatabase() {
+      localStorage.removeItem('amigo_classrooms');
+      localStorage.removeItem('amigo_student_accounts');
+      localStorage.removeItem('amigo_role');
+      localStorage.removeItem('amigo_email');
+      localStorage.removeItem('amigo_name');
+      localStorage.removeItem('amigo_initials');
+      localStorage.removeItem('amigo_department');
+
+      const banner = document.getElementById('statusBanner');
+      banner.style.display = 'flex';
+      banner.className = 'status-banner error';
+      document.getElementById('statusIcon').textContent = '🗑️';
+      document.getElementById('statusTitle').textContent = 'Database cleared';
+      document.getElementById('statusSub').textContent = 'All classrooms, student accounts, and session data have been wiped.';
+      banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      showToast('🗑️ All data cleared from localStorage');
+      renderClassroomCards();
+    }
+
+    // ═══════════════════════════════════════════════
+    //  RENDER CLASSROOM CARDS
+    // ═══════════════════════════════════════════════
+
+    function renderClassroomCards() {
+      const container = document.getElementById('classroomCards');
+      container.innerHTML = '';
+
+      CLASSROOMS.forEach((cls, i) => {
+        const card = document.createElement('div');
+        card.className = 'cls-card';
+        card.style.animation = `fadeUp 0.4s ${i * 0.1}s ease both`;
+
+        const studentsHtml = cls.students.map(s =>
+          `<div class="cls-student-row">
+            <span class="roll">${s.rollNo}</span>
+            <span class="email">${s.email}</span>
+          </div>`
+        ).join('');
+
+        card.innerHTML = `
+          <div class="cls-card-header ${cls.color}">
+            <div class="cls-card-code">${cls.code}</div>
+            <div class="cls-card-name">${cls.icon} ${cls.name}</div>
+          </div>
+          <div class="cls-card-body">
+            <div class="cls-card-info">👨‍🏫 ${cls.facultyName}</div>
+            <div class="cls-card-info">📅 ${cls.schedule}</div>
+            <div class="cls-card-info">🏛️ ${cls.department}</div>
+            <div class="cls-card-students">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:8px;">
+                👥 ${cls.students.length} Enrolled Students
+              </div>
+              ${studentsHtml}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ─── TOAST ─────────────────────────────────────
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ─── INIT ──────────────────────────────────────
+    renderClassroomCards();
+
+    // Auto-check if data already exists
+    const existingClassrooms = JSON.parse(localStorage.getItem('amigo_classrooms') || '[]');
+    const existingStudents = JSON.parse(localStorage.getItem('amigo_student_accounts') || '{}');
+    if (existingClassrooms.length > 0 && Object.keys(existingStudents).length > 0) {
+      const banner = document.getElementById('statusBanner');
+      banner.style.display = 'flex';
+      banner.className = 'status-banner success';
+      document.getElementById('statusIcon').textContent = '📦';
+      document.getElementById('statusTitle').textContent = 'Database already populated';
+      document.getElementById('statusSub').textContent = `Found ${existingClassrooms.length} classroom(s) and ${Object.keys(existingStudents).length} student account(s). Click "Seed" to reset or "Clear" to wipe.`;
+    }
+  </script>
+</body>
+
+</html>

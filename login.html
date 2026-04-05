@@ -800,6 +800,14 @@
           <div class="account-item">👨‍🏫 <code>prof.menon@nitw.ac.in</code> · password: <code>amigo123</code></div>
           <div class="account-item">👨‍🏫 <code>dr.reddy@nitw.ac.in</code> · password: <code>amigo123</code></div>
         </div>
+        <div class="accounts-list" id="studentAccountsHint" style="display:none; margin-top:10px;">
+          <div class="accounts-list-title">Demo Student Accounts</div>
+          <div class="account-item">🎓 <code>ananya.k@student.nitw.ac.in</code> · password: <code>student123</code></div>
+          <div class="account-item">🎓 <code>rahul.s@student.nitw.ac.in</code> · password: <code>student123</code></div>
+          <div class="account-item">🎓 <code>sneha.p@student.nitw.ac.in</code> · password: <code>student123</code></div>
+          <div class="account-item">🎓 <code>vikram.r@student.nitw.ac.in</code> · password: <code>student123</code></div>
+          <div class="account-item">🎓 <code>divya.g@student.nitw.ac.in</code> · password: <code>student123</code></div>
+        </div>
       </div>
 
     </div>
@@ -985,6 +993,7 @@
           ? 'Create Account <span>✦</span><div class="spinner" id="loginSpinner"></div>'
           : 'Log In <span>✦</span><div class="spinner" id="loginSpinner"></div>';
         document.getElementById('accountsHint').style.display = 'none';
+        document.getElementById('studentAccountsHint').style.display = 'block';
 
         goToStep(3);
 
@@ -1018,6 +1027,7 @@
         document.getElementById('passwordInput').placeholder = 'Enter your password';
         document.getElementById('btnLogin').innerHTML = 'Log In <span>✦</span><div class="spinner" id="loginSpinner"></div>';
         document.getElementById('accountsHint').style.display = 'block';
+        document.getElementById('studentAccountsHint').style.display = 'none';
 
         goToStep(3);
       }

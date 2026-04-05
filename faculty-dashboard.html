@@ -478,10 +478,10 @@
   <nav>
     <div class="nav-left">
       <div class="mascot-avatar-small">🤖</div>
-      <div class="nav-logo">
+      <a class="nav-logo" href="faculty-dashboard.html">
         Amigo <span
           style="font-family:'DM Sans', sans-serif; font-size:14px; font-weight:400; color:var(--text-muted);">Faculty</span>
-      </div>
+      </a>
     </div>
     <div class="nav-right">
       <a href="index.html"
@@ -604,10 +604,6 @@
         </div>
       </div>
 
-      <!-- General Analytics Area -->
-      <h2 class="section-title">
-        ✨ Recent Class Analytics
-      </h2>
 
       <!-- Placeholder for AI-generated graphs and reports -->
       <div class="analytics-grid" style="display: block;">
@@ -624,7 +620,7 @@
         </div>
       </div>
 
-      <div style="margin-top: 16px;">
+      <div style="margin-top: 16px; margin-bottom: 48px;">
         <a href="previous-analytics.html" class="btn btn-secondary" style="display: inline-flex;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 8v4l3 3" />
@@ -634,8 +630,63 @@
         </a>
       </div>
 
+      <!-- Inline Doubts Section -->
+      <div id="inline-doubts-area" style="margin-top: 48px; border-top: 1.5px solid rgba(26,26,26,0.1); padding-top: 32px;">
+        <h2 class="section-title">
+          🙋 Pending Student Doubts
+        </h2>
+        <div id="doubts-container" class="session-list">
+          <div class="stat-card" style="text-align: center; padding: 40px; border: 1.5px solid rgba(26,26,26,0.1); background: white;">
+            <p style="color: var(--text-muted);">Loading student doubts...</p>
+          </div>
+        </div>
+
+        <!-- Resolved Doubts Toggle -->
+        <div style="margin-top: 32px; border-top: 1.5px solid rgba(26,26,26,0.08); padding-top: 24px;">
+          <button class="btn btn-secondary" onclick="toggleResolvedSection()" style="width: 100%; justify-content: space-between;">
+            <span>✅ View Resolved Doubts</span>
+            <svg id="resolved-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s;">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div id="resolved-container" class="session-list" style="display: none; margin-top: 16px;">
+            <!-- Resolved items here -->
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
+
+  <!-- Resolution Modal -->
+  <div class="modal-overlay" id="resModal">
+    <div class="modal" style="max-width: 500px; z-index: 1001;">
+      <div class="modal-title">Resolve Student Doubt 🎓</div>
+      <div id="resDoubtText" style="font-size: 14px; color: var(--soft-dark); background: var(--sky); padding: 12px; border-radius: 12px; margin-bottom: 20px; border: 1.5px solid var(--dark);">"Doubt text goes here"</div>
+      
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <textarea id="resText" placeholder="Type your explanation here..." style="width:100%; min-height:100px; padding:12px; border-radius:12px; border:1.5px solid var(--dark); font-family:inherit;"></textarea>
+        
+        <div style="display: flex; gap: 10px; align-items: center; background: white; padding: 12px; border-radius: 12px; border: 1.5px solid rgba(0,0,0,0.1);">
+          <span title="Upload File">📎</span>
+          <input type="file" id="resFile" style="font-size: 12px;">
+        </div>
+
+        <div id="voice-recorder" style="background: var(--lemon); padding: 12px; border-radius: 12px; border: 1.5px solid var(--dark); display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button id="recordBtn" class="session-btn" style="background: white; width: 40px; height: 40px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center;">🎤</button>
+            <span id="recordStatus" style="font-size: 12px; font-weight: 600;">Record Voice Message</span>
+          </div>
+          <audio id="audioPlayback" controls style="display: none; height: 30px; max-width: 150px;"></audio>
+        </div>
+      </div>
+
+      <div class="modal-btns" style="margin-top: 24px;">
+        <button class="modal-btn-cancel" onclick="closeResModal()">Cancel</button>
+        <button class="modal-btn-submit" onclick="submitResolution()" style="background: var(--dark); color: white;">Submit Resolution ✦</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     const viewClasses = document.getElementById('view-classes');
@@ -643,11 +694,277 @@
     const detailTitle = document.getElementById('detail-title');
     const detailCode = document.getElementById('detail-code');
     const detailHeaderCard = document.getElementById('detail-header-card');
+    const doubtsContainer = document.getElementById('doubts-container');
+    const resolvedContainer = document.getElementById('resolved-container');
+    let currentCourseCode = null;
+    let activeDoubtText = null;
+
+    // Media Recorder variables
+    let mediaRecorder;
+    let audioChunks = [];
+    let audioBlob = null;
+
+    async function fetchDoubts(courseId) {
+      currentCourseCode = courseId;
+      doubtsContainer.innerHTML = `
+        <div class="stat-card" style="text-align: center; padding: 40px;">
+          <p style="color: var(--text-muted);">Loading doubts for ${courseId}...</p>
+        </div>
+      `;
+
+      try {
+        const response = await fetch(`http://localhost:5001/get_doubts?course_id=${encodeURIComponent(courseId)}`);
+        const data = await response.json();
+
+        if (data.success) {
+          renderDoubts(data);
+        } else {
+          doubtsContainer.innerHTML = `<p style="color: red; padding: 20px;">Failed to load doubts.</p>`;
+        }
+      } catch (error) {
+        console.error('Error fetching doubts:', error);
+        doubtsContainer.innerHTML = `<p style="color: var(--text-muted); padding: 20px;">No doubts found or server is offline.</p>`;
+      }
+    }
+
+    function renderDoubts(data) {
+      if (data.clusters.length === 0 && data.unclustered.length === 0) {
+        doubtsContainer.innerHTML = `
+          <div class="stat-card" style="text-align: center; padding: 40px; border: 1.5px dashed rgba(26,26,26,0.2); background: transparent; box-shadow: none;">
+            <p style="color: var(--text-muted);">No student doubts submitted for this class yet.</p>
+          </div>
+        `;
+        resolvedContainer.innerHTML = `<p style="text-align:center; padding: 20px; color: var(--text-muted);">No resolved doubts yet.</p>`;
+        return;
+      }
+
+      let pendingHtml = '';
+      let resolvedHtml = '';
+
+      // Helper to render a doubt item
+      const createDoubtItem = (d, isResolved) => {
+        return `
+          <div class="session-item" style="margin-bottom: 12px; flex-direction: column; align-items: flex-start; gap: 10px; border-left: 4px solid ${isResolved ? 'var(--live-green)' : 'var(--inactive-red)'};">
+            <div style="display: flex; justify-content: space-between; width: 100%;">
+              <div class="session-info">
+                <span style="font-size: 10px; font-weight: 700; background: ${isResolved ? 'var(--live-green-bg)' : 'var(--sky)'}; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block;">
+                  ${isResolved ? 'RESOLVED DOUBT' : 'PENDING DOUBT'}
+                </span>
+                <h4 style="font-weight: 500;">${d.text}</h4>
+              </div>
+              ${!isResolved ? `<button class="session-btn" style="background: var(--dark); color: white;" onclick="openResModal('${d.text.replace(/'/g, "\\'")}')">Resolve Now</button>` : ''}
+            </div>
+            
+            <!-- Student Attachments -->
+            ${d.file_url || d.link ? `
+              <div style="display: flex; gap: 12px; padding-left: 4px;">
+                ${d.file_url ? `<span style="font-size: 11px; background: var(--cream); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.05);">📎 Attachment: <strong>${d.file_url}</strong></span>` : ''}
+                ${d.link ? `<a href="${d.link.startsWith('http') ? d.link : 'https://' + d.link}" target="_blank" style="font-size: 11px; color: #3B82F6; font-weight: 500;">🔗 View Link</a>` : ''}
+              </div>
+            ` : ''}
+
+            <!-- Teacher Resolution (if already resolved elsewhere) -->
+            ${isResolved ? `
+              <div style="width: 100%; margin-top: 8px; padding: 12px; background: var(--live-green-bg); border-radius: 12px; border: 1px solid var(--live-green-border);">
+                <div style="font-size: 11px; font-weight: 700; color: var(--live-green-border); margin-bottom: 6px;">TEACHER'S RESPONSE</div>
+                <p style="font-size: 13px; color: var(--dark2); margin-bottom: 8px;">${d.resolution_text || 'No textual response provided.'}</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                  ${d.resolution_file_url ? `<span style="font-size: 11px; background: white; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--live-green-border);">📎 ${d.resolution_file_url}</span>` : ''}
+                  ${d.resolution_audio_url ? `<div style="display: flex; align-items: center; gap: 6px; font-size: 11px; background: white; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--live-green-border);">🔊 Voice Message Recorded</div>` : ''}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      };
+
+      // Process Clusters
+      data.clusters.forEach(cluster => {
+        // Find if all/any are pending
+        const clusterPending = cluster.doubts.filter(d => d.status === 'pending');
+        const clusterResolved = cluster.doubts.filter(d => d.status === 'resolved');
+
+        if (clusterPending.length > 0) {
+          pendingHtml += `
+            <div class="session-item" style="flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 16px; border-left: 4px solid var(--peach);">
+              <div style="display: flex; justify-content: space-between; width: 100%;">
+                <div class="session-info">
+                  <span style="font-size: 10px; font-weight: 700; background: var(--peach); padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block;">AI CLUSTERED (PENDING)</span>
+                  <h4>${cluster.summary}</h4>
+                  <p>${clusterPending.length} pending, ${clusterResolved.length} resolved in this group</p>
+                </div>
+                <button class="session-btn" onclick="toggleDoubtDetails('cluster-${cluster.cluster_id}')">Expand Cluster</button>
+              </div>
+              <div id="cluster-${cluster.cluster_id}" style="display: none; width: 100%; padding-top: 12px; border-top: 1px solid rgba(26,26,26,0.05);">
+                ${cluster.doubts.map(d => createDoubtItem(d, d.status === 'resolved')).join('')}
+              </div>
+            </div>
+          `;
+        } else if (clusterResolved.length > 0) {
+          // Fully resolved cluster
+          resolvedHtml += `
+            <div class="session-item" style="flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 16px; border-left: 4px solid var(--live-green);">
+              <div style="display: flex; justify-content: space-between; width: 100%;">
+                <div class="session-info">
+                  <span style="font-size: 10px; font-weight: 700; background: var(--live-green-bg); padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block;">RESOLVED CLUSTER</span>
+                  <h4>${cluster.summary}</h4>
+                  <p>All ${cluster.count} doubts in this group are resolved</p>
+                </div>
+                <button class="session-btn" onclick="toggleDoubtDetails('res-cluster-${cluster.cluster_id}')">View Details</button>
+              </div>
+              <div id="res-cluster-${cluster.cluster_id}" style="display: none; width: 100%; padding-top: 12px; border-top: 1px solid rgba(26,26,26,0.05);">
+                ${cluster.doubts.map(d => createDoubtItem(d, true)).join('')}
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      // Process Unclustered
+      data.unclustered.forEach(d => {
+        if (d.status === 'resolved') {
+          resolvedHtml += createDoubtItem(d, true);
+        } else {
+          pendingHtml += createDoubtItem(d, false);
+        }
+      });
+
+      doubtsContainer.innerHTML = pendingHtml || `<p style="text-align:center; padding: 20px; color: var(--text-muted);">No pending doubts! All caught up. 🎉</p>`;
+      resolvedContainer.innerHTML = resolvedHtml || `<p style="text-align:center; padding: 20px; color: var(--text-muted);">No resolved doubts yet.</p>`;
+    }
+
+    // Modal Control
+    function openResModal(doubtText) {
+      activeDoubtText = doubtText;
+      document.getElementById('resDoubtText').textContent = `"${doubtText}"`;
+      document.getElementById('resText').value = '';
+      document.getElementById('resFile').value = '';
+      
+      // Reset recorder
+      audioBlob = null;
+      document.getElementById('audioPlayback').style.display = 'none';
+      document.getElementById('recordStatus').textContent = 'Record Voice Message';
+      document.getElementById('recordBtn').textContent = '🎤';
+
+      document.getElementById('resModal').classList.add('open');
+    }
+
+    function closeResModal() {
+      document.getElementById('resModal').classList.remove('open');
+    }
+
+    async function submitResolution() {
+      const resText = document.getElementById('resText').value.trim();
+      const resFile = document.getElementById('resFile').files[0];
+      
+      if (!resText && !resFile && !audioBlob) {
+        alert('Please provide some form of resolution (text, file, or voice).');
+        return;
+      }
+
+      const submitBtn = document.querySelector('#resModal .modal-btn-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+
+      try {
+        const response = await fetch('http://localhost:5001/resolve_doubt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            course_id: currentCourseCode,
+            doubt_text: activeDoubtText,
+            resolution_text: resText,
+            resolution_file: resFile ? resFile.name : null,
+            resolution_audio: audioBlob ? 'voice_resolution.wav' : null // Simulated
+          })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          closeResModal();
+          fetchDoubts(currentCourseCode); // Refresh list
+        } else {
+          alert('Error resolving doubt.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Server error.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Resolution ✦';
+      }
+    }
+
+    // Audio Recording Logic
+    const recordBtn = document.getElementById('recordBtn');
+    const recordStatus = document.getElementById('recordStatus');
+    const audioPlayback = document.getElementById('audioPlayback');
+
+    recordBtn.addEventListener('click', async () => {
+      if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+
+          mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+          mediaRecorder.onstop = () => {
+            audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const audioUrl = URL.createObjectURL(audioBlob);
+            audioPlayback.src = audioUrl;
+            audioPlayback.style.display = 'block';
+            recordStatus.textContent = 'Voice Message Recorded!';
+          };
+
+          mediaRecorder.start();
+          recordBtn.textContent = '⏹';
+          recordBtn.style.color = 'red';
+          recordStatus.textContent = 'Recording... (Click to stop)';
+        } catch (err) {
+          console.error('Microphone access denied:', err);
+          alert('Could not access microphone.');
+        }
+      } else {
+        mediaRecorder.stop();
+        recordBtn.textContent = '🎤';
+        recordBtn.style.color = 'var(--dark)';
+      }
+    });
+
+    function toggleResolvedSection() {
+      const container = document.getElementById('resolved-container');
+      const arrow = document.getElementById('resolved-arrow');
+      if (container.style.display === 'none') {
+        container.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+      } else {
+        container.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    function toggleDoubtDetails(id) {
+      const el = document.getElementById(id);
+      if (el.style.display === 'none') {
+        el.style.display = 'block';
+      } else {
+        el.style.display = 'none';
+      }
+    }
 
     function openClass(title, code, colorClass) {
+      // Clear current course state
+      currentCourseCode = code;
+      
       // Update Detail UI
       detailTitle.textContent = title;
       detailCode.textContent = code + ' • Fall Semester';
+
+      // Update Start Session link
+      const startBtn = document.querySelector('#view-class-detail .btn-primary');
+      if (startBtn) {
+        startBtn.href = `session.html?topic=${encodeURIComponent(title)}&id=${encodeURIComponent(code)}`;
+      }
 
       // Update background color based on class
       detailHeaderCard.className = 'detail-header'; // reset
@@ -660,6 +977,9 @@
       };
       detailHeaderCard.style.background = getBg(colorClass);
 
+      // Fetch doubts but DON'T show modal yet (just to get count)
+      fetchDoubts(code);
+
       // Toggle Views
       viewClasses.classList.remove('active');
       viewDetail.classList.add('active');
@@ -671,6 +991,10 @@
       viewClasses.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  </script>
+</body>
+
+</html>
   </script>
 </body>
 

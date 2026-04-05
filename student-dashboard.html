@@ -184,7 +184,7 @@
   /* ─── STATS ROW ─── */
   .stats-row {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     margin-bottom: 28px;
     animation: fadeUp 0.5s 0.1s ease both;
@@ -217,7 +217,6 @@
 
   .stat-card:nth-child(1) { background: var(--sage); }
   .stat-card:nth-child(2) { background: var(--sky); }
-  .stat-card:nth-child(3) { background: var(--peach); }
 
   /* ─── LEGEND ─── */
   .legend-row {
@@ -578,7 +577,7 @@
     }
 
     .stats-row {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
     }
 
@@ -818,10 +817,6 @@
       <div class="num" id="liveCount">1</div>
       <div class="label">Live Now</div>
     </div>
-    <div class="stat-card">
-      <div class="num">87%</div>
-      <div class="label">Attendance</div>
-    </div>
   </div>
 
   <!-- Legend -->
@@ -873,7 +868,22 @@
     <div class="modal-label">Doubt Resolution</div>
     <div class="modal-title">Post a Doubt 🙋</div>
     <div class="modal-course-info" id="modalCourseInfo">Course · Faculty</div>
-    <textarea id="doubtText" placeholder="Describe your doubt clearly — Amigo AI will resolve it or forward to your faculty..."></textarea>
+    
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <textarea id="doubtText" placeholder="Describe your doubt clearly — Amigo AI will resolve it or forward to your faculty..."></textarea>
+      
+      <div style="background: white; border: 1.5px solid rgba(26,26,26,0.1); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 14px;">📎</span>
+          <input type="file" id="doubtFile" style="font-size: 12px; color: var(--text-muted); width: 100%;">
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 14px;">🔗</span>
+          <input type="text" id="doubtLink" placeholder="Reference Link (optional)" style="flex: 1; border: none; outline: none; font-size: 12px; font-family: 'DM Sans', sans-serif;">
+        </div>
+      </div>
+    </div>
+
     <div class="modal-btns">
       <button class="modal-btn-cancel" onclick="closeDoubtModal()">Cancel</button>
       <button class="modal-btn-submit" onclick="submitDoubt()">Submit Doubt ✦</button>
@@ -896,22 +906,22 @@
       id: 1,
       icon: '💻',
       iconBg: '#B8D4B0',
-      name: 'Data Structures & Algorithms',
-      code: 'CS301',
+      name: 'Software Engineering',
+      code: 'CS-402',
       faculty: 'Dr. Priya Menon',
       dept: 'Computer Science',
       days: ['Mon','Wed','Fri'],
       time: '09:00 – 10:00 AM',
-      status: 'live'
+      status: 'ended'
     },
     {
       id: 2,
       icon: '📐',
       iconBg: '#B8D4E8',
-      name: 'Engineering Mathematics III',
-      code: 'MA302',
+      name: 'Artificial Intelligence',
+      code: 'CS-501',
       faculty: 'Prof. Ramesh Iyer',
-      dept: 'Mathematics',
+      dept: 'Computer Science',
       days: ['Tue','Thu'],
       time: '11:00 – 12:00 PM',
       status: 'upcoming'
@@ -920,10 +930,10 @@
       id: 3,
       icon: '⚡',
       iconBg: '#F2C9A0',
-      name: 'Digital Electronics',
-      code: 'EC201',
+      name: 'Data Structures',
+      code: 'CS-201',
       faculty: 'Dr. Kavitha Reddy',
-      dept: 'Electronics',
+      dept: 'Computer Science',
       days: ['Mon','Wed'],
       time: '02:00 – 03:00 PM',
       status: 'ended'
@@ -932,37 +942,13 @@
       id: 4,
       icon: '🧬',
       iconBg: '#A8D8C8',
-      name: 'Operating Systems',
-      code: 'CS302',
+      name: 'Computer Networks',
+      code: 'CS-304',
       faculty: 'Dr. Suresh Babu',
       dept: 'Computer Science',
       days: ['Tue','Thu','Sat'],
       time: '03:00 – 04:00 PM',
       status: 'upcoming'
-    },
-    {
-      id: 5,
-      icon: '📡',
-      iconBg: '#E8DFA0',
-      name: 'Computer Networks',
-      code: 'CS303',
-      faculty: 'Prof. Anita Sharma',
-      dept: 'Computer Science',
-      days: ['Mon','Fri'],
-      time: '10:00 – 11:00 AM',
-      status: 'ended'
-    },
-    {
-      id: 6,
-      icon: '🧪',
-      iconBg: '#F2C9A0',
-      name: 'Theory of Computation',
-      code: 'CS304',
-      faculty: 'Dr. Vijay Krishnan',
-      dept: 'Computer Science',
-      days: ['Wed','Fri'],
-      time: '04:00 – 05:00 PM',
-      status: 'ended'
     }
   ];
 
@@ -1065,9 +1051,27 @@
   }
 
   // ─── JOIN CLASS ──────────────────────────────────────────
-  function joinClass(id) {
+  async function joinClass(id) {
     const c = courses.find(x => x.id === id);
     showToast(`✅ Joining ${c.name}…`);
+    
+    // Set the topic in the backend for relevancy filtering
+    try {
+      await fetch('http://localhost:5001/set_topic', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: c.name })
+      });
+      console.log(`Topic set to: ${c.name}`);
+    } catch (e) {
+      console.error('Failed to set topic:', e);
+    }
+
+    // Redirect to the classroom session page
+    // Using classroom-session.html (confirmed file exists)
+    setTimeout(() => {
+      window.location.href = `classroom-session.html?topic=${encodeURIComponent(c.name)}&id=${c.id}`;
+    }, 1000);
   }
 
   // ─── DOUBT MODAL ─────────────────────────────────────────
@@ -1077,6 +1081,8 @@
     activeDoubtCourse = courses.find(x => x.id === id);
     document.getElementById('modalCourseInfo').textContent = `${activeDoubtCourse.name} · ${activeDoubtCourse.faculty}`;
     document.getElementById('doubtText').value = '';
+    document.getElementById('doubtFile').value = '';
+    document.getElementById('doubtLink').value = '';
     document.getElementById('doubtModal').classList.add('open');
   }
 
@@ -1085,11 +1091,57 @@
     activeDoubtCourse = null;
   }
 
-  function submitDoubt() {
+  async function submitDoubt() {
     const text = document.getElementById('doubtText').value.trim();
+    const fileInput = document.getElementById('doubtFile');
+    const linkInput = document.getElementById('doubtLink');
+
     if (!text) { showToast('⚠️ Please describe your doubt first.'); return; }
-    closeDoubtModal();
-    showToast(`📬 Doubt submitted for ${activeDoubtCourse ? activeDoubtCourse.code : 'course'} — Amigo is on it!`);
+    
+    const submitBtn = document.querySelector('.modal-btn-submit');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Submitting...';
+    submitBtn.disabled = true;
+
+    // Simulate file upload by taking the name
+    const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : null;
+    const linkValue = linkInput.value.trim();
+
+    try {
+      const res = await fetch('http://localhost:5001/submit_doubts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          doubt: text,
+          topic: activeDoubtCourse ? activeDoubtCourse.name : undefined,
+          course_id: activeDoubtCourse ? activeDoubtCourse.code : 'default',
+          file_url: fileName,
+          link: linkValue || null
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        showToast('❌ Server error: ' + (err.error || res.statusText));
+        return;
+      }
+
+      const data = await res.json();
+
+      if (data.accepted) {
+        showToast(`📬 Doubt submitted for ${activeDoubtCourse ? activeDoubtCourse.code : 'course'} — Amigo is on it!`);
+        closeDoubtModal();
+      } else {
+        showToast('❌ Filtered: ' + (data.reason || 'not relevant'));
+      }
+
+    } catch (e) {
+      showToast('❌ Cannot reach server — is backend.py running?');
+      console.error(e);
+    } finally {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }
   }
 
   document.getElementById('doubtModal').addEventListener('click', function(e) {
@@ -1135,6 +1187,11 @@
   });
 
   // ─── INIT ────────────────────────────────────────────────
+  renderTable();
+</script>
+</body>
+</html>
+�─────
   renderTable();
 </script>
 </body>

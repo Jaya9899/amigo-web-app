@@ -1,0 +1,17 @@
+Total Accepted: 0
+Total Rejected: 10
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+
+--- ALL SUBMISSIONS ---
+[REJECTED: Off-topic (similarity: -0.01)] whats the difference between 2nf and 3nf
+[REJECTED: Off-topic (similarity: 0.01)] what is binary search?
+[REJECTED: Off-topic (similarity: 0.05)] help me
+[REJECTED: Off-topic (similarity: 0.15)] kajsdakjdh asdahskdjaksjdh aksda
+[REJECTED: Off-topic (similarity: 0.20)] hello
+[REJECTED: Off-topic (similarity: 0.14)] hellohello
+[REJECTED: Off-topic (similarity: 0.15)] hellohellohello
+[REJECTED: Off-topic (similarity: 0.14)] hellohellohellohello
+[REJECTED: [toxic] Toxicity score: 1.00] fuck you
+[REJECTED: Off-topic (similarity: 0.02)] explain binary search

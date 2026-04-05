@@ -1,0 +1,14 @@
+Total Accepted: 2
+Total Rejected: 3
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is data
+ - what is algorithm
+
+--- ALL SUBMISSIONS ---
+[REJECTED: Off-topic for "Data Structures & Algorithms" (similarity: 0.16)] explain sliding window in dsa
+[ACCEPTED] what is data
+[ACCEPTED] what is algorithm
+[REJECTED: [toxic] Toxicity score: 0.97] shit class
+[REJECTED: Off-topic for "Engineering Mathematics III" (similarity: 0.06)] Dear sir i have some doubt in this topic. my doubt is why is the kdekajds

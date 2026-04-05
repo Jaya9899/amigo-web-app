@@ -1,0 +1,14 @@
+Total Accepted: 3
+Total Rejected: 1
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is time complexity?
+ - what is binary search?
+ - what is data?
+
+--- ALL SUBMISSIONS ---
+[ACCEPTED] what is time complexity?
+[ACCEPTED] what is binary search?
+[ACCEPTED] what is data?
+[REJECTED: [toxic] Toxicity score: 0.97] shitty subject

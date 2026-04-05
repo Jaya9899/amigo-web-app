@@ -758,14 +758,27 @@
       'Can you recommend any books for design patterns?'
     ];
     const colors = ['var(--sage)', 'var(--sky)', 'var(--peach)', 'var(--mint)', 'var(--lemon)'];
-    let secs = 0, msgCount = 0, timer, chatInt;
+    let secs = 0, msgCount = 0, timer, pollInt;
+    let displayedDoubts = new Set();
 
     // ── Init ──
     window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const topic = params.get('topic');
+      if (topic) {
+        document.getElementById('className').textContent = topic;
+        // Sync topic with backend
+        fetch('http://localhost:5001/set_topic', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ topic: topic })
+        }).catch(e => console.error('Failed to sync topic:', e));
+      }
+
       populateParticipants();
-      addInitialMessages();
+      // addInitialMessages(); // Removed initial mock messages
       startTimer();
-      startSimChat();
+      startPolling();
     });
 
     function populateParticipants() {
@@ -779,23 +792,10 @@
       });
     }
 
-    function addInitialMessages() {
-      const init = [
-        { n: 'Aarav Patel', t: "Good morning! Ready for today's lecture 📚", tm: '10:01 AM' },
-        { n: 'Priya Sharma', t: "Hey everyone! Excited for today's session", tm: '10:01 AM' },
-        { n: 'Rohan Mehta', t: "Can we revisit last week's topic briefly?", tm: '10:02 AM' },
-        { n: 'Ananya Singh', t: 'I had a question about the homework too', tm: '10:02 AM' },
-        { n: 'Kabir Joshi', t: 'The reading material was really helpful!', tm: '10:03 AM' },
-      ];
-      init.forEach(m => addMsg(m.n, m.t, m.tm, false));
-      msgCount = init.length;
-      document.getElementById('statMsgs').textContent = msgCount;
-    }
-
     function addMsg(name, text, time, animate = true) {
       const el = document.getElementById('chatMessages');
       const initials = name.split(' ').map(w => w[0]).join('');
-      const ci = name.length % colors.length;
+      const ci = Math.abs(name.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0)) % colors.length;
       const d = document.createElement('div');
       d.className = 'chat-msg';
       if (!animate) d.style.animation = 'none';
@@ -818,16 +818,38 @@
       }, 1000);
     }
 
-    function startSimChat() {
-      chatInt = setInterval(() => {
-        const n = students[Math.floor(Math.random() * students.length)];
-        const t = msgs[Math.floor(Math.random() * msgs.length)];
-        const now = new Date();
-        const tm = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-        addMsg(n, t, tm);
-        msgCount++;
-        document.getElementById('statMsgs').textContent = msgCount;
-      }, 4000 + Math.random() * 4000);
+    function startPolling() {
+      // Poll every 3 seconds
+      pollDoubts();
+      pollInt = setInterval(pollDoubts, 3000);
+    }
+
+    async function pollDoubts() {
+      try {
+        const res = await fetch('http://localhost:5001/get_doubts');
+        const data = await res.json();
+        if (data.success) {
+          // data.submissions contains { text, accepted, rejection_reason }
+          data.submissions.forEach((sub, index) => {
+            // Use index + text as a unique key for tracking displayed messages
+            const key = `${index}-${sub.text}`;
+            if (sub.accepted && !displayedDoubts.has(key)) {
+              const now = new Date();
+              const tm = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+              
+              // Anonymous labeling
+              const n = `Student ${ (index % 50) + 1 }`;
+              
+              addMsg(n, sub.text, tm);
+              displayedDoubts.add(key);
+              msgCount++;
+              document.getElementById('statMsgs').textContent = msgCount;
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Error polling doubts:", err);
+      }
     }
 
     // ── Modals ──
@@ -875,7 +897,7 @@
     function hideExitConfirm() { document.getElementById('exitConfirm').classList.remove('active'); }
     function endSession() {
       clearInterval(timer);
-      clearInterval(chatInt);
+      clearInterval(pollInt);
       window.location.href = 'faculty-dashboard.html';
     }
   </script>

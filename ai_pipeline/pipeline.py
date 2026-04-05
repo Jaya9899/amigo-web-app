@@ -26,13 +26,19 @@ class DoubtSubmission:
     rejection_reason: str = ""
     mod_result: ModResult | None = None
     topic_result: TopicResult | None = None
+    file_url: str | None = None
+    link: str | None = None
+    status: str = "pending"  # "pending" or "resolved"
+    resolution_text: str | None = None
+    resolution_file_url: str | None = None
+    resolution_audio_url: str | None = None
 
 
 @dataclass
 class ClusterSummary:
     """A clustered and summarized group of doubts."""
     cluster_id: int
-    doubts: list[str]
+    doubts: list[dict]  # Changed from list[str] to list[dict] to store text + extras
     count: int
     summary: str
 
@@ -41,7 +47,7 @@ class ClusterSummary:
 class PipelineOutput:
     """Full output of the clustering + summarization step."""
     clusters: list[ClusterSummary]
-    unclustered: list[str]  # doubts that didn't fit any cluster
+    unclustered: list[dict]  # Changed from list[str] to list[dict]
     total_accepted: int
     total_rejected: int
 
@@ -81,7 +87,19 @@ class DoubtPipeline:
         self._topic_filter.set_topic(topic)
         print(f"[TOPIC] Session topic: \"{topic}\"\n")
 
-    def submit_doubt(self, text: str) -> DoubtSubmission:
+    def resolve_doubt(self, doubt_text: str, res_text: str = None, res_file: str = None, res_audio: str = None):
+        """Mark a doubt as resolved and store the teacher's response."""
+        for sub in self._submissions:
+            if sub.text == doubt_text:
+                sub.status = "resolved"
+                sub.resolution_text = res_text
+                sub.resolution_file_url = res_file
+                sub.resolution_audio_url = res_audio
+                print(f"[RESOLVE] Doubt \"{doubt_text[:30]}...\" resolved.")
+                return True
+        return False
+
+    def submit_doubt(self, text: str, file_url: str = None, link: str = None) -> DoubtSubmission:
         """
         Process a single student doubt through the full pipeline.
         
@@ -101,6 +119,8 @@ class DoubtPipeline:
                 accepted=False,
                 rejection_reason=f"[{mod_result.label}] {mod_result.reason}",
                 mod_result=mod_result,
+                file_url=file_url,
+                link=link
             )
             self._submissions.append(sub)
             return sub
@@ -112,8 +132,10 @@ class DoubtPipeline:
             sub = DoubtSubmission(
                 text=text,
                 accepted=False,
-                rejection_reason=f"Off-topic (similarity: {topic_result.similarity:.2f})",
+                rejection_reason=f"Off-topic for \"{topic_result.topic}\" (similarity: {topic_result.similarity:.2f})",
                 topic_result=topic_result,
+                file_url=file_url,
+                link=link
             )
             self._submissions.append(sub)
             return sub
@@ -128,6 +150,8 @@ class DoubtPipeline:
             doubt_id=doubt_id,
             mod_result=mod_result,
             topic_result=topic_result,
+            file_url=file_url,
+            link=link
         )
         self._submissions.append(sub)
         return sub
@@ -148,14 +172,33 @@ class DoubtPipeline:
         # Step 5: Summarize each cluster
         cluster_summaries = []
 
+        # Map to quickly find submission details by text
+        # (Using text as key for simplicity since engine stores text, 
+        # but in production you'd use a stable ID)
+        sub_map = { s.text: s for s in self._submissions if s.accepted }
+
         for cid, doubt_ids in cluster_result.clusters.items():
             doubt_texts = [self._engine.get_doubt_text(did) for did in doubt_ids]
             summary = self._summarizer.summarize_cluster(doubt_texts)
+            
+            # Enrich with original submission details
+            enriched_doubts = []
+            for dt in doubt_texts:
+                s = sub_map.get(dt)
+                enriched_doubts.append({
+                    "text": dt,
+                    "file_url": s.file_url if s else None,
+                    "link": s.link if s else None,
+                    "status": s.status if s else "pending",
+                    "resolution_text": s.resolution_text if s else None,
+                    "resolution_file_url": s.resolution_file_url if s else None,
+                    "resolution_audio_url": s.resolution_audio_url if s else None
+                })
 
             cluster_summaries.append(ClusterSummary(
                 cluster_id=cid,
-                doubts=doubt_texts,
-                count=len(doubt_texts),
+                doubts=enriched_doubts,
+                count=len(enriched_doubts),
                 summary=summary,
             ))
 
@@ -163,7 +206,19 @@ class DoubtPipeline:
         cluster_summaries.sort(key=lambda c: c.count, reverse=True)
 
         # Unclustered (noise) doubts
-        unclustered = [self._engine.get_doubt_text(did) for did in cluster_result.noise]
+        unclustered = []
+        for did in cluster_result.noise:
+            dt = self._engine.get_doubt_text(did)
+            s = sub_map.get(dt)
+            unclustered.append({
+                "text": dt,
+                "file_url": s.file_url if s else None,
+                "link": s.link if s else None,
+                "status": s.status if s else "pending",
+                "resolution_text": s.resolution_text if s else None,
+                "resolution_file_url": s.resolution_file_url if s else None,
+                "resolution_audio_url": s.resolution_audio_url if s else None
+            })
 
         return PipelineOutput(
             clusters=cluster_summaries,

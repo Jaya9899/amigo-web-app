@@ -17,7 +17,7 @@ MAX_REPEAT_RATIO = 0.6  # if >60% of chars are the same char → spam
 MAX_CAPS_RATIO = 0.8  # if >80% uppercase → likely spam/shouting
 
 # ─── Topic Relevance ───
-TOPIC_SIMILARITY_THRESHOLD = 0.25  # cosine similarity cutoff (lower = more lenient)
+TOPIC_SIMILARITY_THRESHOLD = 0.20  # cosine similarity cutoff (lower = more lenient)
 
 # ─── Clustering (DBSCAN) ───
 DBSCAN_EPS = 0.45  # max distance between two samples in same cluster

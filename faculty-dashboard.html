@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Faculty Dashboard — Amigo</title>
+  <meta name="description" content="Amigo Faculty Dashboard — manage classrooms, enroll students, and start sessions.">
   <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;700&display=swap"
     rel="stylesheet">
@@ -20,34 +21,35 @@
       --dark2: #2D2D2D;
       --soft-dark: #3A3A3A;
       --text-muted: #6B6B6B;
+      --white: #FFFFFF;
+      --error: #E53E3E;
+      --error-bg: #FED7D7;
+      --success: #38A169;
+      --success-bg: #C6F6D5;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--cream);
       color: var(--dark);
       font-family: 'DM Sans', sans-serif;
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
     /* ─── NAVBAR ─── */
     nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 100;
       padding: 16px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(245, 240, 232, 0.85);
-      backdrop-filter: blur(12px);
+      background: rgba(245, 240, 232, 0.88);
+      backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(26, 26, 26, 0.08);
     }
 
@@ -58,14 +60,11 @@
     }
 
     .mascot-avatar-small {
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
       background: var(--sage);
       border-radius: 50%;
       border: 1.5px solid var(--dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 20px;
       box-shadow: 2px 2px 0 var(--dark);
     }
@@ -83,7 +82,7 @@
     .nav-right {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
 
     .user-profile {
@@ -95,16 +94,48 @@
     }
 
     .user-avatar {
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       background: var(--dark);
       color: var(--cream);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-weight: 700;
       font-size: 14px;
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      color: var(--dark);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border: 1.5px solid rgba(26,26,26,0.2);
+      border-radius: 100px;
+      transition: all 0.2s;
+      cursor: pointer;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover {
+      background: var(--dark);
+      color: var(--cream);
+      border-color: var(--dark);
+    }
+
+    .nav-btn-primary {
+      background: var(--dark);
+      color: var(--cream);
+      border-color: var(--dark);
+    }
+
+    .nav-btn-primary:hover {
+      background: var(--dark2);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     /* ─── MAIN LAYOUT ─── */
@@ -115,27 +146,154 @@
       min-height: 100svh;
     }
 
-    .view {
-      display: none;
-      animation: fadeIn 0.4s ease forwards;
-    }
-
-    .view.active {
-      display: block;
-    }
+    .view { display: none; animation: fadeIn 0.4s ease forwards; }
+    .view.active { display: block; }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── FIRST-TIME HERO CTA ─── */
+    .first-time-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100svh - 200px);
+      text-align: center;
+      animation: fadeUp 0.6s ease both;
+      padding: 40px 20px;
+    }
+
+    .hero-illustration {
+      font-size: 100px;
+      margin-bottom: 24px;
+      animation: mascotFloat 4s ease-in-out infinite;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.08));
+    }
+
+    @keyframes mascotFloat {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-14px) rotate(1deg); }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--dark);
+      color: var(--cream);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      background: var(--mint);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+    }
+
+    .hero-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: clamp(32px, 6vw, 52px);
+      letter-spacing: -2px;
+      line-height: 1.08;
+      margin-bottom: 16px;
+      max-width: 500px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .hero-title .accent {
+      background: var(--sage);
+      padding: 2px 10px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 440px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    .hero-create-btn {
+      background: var(--dark);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      padding: 18px 40px;
+      border-radius: 100px;
+      border: 1.5px solid var(--dark);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s;
+      box-shadow: 5px 5px 0 var(--dark2);
+    }
+
+    .hero-create-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 7px 9px 0 var(--dark2);
+    }
+
+    .hero-create-btn:active {
+      transform: translateY(0);
+      box-shadow: 3px 3px 0 var(--dark2);
+    }
+
+    .hero-features {
+      display: flex;
+      gap: 24px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hero-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--soft-dark);
+      font-weight: 500;
+    }
+
+    .hero-feature-icon {
+      width: 32px; height: 32px;
+      background: var(--white);
+      border: 1.5px solid rgba(26,26,26,0.12);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+
+    /* ─── CLASSES VIEW ─── */
     .view-header {
       margin-bottom: 40px;
     }
@@ -154,7 +312,7 @@
       line-height: 1.6;
     }
 
-    /* ─── CLASSES GRID (VIEW 1) ─── */
+    /* ─── CLASSES GRID ─── */
     .classes-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -188,27 +346,16 @@
       position: relative;
     }
 
-    .card-cover.sage {
-      background: var(--sage);
-    }
-
-    .card-cover.sky {
-      background: var(--sky);
-    }
-
-    .card-cover.peach {
-      background: var(--peach);
-    }
-
-    .card-cover.mint {
-      background: var(--mint);
-    }
+    .card-cover.sage { background: var(--sage); }
+    .card-cover.sky { background: var(--sky); }
+    .card-cover.peach { background: var(--peach); }
+    .card-cover.mint { background: var(--mint); }
+    .card-cover.lemon { background: var(--lemon); }
 
     .card-code {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      background: rgba(255, 255, 255, 0.4);
+      top: 16px; right: 16px;
+      background: rgba(255,255,255,0.4);
       padding: 4px 10px;
       border-radius: 100px;
       font-size: 11px;
@@ -242,7 +389,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-top: 1px solid rgba(26, 26, 26, 0.1);
+      border-top: 1px solid rgba(26,26,26,0.1);
       padding-top: 16px;
     }
 
@@ -268,6 +415,7 @@
       border: 1.5px solid var(--dark);
       border-radius: 100px;
       transition: all 0.2s;
+      background: transparent;
     }
 
     .back-btn:hover {
@@ -289,11 +437,9 @@
     .detail-header::after {
       content: '';
       position: absolute;
-      top: -50px;
-      right: -50px;
-      width: 200px;
-      height: 200px;
-      background: rgba(255, 255, 255, 0.2);
+      top: -50px; right: -50px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.2);
       border-radius: 50%;
     }
 
@@ -316,6 +462,7 @@
       gap: 10px;
       transition: all 0.2s;
       border: 1.5px solid var(--dark);
+      text-decoration: none;
     }
 
     .btn-primary {
@@ -325,7 +472,7 @@
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
     .btn-secondary {
@@ -348,7 +495,68 @@
       gap: 10px;
     }
 
-    /* ANALYTICS SECTION */
+    /* ─── ENROLLED STUDENTS TABLE ─── */
+    .students-section {
+      margin-top: 32px;
+    }
+
+    .students-table-wrap {
+      background: var(--white);
+      border: 1.5px solid var(--dark);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 3px 3px 0 var(--dark);
+    }
+
+    .students-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .students-table thead tr {
+      background: rgba(245,240,232,0.6);
+      border-bottom: 1.5px solid rgba(26,26,26,0.1);
+    }
+
+    .students-table th {
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .students-table td {
+      padding: 14px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(26,26,26,0.06);
+    }
+
+    .students-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .students-table tbody tr:hover {
+      background: rgba(245,240,232,0.4);
+    }
+
+    .student-roll {
+      font-family: 'DM Sans', monospace;
+      font-weight: 700;
+      font-size: 13px;
+      background: rgba(26,26,26,0.06);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .student-email {
+      font-size: 13px;
+      color: var(--soft-dark);
+    }
+
+    /* Analytics Placeholder */
     .analytics-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -386,88 +594,357 @@
       color: var(--soft-dark);
     }
 
-    .ai-summary {
-      background: var(--lemon);
-      border: 1.5px solid var(--dark);
-      border-radius: 20px;
-      padding: 24px;
-      display: flex;
-      gap: 20px;
-      box-shadow: 4px 4px 0 var(--dark);
-      margin-bottom: 48px;
-    }
-
-    .ai-icon {
-      width: 48px;
-      height: 48px;
-      background: var(--dark);
-      color: var(--lemon);
-      border-radius: 12px;
+    /* ─── CREATE CLASSROOM MODAL ─── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(26,26,26,0.55);
+      backdrop-filter: blur(6px);
+      z-index: 300;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
     }
 
-    .ai-content h3 {
-      font-family: 'Fraunces', serif;
-      font-size: 18px;
-      margin-bottom: 8px;
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
     }
 
-    .ai-content p {
-      font-size: 14px;
-      line-height: 1.6;
-      color: var(--dark2);
-    }
-
-    /* PREVIOUS SESSIONS */
-    .session-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .session-item {
-      background: white;
-      border: 1.5px solid var(--dark);
-      border-radius: 16px;
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: all 0.2s;
-    }
-
-    .session-item:hover {
+    .modal {
       background: var(--cream);
+      border: 1.5px solid var(--dark);
+      border-radius: 28px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 8px 8px 0 var(--dark);
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.25s;
+      position: relative;
     }
 
-    .session-info h4 {
-      font-family: 'Fraunces', serif;
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(26,26,26,0.15);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
       font-size: 16px;
+      transition: all 0.15s;
+    }
+
+    .modal-close:hover {
+      background: var(--dark);
+      color: var(--cream);
+      border-color: var(--dark);
+    }
+
+    .modal-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-eyebrow::before {
+      content: '';
+      width: 22px; height: 1.5px;
+      background: var(--text-muted);
+    }
+
+    .modal-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 26px;
+      letter-spacing: -0.8px;
       margin-bottom: 4px;
     }
 
-    .session-info p {
+    .modal-sub {
       font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .modal-divider {
+      height: 1px;
+      background: rgba(26,26,26,0.08);
+      margin: 24px 0;
+    }
+
+    /* Modal Form Fields */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group { margin-bottom: 0; }
+
+    .form-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      background: var(--white);
+      border: 1.5px solid rgba(26,26,26,0.15);
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--dark);
+      box-shadow: 3px 3px 0 var(--dark);
+    }
+
+    .form-input::placeholder {
+      color: rgba(26,26,26,0.3);
+    }
+
+    .form-input.error {
+      border-color: var(--error);
+      box-shadow: 3px 3px 0 var(--error);
+    }
+
+    /* Student entry rows */
+    .students-entry-section {
+      margin-top: 8px;
+    }
+
+    .students-entry-title {
+      font-family: 'Fraunces', serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .students-entry-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .student-entry-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 36px;
+      gap: 10px;
+      align-items: start;
+      margin-bottom: 10px;
+      animation: fadeIn 0.2s ease both;
+    }
+
+    .student-entry-row .form-input {
+      padding: 11px 14px;
+      font-size: 13px;
+      border-radius: 12px;
+    }
+
+    .remove-student-btn {
+      width: 36px; height: 42px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(26,26,26,0.12);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.15s;
+      color: var(--error);
+    }
+
+    .remove-student-btn:hover {
+      background: var(--error-bg);
+      border-color: var(--error);
+    }
+
+    .add-student-btn {
+      width: 100%;
+      background: transparent;
+      border: 1.5px dashed rgba(26,26,26,0.2);
+      border-radius: 14px;
+      padding: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--soft-dark);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .add-student-btn:hover {
+      border-color: var(--dark);
+      background: rgba(26,26,26,0.03);
+    }
+
+    .student-count-badge {
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--sage);
+      padding: 3px 10px;
+      border-radius: 100px;
+      border: 1px solid var(--dark);
+    }
+
+    /* Modal Buttons */
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .modal-btn-cancel {
+      flex: 1;
+      background: transparent;
+      border: 1.5px solid rgba(26,26,26,0.2);
+      border-radius: 100px;
+      padding: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--dark);
+    }
+
+    .modal-btn-cancel:hover {
+      border-color: var(--dark);
+      background: rgba(26,26,26,0.04);
+    }
+
+    .modal-btn-create {
+      flex: 2;
+      background: var(--dark);
+      border: 1.5px solid var(--dark);
+      border-radius: 100px;
+      padding: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--cream);
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .modal-btn-create:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+
+    .modal-btn-create:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .modal-error {
+      font-size: 12px;
+      color: var(--error);
+      background: var(--error-bg);
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-top: 12px;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+
+    .modal-error.show { display: flex; }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--dark);
+      color: var(--cream);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 14px 24px;
+      border-radius: 100px;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 400;
+      white-space: nowrap;
+      pointer-events: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ─── EMPTY STATE ─── */
+    .empty-grid-message {
+      text-align: center;
+      padding: 60px 20px;
       color: var(--text-muted);
     }
 
-    .session-btn {
-      font-size: 12px;
-      font-weight: 700;
-      padding: 8px 16px;
-      border-radius: 100px;
-      border: 1.5px solid var(--dark);
-      background: transparent;
-      cursor: pointer;
-    }
+    .empty-grid-message .emoji { font-size: 48px; margin-bottom: 16px; }
 
-    .session-btn:hover {
-      background: var(--dark);
-      color: var(--cream);
+    /* ─── SCROLLBAR ─── */
+    .modal::-webkit-scrollbar { width: 6px; }
+    .modal::-webkit-scrollbar-track { background: transparent; }
+    .modal::-webkit-scrollbar-thumb { background: rgba(26,26,26,0.15); border-radius: 3px; }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 600px) {
+      .modal { padding: 28px 20px; border-radius: 22px; }
+      .form-row { grid-template-columns: 1fr; }
+      .student-entry-row { grid-template-columns: 1fr 1fr 36px; }
+      .hero-features { flex-direction: column; align-items: center; }
+      .nav-right .home-link { display: none; }
     }
   </style>
 </head>
@@ -479,198 +956,488 @@
     <div class="nav-left">
       <div class="mascot-avatar-small">🤖</div>
       <div class="nav-logo">
-        Amigo <span
-          style="font-family:'DM Sans', sans-serif; font-size:14px; font-weight:400; color:var(--text-muted);">Faculty</span>
+        Amigo <span style="font-family:'DM Sans', sans-serif; font-size:14px; font-weight:400; color:var(--text-muted);">Faculty</span>
       </div>
     </div>
     <div class="nav-right">
-      <a href="index.html"
-        style="text-decoration:none; color:var(--dark); font-size:14px; font-weight:500; margin-right:12px;">Home</a>
+      <a href="main.html" class="nav-btn home-link">Home</a>
+      <!-- Create Classroom btn in navbar (shown only when ≥1 classroom exists) -->
+      <button class="nav-btn nav-btn-primary" id="navCreateBtn" style="display:none;" onclick="openCreateModal()">
+        ＋ Create Classroom
+      </button>
       <div class="user-profile">
-        <div class="user-avatar">DR</div>
-        Dr. Richards
+        <div class="user-avatar" id="navAvatar">DR</div>
+        <span id="navName">Dr. Richards</span>
       </div>
+      <a href="login.html" class="nav-btn" onclick="localStorage.removeItem('amigo_role')">Logout</a>
     </div>
   </nav>
 
   <main>
+    <!-- VIEW 0: First-Time Hero CTA -->
+    <div id="view-first-time" class="view">
+      <div class="first-time-hero">
+        <div class="hero-illustration">🏫</div>
+        <div class="hero-badge">
+          <div class="dot"></div>
+          Welcome, Faculty
+        </div>
+        <h1 class="hero-title">Create your<br>first <span class="accent">classroom</span></h1>
+        <p class="hero-sub">
+          Set up a classroom, enroll your students by roll number & email, and start conducting smart sessions with Amigo.
+        </p>
+        <button class="hero-create-btn" onclick="openCreateModal()">
+          ＋ Create Classroom
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+        </button>
+        <div class="hero-features">
+          <div class="hero-feature">
+            <div class="hero-feature-icon">📋</div>
+            Enroll students
+          </div>
+          <div class="hero-feature">
+            <div class="hero-feature-icon">🎥</div>
+            Start sessions
+          </div>
+          <div class="hero-feature">
+            <div class="hero-feature-icon">📊</div>
+            AI analytics
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- VIEW 1: All Classes -->
-    <div id="view-classes" class="view active">
+    <div id="view-classes" class="view">
       <div class="view-header">
         <h1 class="view-title">My Classrooms</h1>
         <p class="view-subtitle">Select a class to manage sessions, schedule work, and view AI analytics.</p>
       </div>
-
-      <div class="classes-grid">
-        <!-- Class Card 1 -->
-        <div class="class-card" onclick="openClass('Software Engineering', 'CS-402', 'sky')">
-          <div class="card-cover sky">
-            <div class="card-code">CS-402</div>
-            <div class="card-title">Software<br>Engineering</div>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">Mon, Wed • 10:00 AM</div>
-            <div class="card-footer">
-              <div class="student-count">👥 48 Students</div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14m-7-7 7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- Class Card 2 -->
-        <div class="class-card" onclick="openClass('Artificial Intelligence', 'CS-501', 'sage')">
-          <div class="card-cover sage">
-            <div class="card-code">CS-501</div>
-            <div class="card-title">Artificial<br>Intelligence</div>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">Tue, Thu • 1:00 PM</div>
-            <div class="card-footer">
-              <div class="student-count">👥 35 Students</div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14m-7-7 7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- Class Card 3 -->
-        <div class="class-card" onclick="openClass('Data Structures', 'CS-201', 'peach')">
-          <div class="card-cover peach">
-            <div class="card-code">CS-201</div>
-            <div class="card-title">Data<br>Structures</div>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">Mon, Wed • 2:30 PM</div>
-            <div class="card-footer">
-              <div class="student-count">👥 120 Students</div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14m-7-7 7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- Class Card 4 -->
-        <div class="class-card" onclick="openClass('Computer Networks', 'CS-304', 'mint')">
-          <div class="card-cover mint">
-            <div class="card-code">CS-304</div>
-            <div class="card-title">Computer<br>Networks</div>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">Fri • 9:00 AM</div>
-            <div class="card-footer">
-              <div class="student-count">👥 55 Students</div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14m-7-7 7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-        </div>
+      <div class="classes-grid" id="classesGrid">
+        <!-- Dynamically populated -->
       </div>
     </div>
 
     <!-- VIEW 2: Class Detail -->
     <div id="view-class-detail" class="view">
-      <div class="back-btn" onclick="goBack()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 12H5m7 7-7-7 7-7" />
-        </svg>
+      <button class="back-btn" onclick="goBack()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5m7 7-7-7 7-7"/></svg>
         Back to Classrooms
-      </div>
+      </button>
 
       <div class="detail-header" id="detail-header-card">
         <h1 class="view-title" id="detail-title">Software Engineering</h1>
         <p class="view-subtitle" id="detail-code">CS-402 • Fall Semester</p>
-
+        <p class="view-subtitle" id="detail-schedule" style="margin-top:4px;opacity:0.7;"></p>
         <div class="detail-actions">
           <a href="session.html" class="btn btn-primary" style="text-decoration:none;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="5 3 19 12 5 21 5 3" />
-            </svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             Start Session
           </a>
           <button class="btn btn-secondary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             Schedule Work
           </button>
         </div>
       </div>
 
-      <!-- General Analytics Area -->
-      <h2 class="section-title">
-        ✨ Recent Class Analytics
-      </h2>
-
-      <!-- Placeholder for AI-generated graphs and reports -->
-      <div class="analytics-grid" style="display: block;">
-        <div class="stat-card"
-          style="text-align: center; padding: 60px 20px; border: 2px dashed rgba(26,26,26,0.2); background: transparent; box-shadow: none;">
-          <div class="ai-icon"
-            style="margin: 0 auto 16px; background: transparent; color: var(--text-muted); border: 1.5px solid rgba(26,26,26,0.2); font-size: 24px; padding: 12px; display: inline-flex;">
-            📊</div>
-          <h3 style="font-family:'Fraunces', serif; font-size: 18px; margin-bottom: 8px; color: var(--soft-dark);">AI
-            Analytics Processing...</h3>
-          <p style="font-size: 14px; color: var(--text-muted); max-width: 300px; margin: 0 auto; line-height: 1.6;">
-            Detailed bar graphs and session insights generated by Amigo will appear here after the class ends.
-          </p>
+      <!-- Enrolled Students -->
+      <div class="students-section">
+        <h2 class="section-title">👥 Enrolled Students <span id="detailStudentCount" class="student-count-badge">0</span></h2>
+        <div class="students-table-wrap">
+          <table class="students-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Roll Number</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody id="detailStudentsBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <div style="margin-top: 16px;">
-        <a href="previous-analytics.html" class="btn btn-secondary" style="display: inline-flex;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 8v4l3 3" />
-            <circle cx="12" cy="12" r="10" />
-          </svg>
-          View Previous Analytics
-        </a>
+      <!-- Analytics -->
+      <div style="margin-top:40px;">
+        <h2 class="section-title">✨ Recent Class Analytics</h2>
+        <div class="analytics-grid" style="display:block;">
+          <div class="stat-card" style="text-align:center; padding:60px 20px; border:2px dashed rgba(26,26,26,0.2); background:transparent; box-shadow:none;">
+            <div style="font-size:36px; margin-bottom:12px;">📊</div>
+            <h3 style="font-family:'Fraunces',serif; font-size:18px; margin-bottom:8px; color:var(--soft-dark);">AI Analytics Processing...</h3>
+            <p style="font-size:14px; color:var(--text-muted); max-width:300px; margin:0 auto; line-height:1.6;">
+              Detailed bar graphs and session insights generated by Amigo will appear here after the class ends.
+            </p>
+          </div>
+        </div>
       </div>
-
     </div>
   </main>
 
+  <!-- ═══ CREATE CLASSROOM MODAL ═══ -->
+  <div class="modal-overlay" id="createModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeCreateModal()">✕</button>
+
+      <div class="modal-eyebrow">New Classroom</div>
+      <div class="modal-title">Create Classroom 🎓</div>
+      <div class="modal-sub">Set up your class and enroll students. Students will use their email to log in.</div>
+
+      <!-- Class Details -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="className">Classroom Name</label>
+          <input class="form-input" id="className" type="text" placeholder="e.g. Software Engineering">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="classCode">Course Code</label>
+          <input class="form-input" id="classCode" type="text" placeholder="e.g. CS-402">
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label class="form-label" for="classSchedule">Schedule</label>
+          <input class="form-input" id="classSchedule" type="text" placeholder="e.g. Mon, Wed • 10:00 AM">
+        </div>
+      </div>
+
+      <div class="modal-divider"></div>
+
+      <!-- Students Entry -->
+      <div class="students-entry-section">
+        <div class="students-entry-title">
+          👥 Enroll Students
+          <span class="student-count-badge" id="modalStudentCount">0 students</span>
+        </div>
+        <p class="students-entry-sub">Enter roll number and institutional email for each student.</p>
+
+        <div id="studentEntries">
+          <!-- Student rows inserted here -->
+        </div>
+
+        <button class="add-student-btn" onclick="addStudentRow()">
+          ＋ Add Student
+        </button>
+      </div>
+
+      <div class="modal-error" id="modalError">⚠️ <span id="modalErrorText">Please fill in all required fields</span></div>
+
+      <div class="modal-actions">
+        <button class="modal-btn-cancel" onclick="closeCreateModal()">Cancel</button>
+        <button class="modal-btn-create" id="btnCreateClass" onclick="createClassroom()">
+          Create Classroom ✦
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
   <script>
-    const viewClasses = document.getElementById('view-classes');
-    const viewDetail = document.getElementById('view-class-detail');
-    const detailTitle = document.getElementById('detail-title');
-    const detailCode = document.getElementById('detail-code');
-    const detailHeaderCard = document.getElementById('detail-header-card');
+    // ─── STATE ─────────────────────────────────────────────
+    const COLORS = ['sage', 'sky', 'peach', 'mint', 'lemon'];
+    const ICONS = ['💻', '📐', '⚡', '🧬', '📡', '🧪', '🔬', '📚', '🎨', '🏗️'];
 
-    function openClass(title, code, colorClass) {
-      // Update Detail UI
-      detailTitle.textContent = title;
-      detailCode.textContent = code + ' • Fall Semester';
+    // ─── HELPERS ───────────────────────────────────────────
+    function getClassrooms() {
+      try { return JSON.parse(localStorage.getItem('amigo_classrooms') || '[]'); }
+      catch { return []; }
+    }
 
-      // Update background color based on class
-      detailHeaderCard.className = 'detail-header'; // reset
-      const getBg = (cClass) => {
-        if (cClass === 'sage') return 'var(--sage)';
-        if (cClass === 'sky') return 'var(--sky)';
-        if (cClass === 'peach') return 'var(--peach)';
-        if (cClass === 'mint') return 'var(--mint)';
-        return 'var(--sky)';
-      };
-      detailHeaderCard.style.background = getBg(colorClass);
+    function saveClassrooms(data) {
+      localStorage.setItem('amigo_classrooms', JSON.stringify(data));
+    }
 
-      // Toggle Views
-      viewClasses.classList.remove('active');
-      viewDetail.classList.add('active');
+    function getFacultyEmail() {
+      return localStorage.getItem('amigo_email') || '';
+    }
+
+    function getMyClassrooms() {
+      const email = getFacultyEmail();
+      return getClassrooms().filter(c => c.facultyEmail === email);
+    }
+
+    // ─── VIEW SWITCHING ───────────────────────────────────
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ─── RENDER DASHBOARD ─────────────────────────────────
+    function renderDashboard() {
+      const myClasses = getMyClassrooms();
+      const navCreateBtn = document.getElementById('navCreateBtn');
+
+      if (myClasses.length === 0) {
+        // First time — show hero CTA, hide nav create btn
+        showView('view-first-time');
+        navCreateBtn.style.display = 'none';
+      } else {
+        // Has classes — show grid, show nav create btn
+        showView('view-classes');
+        navCreateBtn.style.display = 'inline-flex';
+        renderClassCards(myClasses);
+      }
+    }
+
+    function renderClassCards(classes) {
+      const grid = document.getElementById('classesGrid');
+      grid.innerHTML = '';
+
+      classes.forEach((cls, i) => {
+        const color = cls.color || COLORS[i % COLORS.length];
+        const studentCount = cls.students ? cls.students.length : 0;
+        const card = document.createElement('div');
+        card.className = 'class-card';
+        card.style.animation = `fadeIn 0.4s ${i * 0.08}s ease both`;
+        card.style.opacity = '0';
+        card.onclick = () => openClass(cls);
+
+        card.innerHTML = `
+          <div class="card-cover ${color}">
+            <div class="card-code">${cls.code}</div>
+            <div class="card-title">${cls.name}</div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">${cls.schedule || 'No schedule set'}</div>
+            <div class="card-footer">
+              <div class="student-count">👥 ${studentCount} Student${studentCount !== 1 ? 's' : ''}</div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Trigger animations
+      setTimeout(() => {
+        grid.querySelectorAll('.class-card').forEach(c => c.style.opacity = '');
+      }, 50);
+    }
+
+    // ─── OPEN CLASS DETAIL ─────────────────────────────────
+    function openClass(cls) {
+      const color = cls.color || 'sky';
+      const getBg = (c) => {
+        const map = { sage: 'var(--sage)', sky: 'var(--sky)', peach: 'var(--peach)', mint: 'var(--mint)', lemon: 'var(--lemon)' };
+        return map[c] || 'var(--sky)';
+      };
+
+      document.getElementById('detail-title').textContent = cls.name;
+      document.getElementById('detail-code').textContent = cls.code + ' • Semester';
+      document.getElementById('detail-schedule').textContent = cls.schedule || '';
+      document.getElementById('detail-header-card').style.background = getBg(color);
+
+      // Render enrolled students
+      const tbody = document.getElementById('detailStudentsBody');
+      const students = cls.students || [];
+      document.getElementById('detailStudentCount').textContent = students.length;
+
+      tbody.innerHTML = '';
+      if (students.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:24px; color:var(--text-muted);">No students enrolled yet</td></tr>';
+      } else {
+        students.forEach((s, i) => {
+          tbody.innerHTML += `
+            <tr>
+              <td style="font-size:13px;color:var(--text-muted);">${i + 1}</td>
+              <td><span class="student-roll">${s.rollNo}</span></td>
+              <td class="student-email">${s.email}</td>
+            </tr>
+          `;
+        });
+      }
+
+      showView('view-class-detail');
     }
 
     function goBack() {
-      viewDetail.classList.remove('active');
-      viewClasses.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      renderDashboard();
     }
+
+    // ─── CREATE CLASSROOM MODAL ───────────────────────────
+    let studentRowCount = 0;
+
+    function openCreateModal() {
+      document.getElementById('className').value = '';
+      document.getElementById('classCode').value = '';
+      document.getElementById('classSchedule').value = '';
+      document.getElementById('studentEntries').innerHTML = '';
+      document.getElementById('modalError').classList.remove('show');
+      studentRowCount = 0;
+
+      // Add 2 empty rows by default
+      addStudentRow();
+      addStudentRow();
+
+      document.getElementById('createModal').classList.add('open');
+      setTimeout(() => document.getElementById('className').focus(), 300);
+    }
+
+    function closeCreateModal() {
+      document.getElementById('createModal').classList.remove('open');
+    }
+
+    function addStudentRow() {
+      studentRowCount++;
+      const container = document.getElementById('studentEntries');
+      const row = document.createElement('div');
+      row.className = 'student-entry-row';
+      row.id = 'srow-' + studentRowCount;
+      row.innerHTML = `
+        <input class="form-input sr-roll" type="text" placeholder="Roll No." oninput="updateStudentCount()">
+        <input class="form-input sr-email" type="email" placeholder="student@student.nitw.ac.in" oninput="updateStudentCount()">
+        <button class="remove-student-btn" onclick="removeStudentRow('srow-${studentRowCount}')" title="Remove student">✕</button>
+      `;
+      container.appendChild(row);
+      updateStudentCount();
+      row.querySelector('.sr-roll').focus();
+    }
+
+    function removeStudentRow(id) {
+      const row = document.getElementById(id);
+      if (row) {
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(-10px)';
+        setTimeout(() => {
+          row.remove();
+          updateStudentCount();
+        }, 150);
+      }
+    }
+
+    function updateStudentCount() {
+      const rows = document.querySelectorAll('.student-entry-row');
+      let filled = 0;
+      rows.forEach(r => {
+        const roll = r.querySelector('.sr-roll').value.trim();
+        const email = r.querySelector('.sr-email').value.trim();
+        if (roll && email) filled++;
+      });
+      document.getElementById('modalStudentCount').textContent = filled + ' student' + (filled !== 1 ? 's' : '');
+    }
+
+    function createClassroom() {
+      const name = document.getElementById('className').value.trim();
+      const code = document.getElementById('classCode').value.trim();
+      const schedule = document.getElementById('classSchedule').value.trim();
+      const errorEl = document.getElementById('modalError');
+      const errorText = document.getElementById('modalErrorText');
+
+      errorEl.classList.remove('show');
+
+      // Validate name + code
+      if (!name || !code) {
+        errorText.textContent = 'Please enter both a classroom name and course code.';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      // Gather students
+      const rows = document.querySelectorAll('.student-entry-row');
+      const students = [];
+      let hasError = false;
+
+      rows.forEach(r => {
+        const roll = r.querySelector('.sr-roll').value.trim();
+        const email = r.querySelector('.sr-email').value.trim().toLowerCase();
+
+        if (!roll && !email) return; // skip empty rows
+
+        if (!roll || !email) {
+          hasError = true;
+          errorText.textContent = 'Each student must have both a roll number and email.';
+          if (!roll) r.querySelector('.sr-roll').classList.add('error');
+          if (!email) r.querySelector('.sr-email').classList.add('error');
+          return;
+        }
+
+        if (!email.endsWith('@student.nitw.ac.in')) {
+          hasError = true;
+          errorText.textContent = 'Student emails must end with @student.nitw.ac.in';
+          r.querySelector('.sr-email').classList.add('error');
+          return;
+        }
+
+        // Clear errors
+        r.querySelector('.sr-roll').classList.remove('error');
+        r.querySelector('.sr-email').classList.remove('error');
+
+        students.push({ rollNo: roll.toUpperCase(), email });
+      });
+
+      if (hasError) {
+        errorEl.classList.add('show');
+        return;
+      }
+
+      if (students.length === 0) {
+        errorText.textContent = 'Please add at least one student to the classroom.';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      // Build classroom object
+      const facultyEmail = getFacultyEmail();
+      const facultyName = localStorage.getItem('amigo_name') || 'Faculty';
+      const department = localStorage.getItem('amigo_department') || 'Department';
+
+      const classrooms = getClassrooms();
+      const colorIndex = classrooms.length % COLORS.length;
+
+      const newClass = {
+        id: 'cls_' + Date.now(),
+        name,
+        code: code.toUpperCase(),
+        schedule,
+        color: COLORS[colorIndex],
+        icon: ICONS[classrooms.length % ICONS.length],
+        facultyEmail,
+        facultyName,
+        department,
+        students,
+        createdAt: new Date().toISOString()
+      };
+
+      classrooms.push(newClass);
+      saveClassrooms(classrooms);
+
+      closeCreateModal();
+      showToast(`✅ "${name}" created with ${students.length} student${students.length !== 1 ? 's' : ''}!`);
+      renderDashboard();
+    }
+
+    // Close modal on overlay click
+    document.getElementById('createModal').addEventListener('click', function(e) {
+      if (e.target === this) closeCreateModal();
+    });
+
+    // ─── TOAST ────────────────────────────────────────────
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ─── INIT ─────────────────────────────────────────────
+    const savedRole = localStorage.getItem('amigo_role');
+    const savedName = localStorage.getItem('amigo_name');
+    const savedInitials = localStorage.getItem('amigo_initials');
+
+    if (savedRole === 'faculty' && savedName) {
+      document.getElementById('navAvatar').textContent = savedInitials || 'DR';
+      document.getElementById('navName').textContent = savedName;
+    }
+
+    renderDashboard();
   </script>
 </body>
 

@@ -782,7 +782,7 @@
 
 <!-- ─── NAVBAR ─── -->
 <nav>
-  <a class="nav-logo" href="#">
+  <a class="nav-logo" href="main.html">
     <div class="dot"></div>
     Amigo
   </a>
@@ -790,8 +790,9 @@
     <div class="nav-time" id="liveTime">--:-- --</div>
     <div class="student-pill">
       <div class="avatar">🎓</div>
-      Rohan K.
+      <span id="navStudentName">Student</span>
     </div>
+    <a href="login.html" style="text-decoration:none; color:var(--dark); font-size:12px; font-weight:500; padding:6px 14px; border:1.5px solid rgba(26,26,26,0.2); border-radius:100px; transition: all 0.2s;" onmouseover="this.style.background='var(--dark)';this.style.color='var(--cream)'" onmouseout="this.style.background='transparent';this.style.color='var(--dark)'">Logout</a>
   </div>
 </nav>
 
@@ -889,85 +890,75 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // ─── DATA ───────────────────────────────────────────────
-  // status: 'live' | 'upcoming' | 'ended'
-  const courses = [
-    {
-      id: 1,
-      icon: '💻',
-      iconBg: '#B8D4B0',
-      name: 'Data Structures & Algorithms',
-      code: 'CS301',
-      faculty: 'Dr. Priya Menon',
-      dept: 'Computer Science',
-      days: ['Mon','Wed','Fri'],
-      time: '09:00 – 10:00 AM',
-      status: 'live'
-    },
-    {
-      id: 2,
-      icon: '📐',
-      iconBg: '#B8D4E8',
-      name: 'Engineering Mathematics III',
-      code: 'MA302',
-      faculty: 'Prof. Ramesh Iyer',
-      dept: 'Mathematics',
-      days: ['Tue','Thu'],
-      time: '11:00 – 12:00 PM',
-      status: 'upcoming'
-    },
-    {
-      id: 3,
-      icon: '⚡',
-      iconBg: '#F2C9A0',
-      name: 'Digital Electronics',
-      code: 'EC201',
-      faculty: 'Dr. Kavitha Reddy',
-      dept: 'Electronics',
-      days: ['Mon','Wed'],
-      time: '02:00 – 03:00 PM',
-      status: 'ended'
-    },
-    {
-      id: 4,
-      icon: '🧬',
-      iconBg: '#A8D8C8',
-      name: 'Operating Systems',
-      code: 'CS302',
-      faculty: 'Dr. Suresh Babu',
-      dept: 'Computer Science',
-      days: ['Tue','Thu','Sat'],
-      time: '03:00 – 04:00 PM',
-      status: 'upcoming'
-    },
-    {
-      id: 5,
-      icon: '📡',
-      iconBg: '#E8DFA0',
-      name: 'Computer Networks',
-      code: 'CS303',
-      faculty: 'Prof. Anita Sharma',
-      dept: 'Computer Science',
-      days: ['Mon','Fri'],
-      time: '10:00 – 11:00 AM',
-      status: 'ended'
-    },
-    {
-      id: 6,
-      icon: '🧪',
-      iconBg: '#F2C9A0',
-      name: 'Theory of Computation',
-      code: 'CS304',
-      faculty: 'Dr. Vijay Krishnan',
-      dept: 'Computer Science',
-      days: ['Wed','Fri'],
-      time: '04:00 – 05:00 PM',
-      status: 'ended'
+  // ─── DYNAMIC DATA FROM LOCALSTORAGE ─────────────────────
+  const ICON_POOL = ['💻','📐','⚡','🧬','📡','🧪','🔬','📚','🎨','🏗️'];
+  const BG_POOL = ['#B8D4B0','#B8D4E8','#F2C9A0','#A8D8C8','#E8DFA0'];
+  const STATUS_OPTIONS = ['live','upcoming','ended'];
+
+  function getClassrooms() {
+    try { return JSON.parse(localStorage.getItem('amigo_classrooms') || '[]'); }
+    catch { return []; }
+  }
+
+  // Build the courses array dynamically from enrolled classrooms
+  function loadEnrolledCourses() {
+    const studentEmail = (localStorage.getItem('amigo_email') || '').toLowerCase();
+    const allClassrooms = getClassrooms();
+
+    // Filter classrooms where this student is enrolled
+    const enrolled = allClassrooms.filter(cls =>
+      cls.students && cls.students.some(s => s.email.toLowerCase() === studentEmail)
+    );
+
+    // Parse schedule string to extract days (e.g. "Mon, Wed • 10:00 AM" → ['Mon','Wed'])
+    function parseDays(schedule) {
+      if (!schedule) return [];
+      const daysPart = schedule.split('•')[0] || schedule.split('·')[0] || schedule;
+      const dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+      return dayNames.filter(d => daysPart.includes(d));
     }
-  ];
+
+    function parseTime(schedule) {
+      if (!schedule) return 'No time set';
+      const parts = schedule.split('•');
+      if (parts.length > 1) return parts[1].trim();
+      const parts2 = schedule.split('·');
+      if (parts2.length > 1) return parts2[1].trim();
+      return schedule;
+    }
+
+    // Map to course objects with a random-ish status for demo purposes
+    return enrolled.map((cls, i) => ({
+      id: cls.id || i + 1,
+      icon: cls.icon || ICON_POOL[i % ICON_POOL.length],
+      iconBg: BG_POOL[i % BG_POOL.length],
+      name: cls.name,
+      code: cls.code,
+      faculty: cls.facultyName || 'Faculty',
+      dept: cls.department || 'Department',
+      days: parseDays(cls.schedule),
+      time: parseTime(cls.schedule),
+      status: STATUS_OPTIONS[i % STATUS_OPTIONS.length], // rotate statuses for demo
+      classroomId: cls.id
+    }));
+  }
+
+  const courses = loadEnrolledCourses();
 
   const TODAY_MAP = { 0:'Sun', 1:'Mon', 2:'Tue', 3:'Wed', 4:'Thu', 5:'Fri', 6:'Sat' };
   const todayAbbr = TODAY_MAP[new Date().getDay()];
+
+  // ─── UPDATE STATS ───────────────────────────────────────
+  function updateStats() {
+    // Update course count
+    const courseCountEl = document.querySelector('.stats-row .stat-card:nth-child(1) .num');
+    if (courseCountEl) courseCountEl.textContent = courses.length;
+
+    // Update live count
+    const liveCount = courses.filter(c => c.status === 'live').length;
+    const liveCountEl = document.getElementById('liveCount');
+    if (liveCountEl) liveCountEl.textContent = liveCount;
+  }
 
   // ─── RENDER ─────────────────────────────────────────────
   function renderTable(filter = 'all') {
@@ -975,6 +966,15 @@
     tbody.innerHTML = '';
 
     const filtered = filter === 'all' ? courses : courses.filter(c => c.status === filter);
+
+    if (courses.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:48px 20px;color:var(--text-muted);font-size:14px;">
+        <div style="font-size:40px;margin-bottom:12px;">📭</div>
+        <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-bottom:6px;color:var(--soft-dark);">No classrooms yet</div>
+        <div>You haven't been enrolled in any classroom by a faculty member yet.</div>
+      </td></tr>`;
+      return;
+    }
 
     if (filtered.length === 0) {
       tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">No courses found for this filter.</td></tr>`;
@@ -987,16 +987,15 @@
       // JOIN btn: green if live, red if not
       const joinBtnClass = isLive ? 'btn-join-live' : 'btn-join-inactive';
       const joinIcon = isLive ? '▶' : '🔒';
-      const joinTitle = isLive ? 'Join live session' : 'Session not live';
       const joinDisabled = isLive ? '' : 'disabled title="Session is not live"';
-      const joinOnclick = isLive ? `onclick="joinClass(${c.id})"` : '';
+      const joinOnclick = isLive ? `onclick="joinClass('${c.id}')"` : '';
 
-      // DOUBT btn: green if NOT live (session ended/upcoming, i.e., you can post), red if live
+      // DOUBT btn: green if NOT live
       const doubtAvailable = !isLive;
       const doubtBtnClass = doubtAvailable ? 'btn-doubt-available' : 'btn-doubt-unavailable';
       const doubtIcon = doubtAvailable ? '💬' : '🔴';
       const doubtDisabled = doubtAvailable ? '' : 'disabled title="Wait for session to end"';
-      const doubtOnclick = doubtAvailable ? `onclick="openDoubtModal(${c.id})"` : '';
+      const doubtOnclick = doubtAvailable ? `onclick="openDoubtModal('${c.id}')"` : '';
 
       // Status badge
       let badgeHtml = '';
@@ -1009,9 +1008,9 @@
       }
 
       // Days with today highlighted
-      const dayPills = c.days.map(d =>
-        `<span class="day-pill ${d === todayAbbr ? 'today' : ''}">${d}</span>`
-      ).join('');
+      const dayPills = c.days.length > 0
+        ? c.days.map(d => `<span class="day-pill ${d === todayAbbr ? 'today' : ''}">${d}</span>`).join('')
+        : '<span style="font-size:11px;color:var(--text-muted);">—</span>';
 
       tbody.innerHTML += `
         <tr data-status="${c.status}" style="animation: fadeUp 0.4s ${i * 0.06}s ease both; opacity:0;">
@@ -1067,7 +1066,10 @@
   // ─── JOIN CLASS ──────────────────────────────────────────
   function joinClass(id) {
     const c = courses.find(x => x.id === id);
-    showToast(`✅ Joining ${c.name}…`);
+    if (c) {
+      showToast(`✅ Joining ${c.name}…`);
+      setTimeout(() => { window.location.href = 'classroom-session.html'; }, 1000);
+    }
   }
 
   // ─── DOUBT MODAL ─────────────────────────────────────────
@@ -1075,7 +1077,9 @@
 
   function openDoubtModal(id) {
     activeDoubtCourse = courses.find(x => x.id === id);
-    document.getElementById('modalCourseInfo').textContent = `${activeDoubtCourse.name} · ${activeDoubtCourse.faculty}`;
+    if (activeDoubtCourse) {
+      document.getElementById('modalCourseInfo').textContent = `${activeDoubtCourse.name} · ${activeDoubtCourse.faculty}`;
+    }
     document.getElementById('doubtText').value = '';
     document.getElementById('doubtModal').classList.add('open');
   }
@@ -1134,7 +1138,20 @@
     document.getElementById('progressBar').style.width = progress + '%';
   });
 
-  // ─── INIT ────────────────────────────────────────────────
+  // ─── LOAD LOGGED-IN STUDENT DATA ─────────────────────
+  const savedRole = localStorage.getItem('amigo_role');
+  const savedName = localStorage.getItem('amigo_name');
+
+  if (savedRole === 'student' && savedName) {
+    const parts = savedName.split(' ');
+    const shortName = parts.length > 1
+      ? parts[0] + ' ' + parts[1][0] + '.'
+      : parts[0];
+    document.getElementById('navStudentName').textContent = shortName;
+  }
+
+  // ─── INIT ────────────────────────────────────────────
+  updateStats();
   renderTable();
 </script>
 </body>

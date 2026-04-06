@@ -1399,7 +1399,7 @@
         body: JSON.stringify({
           doubt:     text,
           topic:     activeDoubtCourse ? activeDoubtCourse.name : undefined,
-          course_id: activeDoubtCourse ? activeDoubtCourse.code : 'default',
+          course_id: activeDoubtCourse ? String(activeDoubtCourse.id) : 'default',
           file_url:  fileName,
           link:      linkValue || null
         })
@@ -1596,12 +1596,60 @@
     }
   } catch(e) {}
 
+  // ─── SYNC DOUBT RESOLUTIONS ─────────────────────────────
+  async function syncDoubtResolutions() {
+    // Only poll if we have doubts in localStorage
+    const allDoubts = getDoubts();
+    if (allDoubts.length === 0) return;
+
+    // Get unique course IDs from our doubts to poll backend
+    const courseIds = [...new Set(allDoubts.map(d => String(d.classId || d.courseId)).filter(id => id && id !== 'null'))];
+    
+    let changed = false;
+    for (const cid of courseIds) {
+      try {
+        const res = await fetch(`http://localhost:5001/get_doubts?course_id=${cid}`);
+        if (!res.ok) continue;
+        const data = await res.json();
+        
+        if (data.success && data.submissions) {
+          // Check our local doubts for this course against backend submissions
+          allDoubts.forEach(localDoubt => {
+            if (String(localDoubt.classId || localDoubt.courseId) === cid && localDoubt.status === 'pending') {
+              // Find matching submission by text
+              const match = data.submissions.find(s => s.text === localDoubt.text && s.accepted);
+              if (match && match.resolution_text) {
+                localDoubt.status = 'resolved';
+                localDoubt.resolution = match.resolution_text;
+                localDoubt.resolvedAt = new Date().toISOString();
+                changed = true;
+              }
+            }
+          });
+        }
+      } catch (e) {
+        console.error(`Failed to sync resolutions for course ${cid}:`, e);
+      }
+    }
+
+    if (changed) {
+      saveDoubts(allDoubts);
+      renderTable();
+      // If modal is open, re-render it
+      if (document.getElementById('myDoubtsModal').classList.contains('open')) {
+        renderMyDoubts();
+      }
+    }
+  }
+
   // ─── INIT ────────────────────────────────────────────────
   loadCourses();
   updateStats();
   renderTable();
   syncActiveSessions();
+  syncDoubtResolutions();
   setInterval(syncActiveSessions, 5000);
+  setInterval(syncDoubtResolutions, 5000);
 </script>
 </body>
 </html>

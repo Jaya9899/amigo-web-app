@@ -14,3 +14,53 @@ Total Rejected: 0
 --- ACCEPTED DOUBTS CLUSTERS ---
 --- UNCLUSTERED ---
  - what is software engineering? (file: None, link: None)
+
+--- Course: cls_1775405318028 ---
+Total Accepted: 2
+Total Rejected: 0
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+Cluster 0 (2 doubts) Summary: what is engineering? | what are engineering?
+ - what is engineering? (file: None, link: None)
+ - what is engineering? (file: None, link: None)
+
+--- UNCLUSTERED ---
+
+--- Course: cls_1775405318028 ---
+Total Accepted: 3
+Total Rejected: 0
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+Cluster 0 (2 doubts) Summary: what is engineering? | what are engineering?
+ - what is engineering? (file: None, link: None)
+ - what is engineering? (file: None, link: None)
+
+--- UNCLUSTERED ---
+ - what is meaning of software? (file: None, link: None)
+
+--- Course: cls_1775405318028 ---
+Total Accepted: 4
+Total Rejected: 0
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+Cluster 0 (3 doubts) Summary: what is engineering? | what is engineers? | which is engineering .
+ - what is engineering? (file: None, link: None)
+ - what is engineering? (file: None, link: None)
+ - what is engineering? (file: None, link: None)
+
+--- UNCLUSTERED ---
+ - what is meaning of software? (file: None, link: None)
+
+--- Course: cls_1775405318028 ---
+Total Accepted: 5
+Total Rejected: 0
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+Cluster 0 (4 doubts) Summary: what is engineering? | what is engineers? | which is engineering . .
+ - what is engineering? (file: None, link: None)
+ - what is engineering? (file: None, link: None)
+ - what is engineering? (file: None, link: None)
+ - what is engineering? (file: None, link: None)
+
+--- UNCLUSTERED ---
+ - what is meaning of software? (file: None, link: None)

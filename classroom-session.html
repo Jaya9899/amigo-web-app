@@ -1097,7 +1097,14 @@
   function confirmExit() {
     if (confirm('Leave the live session?')) {
       showToast('👋 Leaving session…');
-      setTimeout(() => { window.history.back(); }, 1200);
+      setTimeout(() => { 
+        const role = localStorage.getItem('amigo_role');
+        if (role === 'faculty') {
+          window.location.href = 'faculty-dashboard.html';
+        } else {
+          window.location.href = 'student-dashboard.html';
+        }
+      }, 1200);
     }
   }
 
@@ -1113,10 +1120,14 @@
       if (data.active === false) {
         showToast('🛑 Session has ended. Redirecting...');
         setTimeout(() => {
-          window.location.href = 'student-dashboard.html';
+          const role = localStorage.getItem('amigo_role');
+          if (role === 'faculty') {
+            window.location.href = 'faculty-dashboard.html';
+          } else {
+            window.location.href = 'student-dashboard.html';
+          }
         }, 2000);
-      }
-    } catch (e) {
+      }    } catch (e) {
       console.error('Failed to check session status:', e);
     }
   }

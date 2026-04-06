@@ -614,10 +614,10 @@
 
     <div class="topbar-right">
       <div class="user-info">
-        <div class="name">Dr. Richards</div>
+        <div class="name" id="navName">Dr. Richards</div>
         <div class="role">Faculty</div>
       </div>
-      <div class="avatar">DR</div>
+      <div class="avatar" id="navAvatar">DR</div>
     </div>
   </div>
 
@@ -722,12 +722,16 @@
       <h3 style="font-family:'Fraunces',serif; font-size:22px; margin-bottom:10px;">⚠️ End Session?</h3>
       <p style="font-size:14px; color:var(--soft-dark); margin-bottom:24px; line-height:1.6;">This will close the
         session for all students. Amigo will begin generating analytics for this class.</p>
-      <div style="display:flex; gap:12px; justify-content:center;">
-        <button onclick="hideExitConfirm()"
-          style="font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; padding:12px 28px; border-radius:100px; cursor:pointer; border:1.5px solid var(--dark); background:white; color:var(--dark);">Cancel</button>
-        <button onclick="endSession()"
-          style="font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; padding:12px 28px; border-radius:100px; cursor:pointer; border:1.5px solid #ff6b6b; background:#ff6b6b; color:white;">End
-          Session</button>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; gap:12px; justify-content:center;">
+          <button onclick="hideExitConfirm()"
+            style="flex:1; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; padding:12px; border-radius:100px; cursor:pointer; border:1.5px solid var(--dark); background:white; color:var(--dark);">Cancel</button>
+          <button onclick="endSession()"
+            style="flex:1; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; padding:12px; border-radius:100px; cursor:pointer; border:1.5px solid #ff6b6b; background:#ff6b6b; color:white;">End
+            Session</button>
+        </div>
+        <button onclick="justExit()"
+          style="font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; padding:10px; border-radius:100px; cursor:pointer; border:1.5px solid rgba(26,26,26,0.2); background:transparent; color:var(--soft-dark);">Just Leave (Don't End)</button>
       </div>
     </div>
   </div>
@@ -763,6 +767,14 @@
 
     // ── Init ──
     window.addEventListener('DOMContentLoaded', () => {
+      // Load user profile
+      try {
+        const savedName = localStorage.getItem('amigo_name');
+        const savedInitials = localStorage.getItem('amigo_initials');
+        if (savedName) document.getElementById('navName').textContent = savedName;
+        if (savedInitials) document.getElementById('navAvatar').textContent = savedInitials;
+      } catch(e) {}
+
       const params = new URLSearchParams(window.location.search);
       const topic = params.get('topic');
       const courseId = params.get('id') || 'default';
@@ -835,7 +847,9 @@
 
     async function pollDoubts() {
       try {
-        const res = await fetch('http://localhost:5001/get_doubts');
+        const params = new URLSearchParams(window.location.search);
+        const courseId = params.get('id') || 'default';
+        const res = await fetch(`http://localhost:5001/get_doubts?course_id=${courseId}`);
         const data = await res.json();
         if (data.success) {
           // data.submissions contains { text, accepted, rejection_reason }
@@ -904,6 +918,11 @@
     // ── Exit ──
     function showExitConfirm() { document.getElementById('exitConfirm').classList.add('active'); }
     function hideExitConfirm() { document.getElementById('exitConfirm').classList.remove('active'); }
+    
+    function justExit() {
+      window.location.href = 'faculty-dashboard.html';
+    }
+
     async function endSession() {
       const params = new URLSearchParams(window.location.search);
       const courseId = params.get('id') || 'default';

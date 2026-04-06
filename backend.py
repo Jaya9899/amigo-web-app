@@ -146,7 +146,11 @@ def get_all_doubts():
             "accepted": sub.accepted,
             "rejection_reason": sub.rejection_reason,
             "file_url": sub.file_url,
-            "link": sub.link
+            "link": sub.link,
+            "status": sub.status,
+            "resolution_text": sub.resolution_text,
+            "resolution_file_url": sub.resolution_file_url,
+            "resolution_audio_url": sub.resolution_audio_url
         })
     
     # Get the latest clustered summary

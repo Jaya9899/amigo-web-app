@@ -565,6 +565,179 @@
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
     }
 
+    /* ── Scheduled Work List (in modal) ── */
+    .sw-list {
+      max-height: 350px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+    }
+
+    .sw-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sw-list::-webkit-scrollbar-thumb {
+      background: rgba(26, 26, 26, 0.15);
+      border-radius: 4px;
+    }
+
+    .sw-list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--cream);
+      border: 1.5px solid rgba(26, 26, 26, 0.1);
+      border-radius: 16px;
+      transition: all 0.2s;
+      animation: slideUp 0.3s ease both;
+    }
+
+    .sw-list-item:hover {
+      border-color: var(--dark);
+      box-shadow: 2px 2px 0 var(--dark);
+    }
+
+    .sw-list-item.posted {
+      opacity: 0.5;
+      pointer-events: none;
+      border-style: dashed;
+    }
+
+    .sw-list-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      border: 1.5px solid var(--dark);
+    }
+
+    .sw-list-icon.poll {
+      background: var(--lemon);
+    }
+
+    .sw-list-icon.quiz {
+      background: var(--sky);
+    }
+
+    .sw-list-icon.question {
+      background: var(--mint);
+    }
+
+    .sw-list-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sw-list-name {
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 3px;
+      color: var(--dark);
+    }
+
+    .sw-list-question {
+      font-size: 13px;
+      color: var(--soft-dark);
+      line-height: 1.5;
+      margin-bottom: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .sw-list-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .sw-list-type {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 10px;
+      border-radius: 100px;
+      border: 1px solid;
+    }
+
+    .sw-list-type.poll {
+      background: rgba(232, 223, 160, 0.3);
+      border-color: rgba(232, 223, 160, 0.8);
+      color: #8B6914;
+    }
+
+    .sw-list-type.quiz {
+      background: rgba(184, 212, 232, 0.3);
+      border-color: rgba(184, 212, 232, 0.8);
+      color: #2B6CB0;
+    }
+
+    .sw-list-type.question {
+      background: rgba(168, 216, 200, 0.3);
+      border-color: rgba(168, 216, 200, 0.8);
+      color: #1B6B4F;
+    }
+
+    .sw-list-opts {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .sw-list-post {
+      flex-shrink: 0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 100px;
+      border: 1.5px solid var(--dark);
+      background: var(--dark);
+      color: var(--cream);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    .sw-list-post:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .sw-list-posted-label {
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 600;
+      color: #38A169;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      align-self: center;
+    }
+
+    .sw-empty-msg {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .sw-empty-msg .emoji {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
       .sidebar {
@@ -627,7 +800,7 @@
     <div class="chat-panel">
       <div class="chat-header">
         <h3>💬 Student Chat</h3>
-        <span class="online-count" id="onlineCount">48 students online</span>
+        <span class="online-count" id="onlineCount">0 students online</span>
       </div>
       <div class="chat-messages" id="chatMessages"></div>
     </div>
@@ -641,7 +814,7 @@
       </div>
 
       <div class="stats">
-        <div class="stat-row"><span class="label">👥 Students Joined</span><span class="val" id="statJoined">48</span>
+        <div class="stat-row"><span class="label">👥 Students Joined</span><span class="val" id="statJoined">0</span>
         </div>
         <div class="stat-row"><span class="label">💬 Messages</span><span class="val" id="statMsgs">0</span></div>
         <div class="stat-row"><span class="label">⏱ Duration</span><span class="val" id="statTime">0:00</span></div>
@@ -699,18 +872,15 @@
     </div>
   </div>
 
-  <!-- Upload Modal -->
+  <!-- Scheduled Work Modal -->
   <div class="modal-bg" id="modal-upload">
-    <div class="modal-card">
+    <div class="modal-card" style="max-width:560px;">
       <div class="modal-top">
-        <h3>📁 Upload Scheduled Work</h3><button class="modal-x" onclick="closeModal('upload')">✕</button>
+        <h3>📁 Scheduled Work</h3><button class="modal-x" onclick="closeModal('upload')">✕</button>
       </div>
       <div class="modal-inner">
-        <p>Share assignments, notes, or resources with your students.</p>
-        <input type="text" class="m-input" placeholder="Title (e.g., Lab 5 Submission)" id="upTitle">
-        <textarea class="m-input" placeholder="Description or instructions..." id="upDesc"></textarea>
-        <input type="text" class="m-input" placeholder="Due date (e.g., Apr 12, 2026)" id="upDue">
-        <button class="m-submit" onclick="submitUpload()">📤 Share with Students</button>
+        <p>Select a prepared item to post it to this live session. Students will see it instantly in the chat.</p>
+        <div id="swSessionList" class="sw-list"></div>
       </div>
     </div>
   </div>
@@ -731,39 +901,125 @@
             Session</button>
         </div>
         <button onclick="justExit()"
-          style="font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; padding:10px; border-radius:100px; cursor:pointer; border:1.5px solid rgba(26,26,26,0.2); background:transparent; color:var(--soft-dark);">Just Leave (Don't End)</button>
+          style="font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; padding:10px; border-radius:100px; cursor:pointer; border:1.5px solid rgba(26,26,26,0.2); background:transparent; color:var(--soft-dark);">Just
+          Leave (Don't End)</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ── Sample Data ──
-    const students = [
-      'Aarav Patel', 'Priya Sharma', 'Rohan Mehta', 'Ananya Singh', 'Kabir Joshi',
-      'Diya Reddy', 'Arjun Kumar', 'Ishita Das', 'Vihaan Gupta', 'Saanvi Rao',
-      'Aditya Nair', 'Kavya Iyer', 'Reyansh Verma', 'Mira Choudhury', 'Vivaan Saxena',
-      'Tara Bhat', 'Dhruv Malhotra', 'Zara Khan', 'Aryan Kapoor', 'Nisha Pillai'
-    ];
-    const msgs = [
-      'Can you explain the observer pattern again?',
-      'Is this going to be in the exam?',
-      'I have a doubt about the UML diagram',
-      'This is really interesting! 🔥',
-      'Can we get the slides for this lecture?',
-      'How does this differ from MVC?',
-      'Could you share a code example?',
-      'What are the prerequisites for the next topic?',
-      'I think the factory pattern would work better here',
-      'Thank you for the explanation! Very clear 👏',
-      'Can we have a 5-minute break?',
-      'How do we handle edge cases in this approach?',
-      'Is pair programming mandatory for the project?',
-      'When is the deadline for Lab 5?',
-      'Can you recommend any books for design patterns?'
-    ];
+    // ── Constants ──
+    const LIVE_SESSIONS_KEY = 'amigo_live_sessions';
+    const PARTICIPANTS_KEY = 'amigo_session_participants';
     const colors = ['var(--sage)', 'var(--sky)', 'var(--peach)', 'var(--mint)', 'var(--lemon)'];
-    let secs = 0, msgCount = 0, timer, pollInt;
+    let secs = 0, msgCount = 0, timer, pollInt, participantPollInt;
     let displayedDoubts = new Set();
+    let _enrolledStudents = [];
+    let _currentJoinedCount = 0;
+
+    // ── localStorage helpers ──
+    function getLiveSessions() {
+      try { return JSON.parse(localStorage.getItem(LIVE_SESSIONS_KEY) || '[]'); }
+      catch (e) { return []; }
+    }
+
+    function saveLiveSessions(data) {
+      try { localStorage.setItem(LIVE_SESSIONS_KEY, JSON.stringify(data)); }
+      catch (e) { /* silently ignore */ }
+    }
+
+    function getParticipants() {
+      try { return JSON.parse(localStorage.getItem(PARTICIPANTS_KEY) || '[]'); }
+      catch (e) { return []; }
+    }
+
+    function getClassrooms() {
+      try { return JSON.parse(localStorage.getItem('amigo_classrooms') || '[]'); }
+      catch (e) { return []; }
+    }
+
+    // ── Register this session as live ──
+    function registerLiveSession(courseId, topic) {
+      const sessions = getLiveSessions();
+      // Remove any existing entry for this class
+      const filtered = sessions.filter(s => String(s.classId) !== String(courseId));
+      filtered.push({
+        classId: String(courseId),
+        topic: topic || 'Class Session',
+        facultyName: localStorage.getItem('amigo_name') || 'Faculty',
+        startedAt: new Date().toISOString()
+      });
+      saveLiveSessions(filtered);
+      console.log('📢 Session registered for courseId:', courseId, '| type:', typeof courseId, '| All sessions:', filtered);
+      console.log('   ✅ Saved to localStorage[amigo_live_sessions]');
+      
+      // Verify it was saved
+      const verify = getLiveSessions();
+      console.log('   🔍 Verification: localStorage now contains:', verify);
+    }
+
+    // ── Remove this session from live ──
+    function unregisterLiveSession(courseId) {
+      const sessions = getLiveSessions().filter(s => String(s.classId) !== String(courseId));
+      saveLiveSessions(sessions);
+      // Also clean participants for this class
+      const participants = getParticipants().filter(p => String(p.classId) !== String(courseId));
+      try { localStorage.setItem(PARTICIPANTS_KEY, JSON.stringify(participants)); } catch (e) { }
+    }
+
+    // ── Load enrolled students from classroom data ──
+    function loadEnrolledStudents(courseId) {
+      const classrooms = getClassrooms();
+      const cls = classrooms.find(c => String(c.id) === String(courseId));
+      if (cls && cls.students) {
+        _enrolledStudents = cls.students; // [{rollNo, email}, ...]
+      } else {
+        _enrolledStudents = [];
+      }
+    }
+
+    // ── Poll for real student joins (only from enrolled students) ──
+    function pollParticipants() {
+      const params = new URLSearchParams(window.location.search);
+      const courseId = params.get('id') || 'default';
+
+      const allParticipants = getParticipants();
+      // CRITICAL FIX: Only count participants who are actually enrolled in this class
+      const classParticipants = allParticipants.filter(p => {
+        const isEnrolled = _enrolledStudents.some(s => s.email && s.email.toLowerCase() === (p.email || '').toLowerCase());
+        return String(p.classId) === String(courseId) && isEnrolled;
+      });
+      const count = classParticipants.length;
+
+      // Only update DOM if count changed
+      if (count !== _currentJoinedCount) {
+        _currentJoinedCount = count;
+
+        // Update stats
+        document.getElementById('statJoined').textContent = count;
+        document.getElementById('onlineCount').textContent = count + ' student' + (count !== 1 ? 's' : '') + ' online';
+
+        // Rebuild participant list
+        const list = document.getElementById('pList');
+        list.innerHTML = '';
+
+        if (count === 0) {
+          list.innerHTML = '<div style="font-size:13px; color:var(--text-muted); padding:12px 0; text-align:center;">Waiting for students to join…</div>';
+        } else {
+          classParticipants.forEach(p => {
+            const d = document.createElement('div');
+            d.className = 'p-item';
+            d.innerHTML = `<div class="p-dot"></div><span class="p-name">${escHtml(p.name || p.email || 'Student')}</span>`;
+            list.appendChild(d);
+          });
+        }
+      }
+    }
+
+    function escHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
 
     // ── Init ──
     window.addEventListener('DOMContentLoaded', () => {
@@ -773,12 +1029,14 @@
         const savedInitials = localStorage.getItem('amigo_initials');
         if (savedName) document.getElementById('navName').textContent = savedName;
         if (savedInitials) document.getElementById('navAvatar').textContent = savedInitials;
-      } catch(e) {}
+      } catch (e) { }
 
       const params = new URLSearchParams(window.location.search);
       const topic = params.get('topic');
       const courseId = params.get('id') || 'default';
       
+      console.log('🎓 Session.html loaded | courseId:', courseId, '| topic:', topic);
+
       if (topic) {
         document.getElementById('className').textContent = topic;
         // Sync topic with backend
@@ -796,22 +1054,28 @@
         body: JSON.stringify({ course_id: courseId })
       }).catch(e => console.error('Failed to start session on backend:', e));
 
-      populateParticipants();
-      // addInitialMessages(); // Removed initial mock messages
+      // Register in localStorage so student dashboard can see it
+      registerLiveSession(courseId, topic);
+
+      // Load real enrolled students
+      loadEnrolledStudents(courseId);
+
+      // Start with empty participant list
+      document.getElementById('pList').innerHTML = '<div style="font-size:13px; color:var(--text-muted); padding:12px 0; text-align:center;">Waiting for students to join…</div>';
+
       startTimer();
       startPolling();
+
+      // Poll for student joins every 2 seconds
+      pollParticipants();
+      participantPollInt = setInterval(pollParticipants, 2000);
     });
 
-    function populateParticipants() {
-      const list = document.getElementById('pList');
-      const shuffled = [...students].sort(() => Math.random() - 0.5);
-      shuffled.forEach(n => {
-        const d = document.createElement('div');
-        d.className = 'p-item';
-        d.innerHTML = `<div class="p-dot"></div><span class="p-name">${n}</span>`;
-        list.appendChild(d);
-      });
-    }
+    // ─── DEBUG HELPERS (exposed to window for testing) ────────────────────────────────
+    window.debugSession = function() {
+      console.log('🧪 SESSION.HTML DEBUG:');
+      console.log('  localStorage amigo_live_sessions:', JSON.parse(localStorage.getItem('amigo_live_sessions') || '[]'));
+    };
 
     function addMsg(name, text, time, animate = true) {
       const el = document.getElementById('chatMessages');
@@ -859,10 +1123,10 @@
             if (sub.accepted && !displayedDoubts.has(key)) {
               const now = new Date();
               const tm = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-              
+
               // Anonymous labeling
-              const n = `Student ${ (index % 50) + 1 }`;
-              
+              const n = `Student ${(index % 50) + 1}`;
+
               addMsg(n, sub.text, tm);
               displayedDoubts.add(key);
               msgCount++;
@@ -876,7 +1140,10 @@
     }
 
     // ── Modals ──
-    function openModal(type) { document.getElementById('modal-' + type).classList.add('active'); }
+    function openModal(type) {
+      if (type === 'upload') loadScheduledWorkModal();
+      document.getElementById('modal-' + type).classList.add('active');
+    }
     function closeModal(type) { document.getElementById('modal-' + type).classList.remove('active'); }
 
     function submitPoll() {
@@ -904,22 +1171,130 @@
       document.getElementById('quizW2').value = '';
     }
 
-    function submitUpload() {
-      const t = document.getElementById('upTitle').value;
-      if (!t) return alert('Please enter a title.');
-      closeModal('upload');
-      addMsg('📁 Shared Work', t, 'Just now');
-      msgCount++; document.getElementById('statMsgs').textContent = msgCount;
-      document.getElementById('upTitle').value = '';
-      document.getElementById('upDesc').value = '';
-      document.getElementById('upDue').value = '';
+    // ── Scheduled Work in Session ──
+    let _postedWorkIds = new Set();
+
+    function getScheduledWorkForSession() {
+      try {
+        const allWork = JSON.parse(localStorage.getItem('amigo_scheduled_work') || '[]');
+        const params = new URLSearchParams(window.location.search);
+        const courseId = params.get('id') || 'default';
+        return allWork.filter(w => String(w.classId) === String(courseId));
+      } catch (e) { return []; }
+    }
+
+    function loadScheduledWorkModal() {
+      const items = getScheduledWorkForSession();
+      const container = document.getElementById('swSessionList');
+      container.innerHTML = '';
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="sw-empty-msg">
+            <div class="emoji">📋</div>
+            <h4 style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:6px; color:var(--soft-dark);">No scheduled work</h4>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.6;">You haven't created any polls, quizzes, or questions for this class yet. Create them from the Faculty Dashboard → Schedule Work.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const typeIcons = { poll: '📊', quiz: '🧠', question: '❓' };
+      const typeLabels = { poll: 'Poll', quiz: 'Quiz', question: 'Question' };
+
+      items.forEach(item => {
+        const isPosted = _postedWorkIds.has(item.id);
+        const div = document.createElement('div');
+        div.className = 'sw-list-item' + (isPosted ? ' posted' : '');
+
+        let optsText = '';
+        if (item.options && item.options.length > 0) {
+          optsText = item.options.length + ' option' + (item.options.length !== 1 ? 's' : '');
+          if (item.type === 'quiz' && item.correctIndex !== undefined) {
+            optsText += ' · Answer: ' + String.fromCharCode(65 + item.correctIndex);
+          }
+        }
+
+        const qPreview = item.question ? (item.question.length > 80 ? item.question.substring(0, 80) + '…' : item.question) : '';
+
+        div.innerHTML = `
+          <div class="sw-list-icon ${item.type}">${typeIcons[item.type] || '📄'}</div>
+          <div class="sw-list-body">
+            <div class="sw-list-name">${escHtml(item.name)}</div>
+            <div class="sw-list-question">${escHtml(qPreview)}</div>
+            <div class="sw-list-meta">
+              <span class="sw-list-type ${item.type}">${typeLabels[item.type] || item.type}</span>
+              ${optsText ? `<span class="sw-list-opts">${optsText}</span>` : ''}
+            </div>
+          </div>
+          ${isPosted
+            ? `<span class="sw-list-posted-label">✓ Posted</span>`
+            : `<button class="sw-list-post" onclick="postScheduledWork('${item.id}')">🚀 Post</button>`
+          }
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function escHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function postScheduledWork(workId) {
+      const items = getScheduledWorkForSession();
+      const item = items.find(w => w.id === workId);
+      if (!item) return;
+
+      _postedWorkIds.add(workId);
+
+      const now = new Date();
+      const tm = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      const typeIcons = { poll: '📊 Poll', quiz: '🧠 Quiz', question: '❓ Question' };
+      const label = typeIcons[item.type] || '📄 Work';
+
+      // Build message content
+      let content = `<strong>${escHtml(item.name)}</strong><br>${escHtml(item.question)}`;
+      if (item.options && item.options.length > 0) {
+        content += '<br>';
+        item.options.forEach((opt, i) => {
+          const letter = String.fromCharCode(65 + i);
+          const isCorrect = item.type === 'quiz' && item.correctIndex === i;
+          content += `<br>${letter}. ${escHtml(opt)}${isCorrect ? ' ✓' : ''}`;
+        });
+      }
+
+      // Post as a rich message in chat
+      const el = document.getElementById('chatMessages');
+      const d = document.createElement('div');
+      d.className = 'chat-msg';
+      d.innerHTML = `
+        <div class="msg-avatar" style="background:var(--lemon); border-color:var(--dark);">${item.type === 'poll' ? '📊' : item.type === 'quiz' ? '🧠' : '❓'}</div>
+        <div class="msg-bubble" style="background:var(--cream); border:1.5px solid var(--dark); border-radius:4px 16px 16px 16px; max-width:85%;">
+          <div class="msg-name" style="color:var(--dark);">${label} — Posted by Faculty</div>
+          <div class="msg-text">${content}</div>
+          <div class="msg-time">${tm}</div>
+        </div>
+      `;
+      el.appendChild(d);
+      el.scrollTop = el.scrollHeight;
+
+      msgCount++;
+      document.getElementById('statMsgs').textContent = msgCount;
+
+      // Refresh the modal list to show "Posted" state
+      loadScheduledWorkModal();
     }
 
     // ── Exit ──
     function showExitConfirm() { document.getElementById('exitConfirm').classList.add('active'); }
     function hideExitConfirm() { document.getElementById('exitConfirm').classList.remove('active'); }
-    
+
     function justExit() {
+      // Don't end session, just leave the page
+      clearInterval(timer);
+      clearInterval(pollInt);
+      clearInterval(participantPollInt);
       window.location.href = 'faculty-dashboard.html';
     }
 
@@ -927,18 +1302,27 @@
       const params = new URLSearchParams(window.location.search);
       const courseId = params.get('id') || 'default';
 
+      // Remove from localStorage live sessions
+      unregisterLiveSession(courseId);
+
       try {
         await fetch('http://localhost:5001/end_session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ course_id: courseId })
         });
-      } catch(e) { console.error('Failed to end session on backend:', e); }
+      } catch (e) { console.error('Failed to end session on backend:', e); }
 
       clearInterval(timer);
       clearInterval(pollInt);
+      clearInterval(participantPollInt);
       window.location.href = 'faculty-dashboard.html';
     }
+    // Clean up on page unload (user closes tab)
+    window.addEventListener('beforeunload', () => {
+      // Note: we don't unregister on tab close in case faculty just refreshed
+      // The session stays live until they explicitly end it
+    });
   </script>
 </body>
 

@@ -1120,6 +1120,8 @@
       cls.students && cls.students.some(s => s.email.toLowerCase() === studentEmail)
     );
 
+    console.log('📚 loadCourses | Student email:', studentEmail, '| Enrolled classrooms count:', enrolled.length, '| All classrooms:', allClassrooms);
+
     if (enrolled.length > 0) {
       courses = enrolled.map((cls, i) => ({
         id: cls.id || ('cls_' + i),
@@ -1134,35 +1136,119 @@
         status: 'ended', // Default to ended, sync will update to live
         classroomId: cls.id
       }));
+      console.log('✅ Using enrolled classrooms. Courses:', courses.map(c => ({name: c.name, id: c.id, classroomId: c.classroomId})));
     } else {
       // Use static courses if not enrolled in any real classroom
-      courses = STATIC_COURSES;
+      // Add classroomId to STATIC_COURSES for better matching
+      courses = STATIC_COURSES.map(sc => ({
+        ...sc,
+        classroomId: sc.id,
+        status: 'ended'
+      }));
+      console.log('⚠️  Using STATIC_COURSES (no enrollment). Courses:', courses.map(c => ({name: c.name, id: c.id, classroomId: c.classroomId})));
     }
   }
 
-  // ─── SYNC ACTIVE SESSIONS ────────────────────────────────
-  async function syncActiveSessions() {
+  // ─── SYNC ACTIVE SESSIONS (localStorage-first, backend fallback) ──
+  let _previousLiveIds = new Set();
+
+  function syncActiveSessions() {
+    // Ensure courses are loaded
+    if (courses.length === 0) {
+      console.log('⚠️  Courses array is empty, loading courses...');
+      loadCourses();
+    }
+
+    // PRIMARY: Read from localStorage (instant, works across tabs)
     try {
-      const res = await fetch('http://localhost:5001/active_sessions');
-      const data = await res.json();
-      if (data.active_sessions) {
-        let changed = false;
-        courses.forEach(c => {
-          const isActive = data.active_sessions.includes(String(c.id)) || data.active_sessions.includes(String(c.classroomId));
-          const newStatus = isActive ? 'live' : 'ended';
-          if (c.status !== newStatus) {
-            c.status = newStatus;
-            changed = true;
+      const liveSessions = JSON.parse(localStorage.getItem('amigo_live_sessions') || '[]');
+      console.log('📡 Live sessions from localStorage:', liveSessions);
+      console.log('🎓 Current courses array (count:', courses.length, '):', courses.map(c => ({name: c.name, id: c.id, classroomId: c.classroomId, status: c.status})));
+
+      if (liveSessions.length === 0) {
+        console.log('⚠️  No live sessions in localStorage');
+      }
+      if (courses.length === 0) {
+        console.log('⚠️  No courses loaded');
+      }
+
+      let changed = false;
+      const newLiveIds = new Set();
+
+      courses.forEach(c => {
+        let isActive = false;
+        
+        // Check all possible ID formats
+        const cIdStr = String(c.id).toLowerCase().trim();
+        const cRoomIdStr = String(c.classroomId || c.id).toLowerCase().trim();
+        
+        console.log(`  🔍 Checking course "${c.name}" | id="${c.id}" (${cIdStr}) | classroomId="${c.classroomId}" (${cRoomIdStr})`);
+        
+        // Match against any live session
+        for (const session of liveSessions) {
+          const sessionIdStr = String(session.classId).toLowerCase().trim();
+          console.log(`    🆚 vs session classId="${session.classId}" (${sessionIdStr})`);
+          
+          if (cIdStr === sessionIdStr || cRoomIdStr === sessionIdStr) {
+            isActive = true;
+            console.log(`    ✅ MATCH FOUND!`);
+            break;
+          } else {
+            console.log(`    ❌ No match`);
           }
-        });
-        if (changed) {
-          updateStats();
-          renderTable();
         }
+        
+        const newStatus = isActive ? 'live' : 'ended';
+        if (isActive) newLiveIds.add(String(c.id));
+        
+        if (c.status !== newStatus) {
+          console.log(`🔄 Status changed for "${c.name}": ${c.status} → ${newStatus}`);
+          c.status = newStatus;
+          changed = true;
+        }
+      });
+
+      // Show toast notification for newly live sessions and suggest joining
+      newLiveIds.forEach(id => {
+        if (!_previousLiveIds.has(id)) {
+          const course = courses.find(c => String(c.id) === id);
+          if (course) {
+            showToast('🟢 ' + course.name + ' is LIVE — Join now!');
+          }
+        }
+      });
+      _previousLiveIds = newLiveIds;
+
+      if (changed) {
+        updateStats();
+        renderTable();
       }
     } catch (e) {
-      console.error('Failed to sync active sessions:', e);
+      console.error('Failed to read live sessions from localStorage:', e);
     }
+
+    // FALLBACK: Also try backend (for sessions started before this feature)
+    fetch('http://localhost:5001/active_sessions')
+      .then(r => r.json())
+      .then(data => {
+        if (data.active_sessions) {
+          let changed = false;
+          courses.forEach(c => {
+            if (c.status !== 'live') {
+              const isActive = data.active_sessions.includes(String(c.id)) || data.active_sessions.includes(String(c.classroomId));
+              if (isActive) {
+                c.status = 'live';
+                changed = true;
+              }
+            }
+          });
+          if (changed) {
+            updateStats();
+            renderTable();
+          }
+        }
+      })
+      .catch(() => { /* backend unavailable, localStorage is enough */ });
   }
 
   function parseDays(schedule) {
@@ -1188,6 +1274,8 @@
 
   // ─── RENDER TABLE ────────────────────────────────────────
   function renderTable(filter = 'all') {
+    console.log('🎨 renderTable called | filter:', filter, '| courses count:', courses.length, '| courses:', courses.map(c => ({name: c.name, status: c.status})));
+    
     const tbody = document.getElementById('courseBody');
     tbody.innerHTML = '';
 
@@ -1307,7 +1395,28 @@
   async function joinClass(id) {
     const c = courses.find(x => String(x.id) === String(id));
     if (!c) return;
-    showToast(`✅ Joining ${c.name}…`);
+    showToast('\u2705 Joining ' + c.name + '\u2026');
+
+    // Register as participant in localStorage so faculty session page sees us
+    const studentName = localStorage.getItem('amigo_name') || 'Student';
+    const studentEmail = (localStorage.getItem('amigo_email') || '').toLowerCase();
+    try {
+      const participants = JSON.parse(localStorage.getItem('amigo_session_participants') || '[]');
+      // Don't add duplicate
+      const alreadyJoined = participants.some(p =>
+        String(p.classId) === String(id) && p.email === studentEmail
+      );
+      if (!alreadyJoined) {
+        participants.push({
+          classId: String(id),
+          name: studentName,
+          email: studentEmail,
+          joinedAt: new Date().toISOString()
+        });
+        localStorage.setItem('amigo_session_participants', JSON.stringify(participants));
+      }
+    } catch (e) { console.warn('Failed to register participant:', e); }
+
     try {
       await fetch('http://localhost:5001/set_topic', {
         method: 'POST',
@@ -1316,7 +1425,7 @@
       });
     } catch(e) { console.error('set_topic failed', e); }
     setTimeout(() => {
-      window.location.href = `classroom-session.html?topic=${encodeURIComponent(c.name)}&id=${c.id}`;
+      window.location.href = 'classroom-session.html?topic=' + encodeURIComponent(c.name) + '&id=' + c.id;
     }, 1000);
   }
 
@@ -1642,13 +1751,26 @@
     }
   }
 
+  // ─── DEBUG HELPERS (exposed to window for testing) ────────────────────────────────
+  window.debugSync = function() {
+    console.log('🧪 MANUAL SYNC TRIGGER');
+    syncActiveSessions();
+  };
+  window.debugShow = function() {
+    console.log('🧪 DEBUG STATE:');
+    console.log('  courses:', courses);
+    console.log('  localStorage amigo_live_sessions:', JSON.parse(localStorage.getItem('amigo_live_sessions') || '[]'));
+    console.log('  localStorage amigo_classrooms:', JSON.parse(localStorage.getItem('amigo_classrooms') || '[]'));
+    console.log('  student email:', localStorage.getItem('amigo_email'));
+  };
+
   // ─── INIT ────────────────────────────────────────────────
   loadCourses();
   updateStats();
   renderTable();
   syncActiveSessions();
   syncDoubtResolutions();
-  setInterval(syncActiveSessions, 5000);
+  setInterval(syncActiveSessions, 1000);  // Poll every 1 second for instant visual feedback
   setInterval(syncDoubtResolutions, 5000);
 </script>
 </body>

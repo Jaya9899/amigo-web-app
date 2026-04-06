@@ -28,8 +28,15 @@
       --success-bg: #C6F6D5;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       background: var(--cream);
@@ -53,14 +60,21 @@
       border-bottom: 1px solid rgba(26, 26, 26, 0.08);
     }
 
-    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
     .mascot-avatar-small {
-      width: 40px; height: 40px;
+      width: 40px;
+      height: 40px;
       background: var(--sage);
       border-radius: 50%;
       border: 1.5px solid var(--dark);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 20px;
       box-shadow: 2px 2px 0 var(--dark);
     }
@@ -75,7 +89,11 @@
       gap: 8px;
     }
 
-    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
     .user-profile {
       font-size: 14px;
@@ -86,11 +104,14 @@
     }
 
     .user-avatar {
-      width: 36px; height: 36px;
+      width: 36px;
+      height: 36px;
       background: var(--dark);
       color: var(--cream);
       border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: 700;
       font-size: 14px;
     }
@@ -102,7 +123,7 @@
       font-size: 13px;
       font-weight: 600;
       padding: 8px 18px;
-      border: 1.5px solid rgba(26,26,26,0.2);
+      border: 1.5px solid rgba(26, 26, 26, 0.2);
       border-radius: 100px;
       transition: all 0.2s;
       cursor: pointer;
@@ -112,7 +133,11 @@
       gap: 6px;
     }
 
-    .nav-btn:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
+    .nav-btn:hover {
+      background: var(--dark);
+      color: var(--cream);
+      border-color: var(--dark);
+    }
 
     .nav-btn-primary {
       background: var(--dark);
@@ -123,7 +148,7 @@
     .nav-btn-primary:hover {
       background: var(--dark2);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     /* ─── MAIN LAYOUT ─── */
@@ -133,17 +158,37 @@
       margin: 0 auto;
     }
 
-    .view { display: none; animation: fadeIn 0.4s ease forwards; }
-    .view.active { display: block; }
+    .view {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .view.active {
+      display: block;
+    }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ─── FIRST-TIME HERO ─── */
@@ -162,12 +207,19 @@
       font-size: 100px;
       margin-bottom: 24px;
       animation: mascotFloat 4s ease-in-out infinite;
-      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.08));
+      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.08));
     }
 
     @keyframes mascotFloat {
-      0%, 100% { transform: translateY(0) rotate(-1deg); }
-      50% { transform: translateY(-14px) rotate(1deg); }
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-1deg);
+      }
+
+      50% {
+        transform: translateY(-14px) rotate(1deg);
+      }
     }
 
     .hero-badge {
@@ -186,15 +238,25 @@
     }
 
     .hero-badge .dot {
-      width: 6px; height: 6px;
+      width: 6px;
+      height: 6px;
       background: var(--mint);
       border-radius: 50%;
       animation: pulse 2s infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.5); }
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(1.5);
+      }
     }
 
     .hero-title {
@@ -207,8 +269,17 @@
       max-width: 500px;
     }
 
-    .hero-title em { font-style: italic; font-weight: 300; }
-    .hero-title .accent { background: var(--sage); padding: 2px 10px; border-radius: 8px; display: inline-block; }
+    .hero-title em {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .hero-title .accent {
+      background: var(--sage);
+      padding: 2px 10px;
+      border-radius: 8px;
+      display: inline-block;
+    }
 
     .hero-sub {
       font-size: 16px;
@@ -235,10 +306,23 @@
       box-shadow: 5px 5px 0 var(--dark2);
     }
 
-    .hero-create-btn:hover { transform: translateY(-3px); box-shadow: 7px 9px 0 var(--dark2); }
-    .hero-create-btn:active { transform: translateY(0); box-shadow: 3px 3px 0 var(--dark2); }
+    .hero-create-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 7px 9px 0 var(--dark2);
+    }
 
-    .hero-features { display: flex; gap: 24px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
+    .hero-create-btn:active {
+      transform: translateY(0);
+      box-shadow: 3px 3px 0 var(--dark2);
+    }
+
+    .hero-features {
+      display: flex;
+      gap: 24px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
     .hero-feature {
       display: flex;
@@ -250,16 +334,21 @@
     }
 
     .hero-feature-icon {
-      width: 32px; height: 32px;
+      width: 32px;
+      height: 32px;
       background: var(--white);
-      border: 1.5px solid rgba(26,26,26,0.12);
+      border: 1.5px solid rgba(26, 26, 26, 0.12);
       border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 16px;
     }
 
     /* ─── CLASSES VIEW ─── */
-    .view-header { margin-bottom: 40px; }
+    .view-header {
+      margin-bottom: 40px;
+    }
 
     .view-title {
       font-family: 'Fraunces', serif;
@@ -269,7 +358,11 @@
       margin-bottom: 8px;
     }
 
-    .view-subtitle { font-size: 15px; color: var(--soft-dark); line-height: 1.6; }
+    .view-subtitle {
+      font-size: 15px;
+      color: var(--soft-dark);
+      line-height: 1.6;
+    }
 
     /* ─── CLASSES GRID ─── */
     .classes-grid {
@@ -290,7 +383,10 @@
       flex-direction: column;
     }
 
-    .class-card:hover { transform: translateY(-4px); box-shadow: 6px 8px 0 var(--dark); }
+    .class-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 6px 8px 0 var(--dark);
+    }
 
     .card-cover {
       height: 100px;
@@ -302,16 +398,31 @@
       position: relative;
     }
 
-    .card-cover.sage { background: var(--sage); }
-    .card-cover.sky { background: var(--sky); }
-    .card-cover.peach { background: var(--peach); }
-    .card-cover.mint { background: var(--mint); }
-    .card-cover.lemon { background: var(--lemon); }
+    .card-cover.sage {
+      background: var(--sage);
+    }
+
+    .card-cover.sky {
+      background: var(--sky);
+    }
+
+    .card-cover.peach {
+      background: var(--peach);
+    }
+
+    .card-cover.mint {
+      background: var(--mint);
+    }
+
+    .card-cover.lemon {
+      background: var(--lemon);
+    }
 
     .card-code {
       position: absolute;
-      top: 16px; right: 16px;
-      background: rgba(255,255,255,0.4);
+      top: 16px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.4);
       padding: 4px 10px;
       border-radius: 100px;
       font-size: 11px;
@@ -319,20 +430,43 @@
       border: 1px solid var(--dark);
     }
 
-    .card-title { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--dark); line-height: 1.2; }
+    .card-title {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.2;
+    }
 
-    .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .card-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+    .card-body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
 
     .card-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-top: 1px solid rgba(26,26,26,0.1);
+      border-top: 1px solid rgba(26, 26, 26, 0.1);
       padding-top: 16px;
     }
 
-    .student-count { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+    .student-count {
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
     /* ─── CLASS DETAIL ─── */
     .back-btn {
@@ -351,7 +485,10 @@
       background: transparent;
     }
 
-    .back-btn:hover { background: var(--dark); color: var(--cream); }
+    .back-btn:hover {
+      background: var(--dark);
+      color: var(--cream);
+    }
 
     .detail-header {
       background: var(--sky);
@@ -367,13 +504,20 @@
     .detail-header::after {
       content: '';
       position: absolute;
-      top: -50px; right: -50px;
-      width: 200px; height: 200px;
-      background: rgba(255,255,255,0.2);
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.2);
       border-radius: 50%;
     }
 
-    .detail-actions { display: flex; gap: 16px; margin-top: 24px; flex-wrap: wrap; }
+    .detail-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
 
     .btn {
       font-family: 'DM Sans', sans-serif;
@@ -390,10 +534,25 @@
       text-decoration: none;
     }
 
-    .btn-primary { background: var(--dark); color: var(--lemon); }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-    .btn-secondary { background: white; color: var(--dark); }
-    .btn-secondary:hover { background: var(--dark); color: white; }
+    .btn-primary {
+      background: var(--dark);
+      color: var(--lemon);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--dark);
+    }
+
+    .btn-secondary:hover {
+      background: var(--dark);
+      color: white;
+    }
 
     .section-title {
       font-family: 'Fraunces', serif;
@@ -406,7 +565,9 @@
     }
 
     /* ─── ENROLLED STUDENTS TABLE ─── */
-    .students-section { margin-top: 32px; }
+    .students-section {
+      margin-top: 32px;
+    }
 
     .students-table-wrap {
       background: var(--white);
@@ -416,11 +577,14 @@
       box-shadow: 3px 3px 0 var(--dark);
     }
 
-    .students-table { width: 100%; border-collapse: collapse; }
+    .students-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
     .students-table thead tr {
-      background: rgba(245,240,232,0.6);
-      border-bottom: 1.5px solid rgba(26,26,26,0.1);
+      background: rgba(245, 240, 232, 0.6);
+      border-bottom: 1.5px solid rgba(26, 26, 26, 0.1);
     }
 
     .students-table th {
@@ -436,22 +600,30 @@
     .students-table td {
       padding: 14px 20px;
       font-size: 14px;
-      border-bottom: 1px solid rgba(26,26,26,0.06);
+      border-bottom: 1px solid rgba(26, 26, 26, 0.06);
     }
 
-    .students-table tbody tr:last-child td { border-bottom: none; }
-    .students-table tbody tr:hover { background: rgba(245,240,232,0.4); }
+    .students-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .students-table tbody tr:hover {
+      background: rgba(245, 240, 232, 0.4);
+    }
 
     .student-roll {
       font-family: 'DM Sans', monospace;
       font-weight: 700;
       font-size: 13px;
-      background: rgba(26,26,26,0.06);
+      background: rgba(26, 26, 26, 0.06);
       padding: 3px 8px;
       border-radius: 6px;
     }
 
-    .student-email { font-size: 13px; color: var(--soft-dark); }
+    .student-email {
+      font-size: 13px;
+      color: var(--soft-dark);
+    }
 
     /* ─── STAT CARDS ─── */
     .analytics-grid {
@@ -478,8 +650,18 @@
       margin-bottom: 8px;
     }
 
-    .stat-value { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 900; line-height: 1; margin-bottom: 8px; }
-    .stat-desc { font-size: 13px; color: var(--soft-dark); }
+    .stat-value {
+      font-family: 'Fraunces', serif;
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-desc {
+      font-size: 13px;
+      color: var(--soft-dark);
+    }
 
     /* ─── MODAL ─── */
     .modal-overlay {
@@ -506,18 +688,26 @@
 
     .modal-close {
       position: absolute;
-      top: 20px; right: 20px;
-      width: 36px; height: 36px;
+      top: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      border: 1.5px solid rgba(26,26,26,0.15);
+      border: 1.5px solid rgba(26, 26, 26, 0.15);
       background: var(--white);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       font-size: 16px;
       transition: all 0.15s;
     }
 
-    .modal-close:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
+    .modal-close:hover {
+      background: var(--dark);
+      color: var(--cream);
+      border-color: var(--dark);
+    }
 
     .modal-eyebrow {
       font-size: 10px;
@@ -531,16 +721,49 @@
       gap: 8px;
     }
 
-    .modal-eyebrow::before { content: ''; width: 22px; height: 1.5px; background: var(--text-muted); }
+    .modal-eyebrow::before {
+      content: '';
+      width: 22px;
+      height: 1.5px;
+      background: var(--text-muted);
+    }
 
-    .modal-title { font-family: 'Fraunces', serif; font-weight: 900; font-size: 26px; letter-spacing: -0.8px; margin-bottom: 4px; }
-    .modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.5; }
-    .modal-divider { height: 1px; background: rgba(26,26,26,0.08); margin: 24px 0; }
+    .modal-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 26px;
+      letter-spacing: -0.8px;
+      margin-bottom: 4px;
+    }
+
+    .modal-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .modal-divider {
+      height: 1px;
+      background: rgba(26, 26, 26, 0.08);
+      margin: 24px 0;
+    }
 
     /* Form */
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
-    .form-row.full { grid-template-columns: 1fr; }
-    .form-group { margin-bottom: 0; }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      margin-bottom: 0;
+    }
 
     .form-label {
       font-size: 10px;
@@ -552,10 +775,11 @@
       margin-bottom: 7px;
     }
 
-    .form-input, .form-select {
+    .form-input,
+    .form-select {
       width: 100%;
       background: var(--white);
-      border: 1.5px solid rgba(26,26,26,0.15);
+      border: 1.5px solid rgba(26, 26, 26, 0.15);
       border-radius: 14px;
       padding: 13px 16px;
       font-family: 'DM Sans', sans-serif;
@@ -565,12 +789,25 @@
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    .form-input:focus, .form-select:focus { border-color: var(--dark); box-shadow: 3px 3px 0 var(--dark); }
-    .form-input::placeholder { color: rgba(26,26,26,0.3); }
-    .form-input.error { border-color: var(--error); box-shadow: 3px 3px 0 var(--error); }
+    .form-input:focus,
+    .form-select:focus {
+      border-color: var(--dark);
+      box-shadow: 3px 3px 0 var(--dark);
+    }
+
+    .form-input::placeholder {
+      color: rgba(26, 26, 26, 0.3);
+    }
+
+    .form-input.error {
+      border-color: var(--error);
+      box-shadow: 3px 3px 0 var(--error);
+    }
 
     /* Students entry */
-    .students-entry-section { margin-top: 8px; }
+    .students-entry-section {
+      margin-top: 8px;
+    }
 
     .students-entry-title {
       font-family: 'Fraunces', serif;
@@ -582,7 +819,11 @@
       gap: 8px;
     }
 
-    .students-entry-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; }
+    .students-entry-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
 
     .student-entry-row {
       display: grid;
@@ -593,26 +834,36 @@
       animation: fadeIn 0.2s ease both;
     }
 
-    .student-entry-row .form-input { padding: 11px 14px; font-size: 13px; border-radius: 12px; }
+    .student-entry-row .form-input {
+      padding: 11px 14px;
+      font-size: 13px;
+      border-radius: 12px;
+    }
 
     .remove-student-btn {
-      width: 36px; height: 42px;
+      width: 36px;
+      height: 42px;
       border-radius: 12px;
-      border: 1.5px solid rgba(26,26,26,0.12);
+      border: 1.5px solid rgba(26, 26, 26, 0.12);
       background: var(--white);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       font-size: 14px;
       transition: all 0.15s;
       color: var(--error);
     }
 
-    .remove-student-btn:hover { background: var(--error-bg); border-color: var(--error); }
+    .remove-student-btn:hover {
+      background: var(--error-bg);
+      border-color: var(--error);
+    }
 
     .add-student-btn {
       width: 100%;
       background: transparent;
-      border: 1.5px dashed rgba(26,26,26,0.2);
+      border: 1.5px dashed rgba(26, 26, 26, 0.2);
       border-radius: 14px;
       padding: 12px;
       font-family: 'DM Sans', sans-serif;
@@ -628,7 +879,10 @@
       margin-top: 6px;
     }
 
-    .add-student-btn:hover { border-color: var(--dark); background: rgba(26,26,26,0.03); }
+    .add-student-btn:hover {
+      border-color: var(--dark);
+      background: rgba(26, 26, 26, 0.03);
+    }
 
     .student-count-badge {
       font-size: 11px;
@@ -639,12 +893,16 @@
       border: 1px solid var(--dark);
     }
 
-    .modal-actions { display: flex; gap: 12px; margin-top: 28px; }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
 
     .modal-btn-cancel {
       flex: 1;
       background: transparent;
-      border: 1.5px solid rgba(26,26,26,0.2);
+      border: 1.5px solid rgba(26, 26, 26, 0.2);
       border-radius: 100px;
       padding: 14px;
       font-family: 'DM Sans', sans-serif;
@@ -655,7 +913,10 @@
       color: var(--dark);
     }
 
-    .modal-btn-cancel:hover { border-color: var(--dark); background: rgba(26,26,26,0.04); }
+    .modal-btn-cancel:hover {
+      border-color: var(--dark);
+      background: rgba(26, 26, 26, 0.04);
+    }
 
     .modal-btn-create {
       flex: 2;
@@ -675,8 +936,17 @@
       gap: 8px;
     }
 
-    .modal-btn-create:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
-    .modal-btn-create:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .modal-btn-create:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .modal-btn-create:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
 
     .modal-error {
       font-size: 12px;
@@ -691,7 +961,9 @@
       font-weight: 500;
     }
 
-    .modal-error.show { display: flex; }
+    .modal-error.show {
+      display: flex;
+    }
 
     /* ─── TOAST ─── */
     .toast-wrap {
@@ -714,27 +986,63 @@
       transform: translateY(20px);
       transition: all 0.3s;
       white-space: nowrap;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     }
 
-    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     /* ─── EMPTY STATE ─── */
-    .empty-grid-message { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-    .empty-grid-message .emoji { font-size: 48px; margin-bottom: 16px; }
+    .empty-grid-message {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-grid-message .emoji {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
 
     /* Scrollbar */
-    .modal::-webkit-scrollbar { width: 6px; }
-    .modal::-webkit-scrollbar-track { background: transparent; }
-    .modal::-webkit-scrollbar-thumb { background: rgba(26,26,26,0.15); border-radius: 3px; }
+    .modal::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .modal::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .modal::-webkit-scrollbar-thumb {
+      background: rgba(26, 26, 26, 0.15);
+      border-radius: 3px;
+    }
 
     /* ─── MOBILE ─── */
     @media (max-width: 600px) {
-      .modal { padding: 28px 20px; border-radius: 22px; }
-      .form-row { grid-template-columns: 1fr; }
-      .student-entry-row { grid-template-columns: 1fr 1fr 36px; }
-      .hero-features { flex-direction: column; align-items: center; }
-      .nav-right .home-link { display: none; }
+      .modal {
+        padding: 28px 20px;
+        border-radius: 22px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .student-entry-row {
+        grid-template-columns: 1fr 1fr 36px;
+      }
+
+      .hero-features {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .nav-right .home-link {
+        display: none;
+      }
     }
 
     /* ─── DOUBT RESOLUTION ─── */
@@ -745,7 +1053,10 @@
       position: relative;
     }
 
-    .btn-doubt:hover { background: var(--dark); color: var(--cream); }
+    .btn-doubt:hover {
+      background: var(--dark);
+      color: var(--cream);
+    }
 
     .doubt-badge-btn {
       display: inline-flex;
@@ -788,16 +1099,22 @@
     }
 
     .doubt-card-icon {
-      width: 40px; height: 40px;
+      width: 40px;
+      height: 40px;
       min-width: 40px;
       background: var(--lemon);
       border: 1.5px solid var(--dark);
       border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 18px;
     }
 
-    .doubt-card-body { flex: 1; min-width: 0; }
+    .doubt-card-body {
+      flex: 1;
+      min-width: 0;
+    }
 
     .doubt-card-meta {
       font-size: 11px;
@@ -812,7 +1129,13 @@
       flex-wrap: wrap;
     }
 
-    .doubt-card-text { font-size: 15px; line-height: 1.65; color: var(--dark); margin-bottom: 8px; word-break: break-word; }
+    .doubt-card-text {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--dark);
+      margin-bottom: 8px;
+      word-break: break-word;
+    }
 
     /* Student name badge on doubt card */
     .doubt-student-badge {
@@ -820,7 +1143,7 @@
       align-items: center;
       gap: 5px;
       background: var(--sky);
-      border: 1px solid rgba(26,26,26,0.15);
+      border: 1px solid rgba(26, 26, 26, 0.15);
       border-radius: 100px;
       padding: 2px 10px;
       font-size: 11px;
@@ -829,7 +1152,10 @@
       margin-bottom: 8px;
     }
 
-    .doubt-card-time { font-size: 12px; color: var(--text-muted); }
+    .doubt-card-time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
 
     .resolve-btn {
       flex-shrink: 0;
@@ -853,22 +1179,40 @@
       background: var(--success);
       border-color: var(--success);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(56,161,105,0.3);
+      box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
     }
 
     /* Resolved doubt card */
     .resolved-doubt-card {
       background: rgba(198, 246, 213, 0.3);
-      border: 1.5px solid rgba(56,161,105,0.25);
+      border: 1.5px solid rgba(56, 161, 105, 0.25);
       border-radius: 16px;
       padding: 18px 20px;
       margin-bottom: 10px;
       animation: fadeIn 0.3s ease both;
     }
 
-    .resolved-doubt-q { font-size: 14px; color: var(--soft-dark); line-height: 1.6; margin-bottom: 10px; }
-    .resolved-doubt-student { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
-    .resolved-divider { height: 1px; background: rgba(56,161,105,0.2); margin: 10px 0; }
+    .resolved-doubt-q {
+      font-size: 14px;
+      color: var(--soft-dark);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .resolved-doubt-student {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .resolved-divider {
+      height: 1px;
+      background: rgba(56, 161, 105, 0.2);
+      margin: 10px 0;
+    }
 
     .resolved-answer-label {
       font-size: 10px;
@@ -882,14 +1226,23 @@
       gap: 6px;
     }
 
-    .resolved-answer-text { font-size: 14px; color: var(--dark); line-height: 1.65; }
-    .resolved-meta { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+    .resolved-answer-text {
+      font-size: 14px;
+      color: var(--dark);
+      line-height: 1.65;
+    }
+
+    .resolved-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
 
     /* Empty state */
     .doubts-empty {
       text-align: center;
       padding: 48px 20px;
-      border: 2px dashed rgba(26,26,26,0.15);
+      border: 2px dashed rgba(26, 26, 26, 0.15);
       border-radius: 18px;
     }
 
@@ -899,7 +1252,7 @@
       align-items: center;
       gap: 8px;
       background: transparent;
-      border: 1.5px solid rgba(26,26,26,0.15);
+      border: 1.5px solid rgba(26, 26, 26, 0.15);
       border-radius: 100px;
       padding: 10px 20px;
       font-family: 'DM Sans', sans-serif;
@@ -910,27 +1263,40 @@
       transition: all 0.2s;
     }
 
-    .resolved-toggle-btn:hover { border-color: var(--dark); background: rgba(26,26,26,0.03); }
+    .resolved-toggle-btn:hover {
+      border-color: var(--dark);
+      background: rgba(26, 26, 26, 0.03);
+    }
 
     .doubt-resolved-count {
       font-size: 11px;
       font-weight: 700;
-      background: rgba(56,161,105,0.15);
+      background: rgba(56, 161, 105, 0.15);
       color: var(--success);
       padding: 2px 9px;
       border-radius: 100px;
     }
 
-    .toggle-chevron { transition: transform 0.25s; }
-    .toggle-chevron.open { transform: rotate(180deg); }
-    .resolved-list { animation: fadeIn 0.3s ease both; }
+    .toggle-chevron {
+      transition: transform 0.25s;
+    }
+
+    .toggle-chevron.open {
+      transform: rotate(180deg);
+    }
+
+    .resolved-list {
+      animation: fadeIn 0.3s ease both;
+    }
 
     /* Resolve modal */
-    .resolve-modal { max-width: 540px; }
+    .resolve-modal {
+      max-width: 540px;
+    }
 
     .doubt-preview-card {
       background: rgba(232, 223, 160, 0.25);
-      border: 1.5px solid rgba(26,26,26,0.12);
+      border: 1.5px solid rgba(26, 26, 26, 0.12);
       border-radius: 14px;
       padding: 16px 18px;
       margin-bottom: 4px;
@@ -958,10 +1324,24 @@
       gap: 6px;
     }
 
-    .doubt-preview-text { font-size: 15px; line-height: 1.65; color: var(--dark); margin-bottom: 8px; }
-    .doubt-preview-time { font-size: 11px; color: var(--text-muted); }
+    .doubt-preview-text {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
 
-    .resolution-textarea { border-radius: 14px; resize: vertical; min-height: 120px; line-height: 1.6; }
+    .doubt-preview-time {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .resolution-textarea {
+      border-radius: 14px;
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.6;
+    }
 
     /* Attachments in doubt card */
     .doubt-attachment {
@@ -973,8 +1353,459 @@
       margin-top: 6px;
     }
 
-    .doubt-attachment a { color: #3B82F6; text-decoration: none; }
-    .doubt-attachment a:hover { text-decoration: underline; }
+    .doubt-attachment a {
+      color: #3B82F6;
+      text-decoration: none;
+    }
+
+    .doubt-attachment a:hover {
+      text-decoration: underline;
+    }
+
+    /* ─── SCHEDULE WORK ─── */
+    .sw-tabs {
+      display: flex;
+      gap: 6px;
+      background: rgba(26, 26, 26, 0.05);
+      border-radius: 14px;
+      padding: 5px;
+      margin-bottom: 24px;
+    }
+
+    .sw-tab {
+      flex: 1;
+      padding: 12px 10px;
+      border: none;
+      background: transparent;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .sw-tab:hover {
+      color: var(--dark);
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .sw-tab.active {
+      background: var(--white);
+      color: var(--dark);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .sw-tab-icon {
+      font-size: 16px;
+    }
+
+    .sw-panel {
+      display: none;
+      animation: fadeIn 0.3s ease both;
+    }
+
+    .sw-panel.active {
+      display: block;
+    }
+
+    .sw-field-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .sw-field-input {
+      width: 100%;
+      background: var(--white);
+      border: 1.5px solid rgba(26, 26, 26, 0.15);
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .sw-field-input:focus {
+      border-color: var(--dark);
+      box-shadow: 3px 3px 0 var(--dark);
+    }
+
+    .sw-field-input::placeholder {
+      color: rgba(26, 26, 26, 0.3);
+    }
+
+    .sw-field-group {
+      margin-bottom: 16px;
+    }
+
+    /* Option rows */
+    .sw-option-row {
+      display: grid;
+      grid-template-columns: 32px 1fr 36px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+      animation: fadeIn 0.2s ease both;
+    }
+
+    .sw-option-letter {
+      width: 32px;
+      height: 32px;
+      background: var(--sage);
+      border: 1.5px solid var(--dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--dark);
+    }
+
+    .sw-option-row .sw-field-input {
+      padding: 11px 14px;
+      font-size: 13px;
+      border-radius: 12px;
+    }
+
+    .sw-remove-option {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(26, 26, 26, 0.12);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.15s;
+      color: var(--error);
+    }
+
+    .sw-remove-option:hover {
+      background: var(--error-bg);
+      border-color: var(--error);
+    }
+
+    .sw-add-option {
+      width: 100%;
+      background: transparent;
+      border: 1.5px dashed rgba(26, 26, 26, 0.2);
+      border-radius: 12px;
+      padding: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--soft-dark);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .sw-add-option:hover {
+      border-color: var(--dark);
+      background: rgba(26, 26, 26, 0.03);
+    }
+
+    /* Correct answer selector (quiz) */
+    .sw-correct-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: rgba(198, 246, 213, 0.25);
+      border: 1.5px solid rgba(56, 161, 105, 0.25);
+      border-radius: 14px;
+    }
+
+    .sw-correct-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--success);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sw-correct-select {
+      flex: 1;
+      background: var(--white);
+      border: 1.5px solid rgba(56, 161, 105, 0.3);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--dark);
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Scheduled Work Library */
+    .sw-library-section {
+      margin-top: 32px;
+    }
+
+    .sw-library-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .sw-library-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .sw-card {
+      background: var(--white);
+      border: 1.5px solid var(--dark);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 3px 3px 0 var(--dark);
+      transition: all 0.2s;
+      animation: fadeIn 0.3s ease both;
+    }
+
+    .sw-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 5px 6px 0 var(--dark);
+    }
+
+    .sw-card-header {
+      padding: 16px 20px;
+      border-bottom: 1.5px solid rgba(26, 26, 26, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sw-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 100px;
+      border: 1px solid;
+      white-space: nowrap;
+    }
+
+    .sw-type-badge.poll {
+      background: rgba(184, 212, 232, 0.35);
+      border-color: rgba(184, 212, 232, 0.8);
+      color: #2B6CB0;
+    }
+
+    .sw-type-badge.quiz {
+      background: rgba(184, 212, 176, 0.35);
+      border-color: rgba(184, 212, 176, 0.8);
+      color: #2D6A2E;
+    }
+
+    .sw-type-badge.question {
+      background: rgba(232, 223, 160, 0.35);
+      border-color: rgba(232, 223, 160, 0.8);
+      color: #8B6914;
+    }
+
+    .sw-card-date {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    .sw-card-body {
+      padding: 18px 20px;
+    }
+
+    .sw-card-title {
+      font-family: 'Fraunces', serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--dark);
+      line-height: 1.3;
+    }
+
+    .sw-card-preview {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 4px;
+    }
+
+    .sw-card-options {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sw-card-option-chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: rgba(26, 26, 26, 0.05);
+      border: 1px solid rgba(26, 26, 26, 0.1);
+      color: var(--soft-dark);
+    }
+
+    .sw-card-option-chip.correct {
+      background: rgba(198, 246, 213, 0.4);
+      border-color: rgba(56, 161, 105, 0.3);
+      color: var(--success);
+    }
+
+    .sw-card-footer {
+      padding: 14px 20px;
+      border-top: 1px solid rgba(26, 26, 26, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sw-card-action {
+      flex: 1;
+      padding: 9px 14px;
+      border-radius: 100px;
+      border: 1.5px solid rgba(26, 26, 26, 0.15);
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      color: var(--dark);
+    }
+
+    .sw-card-action:hover {
+      border-color: var(--dark);
+      background: rgba(26, 26, 26, 0.04);
+    }
+
+    .sw-card-action.delete:hover {
+      border-color: var(--error);
+      color: var(--error);
+      background: var(--error-bg);
+    }
+
+    .sw-empty {
+      text-align: center;
+      padding: 50px 20px;
+      border: 2px dashed rgba(26, 26, 26, 0.15);
+      border-radius: 18px;
+    }
+
+    .sw-filter-tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .sw-filter-tab {
+      padding: 7px 14px;
+      border-radius: 100px;
+      border: 1.5px solid rgba(26, 26, 26, 0.15);
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--soft-dark);
+    }
+
+    .sw-filter-tab:hover {
+      border-color: var(--dark);
+    }
+
+    .sw-filter-tab.active {
+      background: var(--dark);
+      color: var(--cream);
+      border-color: var(--dark);
+    }
+
+    /* Schedule Work modal wider */
+    .schedule-work-modal {
+      max-width: 620px;
+    }
+
+    .sw-modal-scroll {
+      max-height: 55vh;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .sw-modal-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .sw-modal-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sw-modal-scroll::-webkit-scrollbar-thumb {
+      background: rgba(26, 26, 26, 0.12);
+      border-radius: 3px;
+    }
+
+    /* Time limit */
+    .sw-row-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .sw-tabs {
+        flex-direction: column;
+      }
+
+      .sw-row-2col {
+        grid-template-columns: 1fr;
+      }
+
+      .sw-library-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sw-library-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 
@@ -985,7 +1816,8 @@
     <div class="nav-left">
       <div class="mascot-avatar-small">🤖</div>
       <div class="nav-logo">
-        Amigo <span style="font-family:'DM Sans', sans-serif; font-size:14px; font-weight:400; color:var(--text-muted);">Faculty</span>
+        Amigo <span
+          style="font-family:'DM Sans', sans-serif; font-size:14px; font-weight:400; color:var(--text-muted);">Faculty</span>
       </div>
     </div>
     <div class="nav-right">
@@ -1007,17 +1839,28 @@
     <div id="view-first-time" class="view">
       <div class="first-time-hero">
         <div class="hero-illustration">🏫</div>
-        <div class="hero-badge"><div class="dot"></div>Welcome, Faculty</div>
+        <div class="hero-badge">
+          <div class="dot"></div>Welcome, Faculty
+        </div>
         <h1 class="hero-title">Create your<br>first <span class="accent">classroom</span></h1>
-        <p class="hero-sub">Set up a classroom, enroll your students by roll number & email, and start conducting smart sessions with Amigo.</p>
+        <p class="hero-sub">Set up a classroom, enroll your students by roll number & email, and start conducting smart
+          sessions with Amigo.</p>
         <button class="hero-create-btn" onclick="openCreateModal()">
           ＋ Create Classroom
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14m-7-7 7 7-7 7" />
+          </svg>
         </button>
         <div class="hero-features">
-          <div class="hero-feature"><div class="hero-feature-icon">📋</div>Enroll students</div>
-          <div class="hero-feature"><div class="hero-feature-icon">🎥</div>Start sessions</div>
-          <div class="hero-feature"><div class="hero-feature-icon">📊</div>AI analytics</div>
+          <div class="hero-feature">
+            <div class="hero-feature-icon">📋</div>Enroll students
+          </div>
+          <div class="hero-feature">
+            <div class="hero-feature-icon">🎥</div>Start sessions
+          </div>
+          <div class="hero-feature">
+            <div class="hero-feature-icon">📊</div>AI analytics
+          </div>
         </div>
       </div>
     </div>
@@ -1034,7 +1877,9 @@
     <!-- VIEW 2: Class Detail -->
     <div id="view-class-detail" class="view">
       <button class="back-btn" onclick="goBack()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5m7 7-7-7 7-7"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5m7 7-7-7 7-7" />
+        </svg>
         Back to Classrooms
       </button>
 
@@ -1044,15 +1889,26 @@
         <p class="view-subtitle" id="detail-schedule" style="margin-top:4px;opacity:0.7;"></p>
         <div class="detail-actions">
           <a href="session.html" class="btn btn-primary" style="text-decoration:none;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg>
             Start Session
           </a>
-          <button class="btn btn-secondary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <button class="btn btn-secondary" onclick="openScheduleWorkModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
             Schedule Work
           </button>
           <button class="btn btn-doubt" onclick="scrollToDoubts()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
             Doubt Resolution
             <span class="doubt-badge-btn" id="pendingBadgeBtn" style="display:none">0</span>
           </button>
@@ -1061,7 +1917,8 @@
 
       <!-- Enrolled Students -->
       <div class="students-section">
-        <h2 class="section-title">👥 Enrolled Students <span id="detailStudentCount" class="student-count-badge">0</span></h2>
+        <h2 class="section-title">👥 Enrolled Students <span id="detailStudentCount"
+            class="student-count-badge">0</span></h2>
         <div class="students-table-wrap">
           <table class="students-table">
             <thead>
@@ -1076,14 +1933,43 @@
         </div>
       </div>
 
+      <!-- Scheduled Work Library -->
+      <div class="sw-library-section">
+        <div class="sw-library-header">
+          <h2 class="section-title" style="margin-bottom:0;">📝 Scheduled Work <span class="student-count-badge"
+              id="swCountBadge">0</span></h2>
+          <div class="sw-filter-tabs">
+            <button class="sw-filter-tab active" onclick="filterScheduledWork('all', this)">All</button>
+            <button class="sw-filter-tab" onclick="filterScheduledWork('poll', this)">📊 Polls</button>
+            <button class="sw-filter-tab" onclick="filterScheduledWork('quiz', this)">🧠 Quizzes</button>
+            <button class="sw-filter-tab" onclick="filterScheduledWork('question', this)">❓ Questions</button>
+          </div>
+        </div>
+        <div id="swLibraryGrid" class="sw-library-grid"></div>
+        <div id="swEmptyState" class="sw-empty" style="display:none;">
+          <div style="font-size:36px; margin-bottom:12px;">📋</div>
+          <h3 style="font-family:'Fraunces',serif; font-size:18px; margin-bottom:8px; color:var(--soft-dark);">No
+            scheduled work yet</h3>
+          <p style="font-size:14px; color:var(--text-muted); max-width:320px; margin:0 auto; line-height:1.6;">Create
+            polls, quizzes, or questions to post during your live sessions.</p>
+          <button class="btn btn-secondary" onclick="openScheduleWorkModal()"
+            style="margin-top:20px; font-size:13px; padding:12px 24px;">
+            ＋ Create Your First Item
+          </button>
+        </div>
+      </div>
+
       <!-- Analytics -->
       <div style="margin-top:40px;">
         <h2 class="section-title">✨ Recent Class Analytics</h2>
         <div class="analytics-grid" style="display:block;">
-          <div class="stat-card" style="text-align:center; padding:60px 20px; border:2px dashed rgba(26,26,26,0.2); background:transparent; box-shadow:none;">
+          <div class="stat-card"
+            style="text-align:center; padding:60px 20px; border:2px dashed rgba(26,26,26,0.2); background:transparent; box-shadow:none;">
             <div style="font-size:36px; margin-bottom:12px;">📊</div>
-            <h3 style="font-family:'Fraunces',serif; font-size:18px; margin-bottom:8px; color:var(--soft-dark);">AI Analytics Processing...</h3>
-            <p style="font-size:14px; color:var(--text-muted); max-width:300px; margin:0 auto; line-height:1.6;">Detailed bar graphs and session insights generated by Amigo will appear here after the class ends.</p>
+            <h3 style="font-family:'Fraunces',serif; font-size:18px; margin-bottom:8px; color:var(--soft-dark);">AI
+              Analytics Processing...</h3>
+            <p style="font-size:14px; color:var(--text-muted); max-width:300px; margin:0 auto; line-height:1.6;">
+              Detailed bar graphs and session insights generated by Amigo will appear here after the class ends.</p>
           </div>
         </div>
       </div>
@@ -1091,13 +1977,19 @@
       <!-- ─── DOUBT RESOLUTION SECTION ─── -->
       <div id="doubts-section" style="margin-top:48px; padding-top:8px;">
 
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+        <div
+          style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
           <h2 class="section-title" style="margin-bottom:0;">
             💬 Doubt Resolution
             <span class="doubt-pending-count" id="pendingCountLabel" style="display:none"></span>
           </h2>
           <span style="font-size:13px; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
             Students submit doubts from their dashboard
           </span>
         </div>
@@ -1108,17 +2000,24 @@
         <!-- Empty pending state -->
         <div id="noDoubtsMsg" class="doubts-empty" style="display:none;">
           <div style="font-size:36px; margin-bottom:12px;">🎉</div>
-          <h3 style="font-family:'Fraunces',serif; font-size:18px; margin-bottom:6px; color:var(--soft-dark);">All clear!</h3>
-          <p style="font-size:14px; color:var(--text-muted); line-height:1.6;">No pending doubts right now. Students' questions will appear here after they post them from the student dashboard.</p>
+          <h3 style="font-family:'Fraunces',serif; font-size:18px; margin-bottom:6px; color:var(--soft-dark);">All
+            clear!</h3>
+          <p style="font-size:14px; color:var(--text-muted); line-height:1.6;">No pending doubts right now. Students'
+            questions will appear here after they post them from the student dashboard.</p>
         </div>
 
         <!-- Resolved toggle -->
         <div style="margin-top:32px;">
           <button class="resolved-toggle-btn" id="resolvedToggleBtn" onclick="toggleResolved()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
             Resolved Doubts
             <span class="doubt-resolved-count" id="resolvedCountBadge">0</span>
-            <svg class="toggle-chevron" id="resolvedChevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="toggle-chevron" id="resolvedChevron" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
           </button>
           <div id="resolvedDoubtsList" class="resolved-list" style="display:none; margin-top:12px;"></div>
         </div>
@@ -1164,7 +2063,8 @@
             <button class="add-student-btn" onclick="addStudentRow()">＋ Add Student</button>
           </div>
 
-          <div class="modal-error" id="modalError">⚠️ <span id="modalErrorText">Please fill in all required fields</span></div>
+          <div class="modal-error" id="modalError">⚠️ <span id="modalErrorText">Please fill in all required
+              fields</span></div>
 
           <div class="modal-actions">
             <button class="modal-btn-cancel" onclick="closeCreateModal()">Cancel</button>
@@ -1185,11 +2085,18 @@
 
           <div class="doubt-preview-card">
             <div class="doubt-preview-label">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
               Student's Doubt
             </div>
             <div class="doubt-preview-student" id="resolveDoubtStudent">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
               Student
             </div>
             <p class="doubt-preview-text" id="resolveDoubtText"></p>
@@ -1200,13 +2107,8 @@
 
           <div class="form-group" style="margin-bottom:0;">
             <label class="form-label" for="resolutionText">Your Resolution</label>
-            <textarea
-              class="form-input resolution-textarea"
-              id="resolutionText"
-              placeholder="Type your explanation or solution here..."
-              rows="5"
-              oninput="updateCharCount()"
-            ></textarea>
+            <textarea class="form-input resolution-textarea" id="resolutionText"
+              placeholder="Type your explanation or solution here..." rows="5" oninput="updateCharCount()"></textarea>
             <div style="text-align:right; font-size:11px; color:var(--text-muted); margin-top:6px;">
               <span id="charCount">0</span> characters
             </div>
@@ -1216,11 +2118,130 @@
 
           <div class="modal-actions">
             <button class="modal-btn-cancel" onclick="closeResolveModal()">Cancel</button>
-            <button class="modal-btn-create" onclick="submitResolution()" style="background:var(--success); border-color:var(--success);">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <button class="modal-btn-create" onclick="submitResolution()"
+              style="background:var(--success); border-color:var(--success);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
               Mark as Resolved
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 5: Schedule Work Modal -->
+    <div id="view-schedule-work" class="view">
+      <div class="modal-overlay" id="swModalOverlay" onclick="if(event.target===this) closeScheduleWorkModal()">
+        <div class="modal schedule-work-modal">
+          <button class="modal-close" onclick="closeScheduleWorkModal()">✕</button>
+
+          <!-- STEP 1: Name & Type -->
+          <div id="swStep1">
+            <div class="modal-eyebrow">Schedule Work</div>
+            <div class="modal-title">Create New Work 📝</div>
+            <div class="modal-sub">Give it a name and pick the type — poll, quiz, or open question.</div>
+
+            <div class="sw-field-group">
+              <label class="sw-field-label">Work Name</label>
+              <input class="sw-field-input" id="swName" type="text" placeholder="e.g. Week 3 — Understanding OOP">
+            </div>
+
+            <div class="sw-field-group" style="margin-bottom:0;">
+              <label class="sw-field-label">Type</label>
+              <div class="sw-tabs" id="swTypeTabs">
+                <button class="sw-tab active" onclick="selectSwType('poll', this)">
+                  <span class="sw-tab-icon">📊</span> Poll
+                </button>
+                <button class="sw-tab" onclick="selectSwType('quiz', this)">
+                  <span class="sw-tab-icon">🧠</span> Quiz
+                </button>
+                <button class="sw-tab" onclick="selectSwType('question', this)">
+                  <span class="sw-tab-icon">❓</span> Question
+                </button>
+              </div>
+            </div>
+
+            <div class="modal-error" id="swStep1Error">⚠️ <span id="swStep1ErrorText">Please enter a name.</span></div>
+
+            <div class="modal-actions">
+              <button class="modal-btn-cancel" onclick="closeScheduleWorkModal()">Cancel</button>
+              <button class="modal-btn-create" onclick="goToSwStep2()">
+                Next — Build It →
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 2: Build the work item -->
+          <div id="swStep2" style="display:none;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+              <button class="back-btn" onclick="goBackToSwStep1()"
+                style="margin-bottom:0; padding:6px 14px; font-size:12px;">
+                ← Back
+              </button>
+              <div class="modal-eyebrow" style="margin-bottom:0;" id="swStep2Eyebrow">Building Poll</div>
+            </div>
+            <div class="modal-title" id="swStep2Title" style="margin-top:8px;"></div>
+            <div class="modal-sub">Fill in the details below. You can post this during a live session later.</div>
+
+            <div class="sw-modal-scroll">
+              <!-- Poll Panel -->
+              <div id="swPanelPoll" class="sw-panel active">
+                <div class="sw-field-group">
+                  <label class="sw-field-label">Poll Question</label>
+                  <input class="sw-field-input" id="swPollQuestion" type="text"
+                    placeholder="e.g. What topic should we cover next?">
+                </div>
+                <div class="sw-field-group" style="margin-bottom:8px;">
+                  <label class="sw-field-label">Options</label>
+                  <div id="swPollOptions"></div>
+                  <button class="sw-add-option" onclick="addSwOption('swPollOptions')">＋ Add Option</button>
+                </div>
+              </div>
+
+              <!-- Quiz Panel -->
+              <div id="swPanelQuiz" class="sw-panel">
+                <div class="sw-field-group">
+                  <label class="sw-field-label">Quiz Question</label>
+                  <input class="sw-field-input" id="swQuizQuestion" type="text"
+                    placeholder="e.g. What is polymorphism in OOP?">
+                </div>
+                <div class="sw-field-group" style="margin-bottom:8px;">
+                  <label class="sw-field-label">Answer Options</label>
+                  <div id="swQuizOptions"></div>
+                  <button class="sw-add-option" onclick="addSwOption('swQuizOptions')">＋ Add Option</button>
+                </div>
+                <div class="sw-correct-row">
+                  <span class="sw-correct-label">✅ Correct Answer</span>
+                  <select class="sw-correct-select" id="swQuizCorrect">
+                    <option value="">Select correct option…</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Question Panel -->
+              <div id="swPanelQuestion" class="sw-panel">
+                <div class="sw-field-group">
+                  <label class="sw-field-label">Question</label>
+                  <textarea class="sw-field-input" id="swQuestionText" rows="4"
+                    placeholder="e.g. Explain the difference between abstraction and encapsulation."
+                    style="resize:vertical; min-height:100px; line-height:1.6;"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-error" id="swStep2Error">⚠️ <span id="swStep2ErrorText">Please fill in all required
+                fields.</span></div>
+
+            <div class="modal-actions">
+              <button class="modal-btn-cancel" onclick="closeScheduleWorkModal()">Cancel</button>
+              <button class="modal-btn-create" onclick="saveScheduledWork()"
+                style="background:var(--success); border-color:var(--success);">
+                ✦ Save Work Item
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -1234,34 +2255,34 @@
   <script>
     // ─── STATE ─────────────────────────────────────────────
     const COLORS = ['sage', 'sky', 'peach', 'mint', 'lemon'];
-    const ICONS  = ['💻', '📐', '⚡', '🧬', '📡', '🧪', '🔬', '📚', '🎨', '🏗️'];
+    const ICONS = ['💻', '📐', '⚡', '🧬', '📡', '🧪', '🔬', '📚', '🎨', '🏗️'];
     const STORAGE_KEY = 'amigo_classrooms';
-    const DOUBTS_KEY  = 'amigo_doubts';
+    const DOUBTS_KEY = 'amigo_doubts';
 
-    let _memoryStore   = [];
+    let _memoryStore = [];
     let _currentClassId = null;
     let _resolveDoubtId = null;
-    let _resolvedOpen   = false;
+    let _resolvedOpen = false;
 
     // ─── STORAGE HELPERS ──────────────────────────────────
     function getClassrooms() {
       try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-      catch(e) { return _memoryStore; }
+      catch (e) { return _memoryStore; }
     }
 
     function saveClassrooms(data) {
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-      catch(e) { _memoryStore = data; }
+      catch (e) { _memoryStore = data; }
     }
 
     function getFacultyEmail() {
       try { return localStorage.getItem('amigo_email') || 'faculty@nitw.ac.in'; }
-      catch(e) { return 'faculty@nitw.ac.in'; }
+      catch (e) { return 'faculty@nitw.ac.in'; }
     }
 
     function getFacultyName() {
       try { return localStorage.getItem('amigo_name') || 'Faculty'; }
-      catch(e) { return 'Faculty'; }
+      catch (e) { return 'Faculty'; }
     }
 
     function getMyClassrooms() {
@@ -1272,12 +2293,12 @@
     // ─── DOUBTS STORAGE ───────────────────────────────────
     function getDoubts() {
       try { return JSON.parse(localStorage.getItem(DOUBTS_KEY) || '[]'); }
-      catch(e) { return []; }
+      catch (e) { return []; }
     }
 
     function saveDoubts(data) {
       try { localStorage.setItem(DOUBTS_KEY, JSON.stringify(data)); }
-      catch(e) { /* silently ignore */ }
+      catch (e) { /* silently ignore */ }
     }
 
     // Match doubts for a class using BOTH classId and courseId
@@ -1298,7 +2319,7 @@
 
     // ─── DASHBOARD ────────────────────────────────────────
     function renderDashboard() {
-      const myClasses  = getMyClassrooms();
+      const myClasses = getMyClassrooms();
       const navCreateBtn = document.getElementById('navCreateBtn');
       if (myClasses.length === 0) {
         showView('view-first-time');
@@ -1359,8 +2380,8 @@
         startSessionBtn.href = `session.html?topic=${encodeURIComponent(cls.name)}&id=${cls.id}`;
       }
 
-      document.getElementById('detail-title').textContent  = cls.name;
-      document.getElementById('detail-code').textContent   = cls.code + ' • Semester';
+      document.getElementById('detail-title').textContent = cls.name;
+      document.getElementById('detail-code').textContent = cls.code + ' • Semester';
       document.getElementById('detail-schedule').textContent = cls.schedule || '';
       document.getElementById('detail-header-card').style.background = bgMap[color] || 'var(--sky)';
 
@@ -1389,6 +2410,7 @@
 
       showView('view-class-detail');
       renderDoubts(cls.id);
+      renderScheduledWork(cls.id);
     }
 
     function goBack() { renderDashboard(); }
@@ -1397,8 +2419,8 @@
     let studentRowCount = 0;
 
     function openCreateModal() {
-      document.getElementById('className').value    = '';
-      document.getElementById('classCode').value    = '';
+      document.getElementById('className').value = '';
+      document.getElementById('classCode').value = '';
       document.getElementById('classSchedule').value = '';
       document.getElementById('studentEntries').innerHTML = '';
       document.getElementById('modalError').classList.remove('show');
@@ -1449,11 +2471,11 @@
     }
 
     function createClassroom() {
-      const name     = document.getElementById('className').value.trim();
-      const code     = document.getElementById('classCode').value.trim();
+      const name = document.getElementById('className').value.trim();
+      const code = document.getElementById('classCode').value.trim();
       const schedule = document.getElementById('classSchedule').value.trim();
-      const errorEl  = document.getElementById('modalError');
-      const errorText= document.getElementById('modalErrorText');
+      const errorEl = document.getElementById('modalError');
+      const errorText = document.getElementById('modalErrorText');
       errorEl.classList.remove('show');
 
       if (!name || !code) {
@@ -1467,13 +2489,13 @@
       let hasError = false;
 
       rows.forEach(r => {
-        const roll  = r.querySelector('.sr-roll').value.trim();
+        const roll = r.querySelector('.sr-roll').value.trim();
         const email = r.querySelector('.sr-email').value.trim().toLowerCase();
         if (!roll && !email) return;
         if (!roll || !email) {
           hasError = true;
           errorText.textContent = 'Each student must have both a roll number and email.';
-          if (!roll)  r.querySelector('.sr-roll').classList.add('error');
+          if (!roll) r.querySelector('.sr-roll').classList.add('error');
           if (!email) r.querySelector('.sr-email').classList.add('error');
           return;
         }
@@ -1495,20 +2517,20 @@
         return;
       }
 
-      const classrooms  = getClassrooms();
-      const colorIndex  = classrooms.length % COLORS.length;
+      const classrooms = getClassrooms();
+      const colorIndex = classrooms.length % COLORS.length;
 
       const newClass = {
-        id:          'cls_' + Date.now(),
+        id: 'cls_' + Date.now(),
         name,
-        code:        code.toUpperCase(),
+        code: code.toUpperCase(),
         schedule,
-        color:       COLORS[colorIndex],
-        icon:        ICONS[classrooms.length % ICONS.length],
+        color: COLORS[colorIndex],
+        icon: ICONS[classrooms.length % ICONS.length],
         facultyEmail: getFacultyEmail(),
-        facultyName:  getFacultyName(),
+        facultyName: getFacultyName(),
         students,
-        createdAt:   new Date().toISOString()
+        createdAt: new Date().toISOString()
       };
 
       classrooms.push(newClass);
@@ -1523,29 +2545,29 @@
       if (!iso) return '';
       const diff = Date.now() - new Date(iso).getTime();
       const mins = Math.floor(diff / 60000);
-      if (mins < 1)  return 'just now';
+      if (mins < 1) return 'just now';
       if (mins < 60) return mins + 'm ago';
       const hrs = Math.floor(mins / 60);
-      if (hrs < 24)  return hrs + 'h ago';
+      if (hrs < 24) return hrs + 'h ago';
       return Math.floor(hrs / 24) + 'd ago';
     }
 
     function escapeHtml(str) {
       if (!str) return '';
       return String(str)
-        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     function renderDoubts(classId) {
       _currentClassId = classId;
 
-      const all     = getDoubtsForClass(classId);
-      const pending  = all.filter(d => d.status === 'pending');
+      const all = getDoubtsForClass(classId);
+      const pending = all.filter(d => d.status === 'pending');
       const resolved = all.filter(d => d.status === 'resolved');
 
       // Badge in header button
-      const badge      = document.getElementById('pendingBadgeBtn');
+      const badge = document.getElementById('pendingBadgeBtn');
       const countLabel = document.getElementById('pendingCountLabel');
       if (pending.length > 0) {
         badge.textContent = pending.length;
@@ -1561,7 +2583,7 @@
 
       // Render pending
       const pendingList = document.getElementById('pendingDoubtsList');
-      const noMsg       = document.getElementById('noDoubtsMsg');
+      const noMsg = document.getElementById('noDoubtsMsg');
 
       if (pending.length === 0) {
         pendingList.innerHTML = '';
@@ -1600,7 +2622,7 @@
               ${studentDisplay}
               <p class="doubt-card-text">${escapeHtml(d.text)}</p>
               ${fileHtml}${linkHtml}
-              <div class="doubt-card-time">Posted ${new Date(d.createdAt || d.submittedAt).toLocaleString('en-IN', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+              <div class="doubt-card-time">Posted ${new Date(d.createdAt || d.submittedAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
             </div>
             <button class="resolve-btn" onclick="openResolveModal('${d.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1646,7 +2668,7 @@
 
     function toggleResolved() {
       _resolvedOpen = !_resolvedOpen;
-      const list    = document.getElementById('resolvedDoubtsList');
+      const list = document.getElementById('resolvedDoubtsList');
       const chevron = document.getElementById('resolvedChevron');
       list.style.display = _resolvedOpen ? 'block' : 'none';
       chevron.classList.toggle('open', _resolvedOpen);
@@ -1673,7 +2695,7 @@
         : `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Anonymous Student`;
 
       document.getElementById('resolveDoubtText').textContent = doubt.text;
-      document.getElementById('resolveDoubtTime').textContent  = 'Asked ' + timeAgo(doubt.createdAt || doubt.submittedAt);
+      document.getElementById('resolveDoubtTime').textContent = 'Asked ' + timeAgo(doubt.createdAt || doubt.submittedAt);
       document.getElementById('resolutionText').value = '';
       document.getElementById('charCount').textContent = '0';
       document.getElementById('resolveError').classList.remove('show');
@@ -1696,7 +2718,7 @@
     }
 
     function submitResolution() {
-      const text  = document.getElementById('resolutionText').value.trim();
+      const text = document.getElementById('resolutionText').value.trim();
       const errEl = document.getElementById('resolveError');
       if (!text) { errEl.classList.add('show'); return; }
       errEl.classList.remove('show');
@@ -1709,20 +2731,375 @@
       const now = new Date().toISOString();
 
       // ── Write ALL fields — both teacher schema and student schema ──
-      all[idx].status     = 'resolved';
+      all[idx].status = 'resolved';
       // Teacher dashboard reads:
       all[idx].resolution = text;
       all[idx].resolvedAt = now;
       // Student dashboard reads:
-      all[idx].reply      = text;
-      all[idx].repliedAt  = now;
-      all[idx].repliedBy  = facultyName;
+      all[idx].reply = text;
+      all[idx].repliedAt = now;
+      all[idx].repliedBy = facultyName;
 
       saveDoubts(all);
 
       closeResolveModal();
       showToast('✅ Doubt resolved — student will see your reply instantly!');
       if (_currentClassId) renderDoubts(_currentClassId);
+    }
+
+    // ─── SCHEDULE WORK ────────────────────────────────────
+    const SW_STORAGE_KEY = 'amigo_scheduled_work';
+    let _swType = 'poll';
+    let _swOptionCounters = {};
+    let _swCurrentFilter = 'all';
+
+    function getScheduledWork() {
+      try { return JSON.parse(localStorage.getItem(SW_STORAGE_KEY) || '[]'); }
+      catch (e) { return []; }
+    }
+
+    function saveScheduledWorkData(data) {
+      try { localStorage.setItem(SW_STORAGE_KEY, JSON.stringify(data)); }
+      catch (e) { /* silently ignore */ }
+    }
+
+    function getScheduledWorkForClass(classId) {
+      return getScheduledWork().filter(w => String(w.classId) === String(classId));
+    }
+
+    // ── Open: scroll to library first, then show empty state CTA ──
+    function openScheduleWorkModal() {
+      // Scroll to the library section first so user sees it
+      const libSection = document.querySelector('.sw-library-section');
+      if (libSection) {
+        libSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      // Small delay so the scroll completes, then open modal
+      setTimeout(() => {
+        _swType = 'poll';
+        document.getElementById('swName').value = '';
+        document.getElementById('swStep1Error').classList.remove('show');
+        document.getElementById('swStep2Error').classList.remove('show');
+
+        // Reset type tabs
+        document.querySelectorAll('#swTypeTabs .sw-tab').forEach(t => t.classList.remove('active'));
+        document.querySelector('#swTypeTabs .sw-tab').classList.add('active');
+
+        // Show step 1, hide step 2
+        document.getElementById('swStep1').style.display = 'block';
+        document.getElementById('swStep2').style.display = 'none';
+
+        showView('view-schedule-work');
+        setTimeout(() => document.getElementById('swName').focus(), 150);
+      }, 300);
+    }
+
+    function closeScheduleWorkModal() {
+      showView('view-class-detail');
+      // Re-scroll to library section
+      setTimeout(() => {
+        const libSection = document.querySelector('.sw-library-section');
+        if (libSection) libSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+
+    function selectSwType(type, btn) {
+      _swType = type;
+      document.querySelectorAll('#swTypeTabs .sw-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function goToSwStep2() {
+      const name = document.getElementById('swName').value.trim();
+      const errEl = document.getElementById('swStep1Error');
+      const errText = document.getElementById('swStep1ErrorText');
+
+      if (!name) {
+        errText.textContent = 'Please enter a name for this work item.';
+        errEl.classList.add('show');
+        return;
+      }
+      errEl.classList.remove('show');
+
+      // Set up step 2
+      const typeLabels = { poll: 'Poll', quiz: 'Quiz', question: 'Question' };
+      const typeEmojis = { poll: '📊', quiz: '🧠', question: '❓' };
+      document.getElementById('swStep2Eyebrow').textContent = 'Building ' + typeLabels[_swType];
+      document.getElementById('swStep2Title').textContent = name + ' ' + typeEmojis[_swType];
+
+      // Show the right panel
+      document.querySelectorAll('.sw-panel').forEach(p => p.classList.remove('active'));
+      const panelMap = { poll: 'swPanelPoll', quiz: 'swPanelQuiz', question: 'swPanelQuestion' };
+      document.getElementById(panelMap[_swType]).classList.add('active');
+
+      // Reset fields
+      document.getElementById('swPollQuestion').value = '';
+      document.getElementById('swQuizQuestion').value = '';
+      document.getElementById('swQuestionText').value = '';
+      document.getElementById('swPollOptions').innerHTML = '';
+      document.getElementById('swQuizOptions').innerHTML = '';
+      document.getElementById('swQuizCorrect').innerHTML = '<option value="">Select correct option…</option>';
+      _swOptionCounters = {};
+
+      // Pre-add default options
+      if (_swType === 'poll') {
+        addSwOption('swPollOptions');
+        addSwOption('swPollOptions');
+      } else if (_swType === 'quiz') {
+        addSwOption('swQuizOptions');
+        addSwOption('swQuizOptions');
+      }
+
+      document.getElementById('swStep2Error').classList.remove('show');
+      document.getElementById('swStep1').style.display = 'none';
+      document.getElementById('swStep2').style.display = 'block';
+    }
+
+    function goBackToSwStep1() {
+      document.getElementById('swStep1').style.display = 'block';
+      document.getElementById('swStep2').style.display = 'none';
+    }
+
+    // ── Dynamic option rows ──
+    const OPTION_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    function addSwOption(containerId) {
+      if (!_swOptionCounters[containerId]) _swOptionCounters[containerId] = 0;
+      const idx = _swOptionCounters[containerId];
+      _swOptionCounters[containerId]++;
+
+      const letter = OPTION_LETTERS[idx] || String(idx + 1);
+      const container = document.getElementById(containerId);
+      const row = document.createElement('div');
+      row.className = 'sw-option-row';
+      row.dataset.idx = idx;
+      row.innerHTML = `
+        <div class="sw-option-letter">${letter}</div>
+        <input class="sw-field-input sw-opt-input" type="text" placeholder="Option ${letter}">
+        <button class="sw-remove-option" onclick="removeSwOption(this, '${containerId}')" title="Remove">✕</button>
+      `;
+      container.appendChild(row);
+
+      // If quiz, update the correct answer dropdown
+      if (containerId === 'swQuizOptions') updateQuizCorrectSelect();
+    }
+
+    function removeSwOption(btn, containerId) {
+      const row = btn.closest('.sw-option-row');
+      row.style.opacity = '0';
+      row.style.transform = 'translateX(-10px)';
+      setTimeout(() => {
+        row.remove();
+        // Re-letter remaining options
+        const container = document.getElementById(containerId);
+        container.querySelectorAll('.sw-option-row').forEach((r, i) => {
+          const letter = OPTION_LETTERS[i] || String(i + 1);
+          r.querySelector('.sw-option-letter').textContent = letter;
+          r.dataset.idx = i;
+        });
+        if (containerId === 'swQuizOptions') updateQuizCorrectSelect();
+      }, 150);
+    }
+
+    function updateQuizCorrectSelect() {
+      const select = document.getElementById('swQuizCorrect');
+      const prevVal = select.value;
+      select.innerHTML = '<option value="">Select correct option…</option>';
+      document.querySelectorAll('#swQuizOptions .sw-option-row').forEach((r, i) => {
+        const letter = OPTION_LETTERS[i] || String(i + 1);
+        const text = r.querySelector('.sw-opt-input').value.trim() || `Option ${letter}`;
+        select.innerHTML += `<option value="${i}">Option ${letter}: ${escapeHtml(text)}</option>`;
+      });
+      select.value = prevVal;
+    }
+
+    // ── Save work item ──
+    function saveScheduledWork() {
+      const name = document.getElementById('swName').value.trim();
+      const errEl = document.getElementById('swStep2Error');
+      const errText = document.getElementById('swStep2ErrorText');
+      errEl.classList.remove('show');
+
+      let workItem = {
+        id: 'sw_' + Date.now(),
+        classId: _currentClassId,
+        name: name,
+        type: _swType,
+        createdAt: new Date().toISOString(),
+        facultyEmail: getFacultyEmail()
+      };
+
+      if (_swType === 'poll') {
+        const question = document.getElementById('swPollQuestion').value.trim();
+        if (!question) {
+          errText.textContent = 'Please enter a poll question.';
+          errEl.classList.add('show');
+          return;
+        }
+        const options = [];
+        document.querySelectorAll('#swPollOptions .sw-opt-input').forEach(inp => {
+          const v = inp.value.trim();
+          if (v) options.push(v);
+        });
+        if (options.length < 2) {
+          errText.textContent = 'Please add at least 2 options for the poll.';
+          errEl.classList.add('show');
+          return;
+        }
+        workItem.question = question;
+        workItem.options = options;
+
+      } else if (_swType === 'quiz') {
+        const question = document.getElementById('swQuizQuestion').value.trim();
+        if (!question) {
+          errText.textContent = 'Please enter a quiz question.';
+          errEl.classList.add('show');
+          return;
+        }
+        const options = [];
+        document.querySelectorAll('#swQuizOptions .sw-opt-input').forEach(inp => {
+          const v = inp.value.trim();
+          if (v) options.push(v);
+        });
+        if (options.length < 2) {
+          errText.textContent = 'Please add at least 2 answer options.';
+          errEl.classList.add('show');
+          return;
+        }
+        const correct = document.getElementById('swQuizCorrect').value;
+        if (correct === '') {
+          errText.textContent = 'Please select the correct answer.';
+          errEl.classList.add('show');
+          return;
+        }
+        workItem.question = question;
+        workItem.options = options;
+        workItem.correctIndex = parseInt(correct);
+
+      } else if (_swType === 'question') {
+        const question = document.getElementById('swQuestionText').value.trim();
+        if (!question) {
+          errText.textContent = 'Please enter the question.';
+          errEl.classList.add('show');
+          return;
+        }
+        workItem.question = question;
+      }
+
+      const allWork = getScheduledWork();
+      allWork.push(workItem);
+      saveScheduledWorkData(allWork);
+
+      closeScheduleWorkModal();
+      showToast(`✅ "${name}" saved! You can post it during a live session.`);
+      if (_currentClassId) renderScheduledWork(_currentClassId);
+    }
+
+    function deleteScheduledWork(workId) {
+      const allWork = getScheduledWork().filter(w => w.id !== workId);
+      saveScheduledWorkData(allWork);
+      showToast('🗑️ Work item deleted.');
+      if (_currentClassId) renderScheduledWork(_currentClassId);
+    }
+
+    // ── Filter tabs ──
+    function filterScheduledWork(type, btn) {
+      _swCurrentFilter = type;
+      document.querySelectorAll('.sw-filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      if (_currentClassId) renderScheduledWork(_currentClassId);
+    }
+
+    // ── Render library ──
+    function renderScheduledWork(classId) {
+      let items = getScheduledWorkForClass(classId);
+      const grid = document.getElementById('swLibraryGrid');
+      const emptyState = document.getElementById('swEmptyState');
+      const badge = document.getElementById('swCountBadge');
+
+      // Total count (unfiltered)
+      const totalCount = items.length;
+      badge.textContent = totalCount;
+
+      // Apply filter
+      if (_swCurrentFilter !== 'all') {
+        items = items.filter(w => w.type === _swCurrentFilter);
+      }
+
+      if (totalCount === 0) {
+        grid.innerHTML = '';
+        grid.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      grid.style.display = 'grid';
+      grid.innerHTML = '';
+
+      if (items.length === 0) {
+        grid.style.display = 'none';
+        const noResults = document.createElement('div');
+        noResults.className = 'sw-empty';
+        noResults.innerHTML = `
+          <div style="font-size:28px; margin-bottom:10px;">🔍</div>
+          <h3 style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:6px; color:var(--soft-dark);">No ${_swCurrentFilter}s found</h3>
+          <p style="font-size:13px; color:var(--text-muted);">Try a different filter or create a new ${_swCurrentFilter}.</p>
+        `;
+        grid.parentNode.insertBefore(noResults, grid.nextSibling);
+        // Remove it when filter changes (re-render will clear)
+        noResults.id = 'swNoResults';
+        return;
+      }
+
+      // Remove any previous no-results element
+      const oldNoResults = document.getElementById('swNoResults');
+      if (oldNoResults) oldNoResults.remove();
+
+      // Sort by newest first
+      items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      items.forEach((item, i) => {
+        const card = document.createElement('div');
+        card.className = 'sw-card';
+        card.style.animationDelay = (i * 0.06) + 's';
+
+        const typeIcons = { poll: '📊', quiz: '🧠', question: '❓' };
+        const typeLabels = { poll: 'POLL', quiz: 'QUIZ', question: 'QUESTION' };
+        const dateStr = new Date(item.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+
+        let optionsHtml = '';
+        if (item.options && item.options.length > 0) {
+          optionsHtml = '<div class="sw-card-options">';
+          item.options.forEach((opt, oi) => {
+            const isCorrect = item.type === 'quiz' && item.correctIndex === oi;
+            const letter = OPTION_LETTERS[oi];
+            optionsHtml += `<span class="sw-card-option-chip ${isCorrect ? 'correct' : ''}">${letter}. ${escapeHtml(opt)}${isCorrect ? ' ✓' : ''}</span>`;
+          });
+          optionsHtml += '</div>';
+        }
+
+        const previewText = item.question ? (item.question.length > 80 ? item.question.substring(0, 80) + '…' : item.question) : '';
+
+        card.innerHTML = `
+          <div class="sw-card-header">
+            <span class="sw-type-badge ${item.type}">${typeIcons[item.type]} ${typeLabels[item.type]}</span>
+            <span class="sw-card-date">${dateStr}</span>
+          </div>
+          <div class="sw-card-body">
+            <div class="sw-card-title">${escapeHtml(item.name)}</div>
+            <div class="sw-card-preview">${escapeHtml(previewText)}</div>
+            ${optionsHtml}
+          </div>
+          <div class="sw-card-footer">
+            <button class="sw-card-action delete" onclick="event.stopPropagation(); deleteScheduledWork('${item.id}')">
+              🗑️ Delete
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
     }
 
     // ─── TOAST ────────────────────────────────────────────
@@ -1737,13 +3114,13 @@
 
     // ─── INIT ─────────────────────────────────────────────
     try {
-      const savedName     = localStorage.getItem('amigo_name');
+      const savedName = localStorage.getItem('amigo_name');
       const savedInitials = localStorage.getItem('amigo_initials');
       if (savedName) {
-        document.getElementById('navAvatar').textContent = savedInitials || savedName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-        document.getElementById('navName').textContent   = savedName;
+        document.getElementById('navAvatar').textContent = savedInitials || savedName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        document.getElementById('navName').textContent = savedName;
       }
-    } catch(e) {}
+    } catch (e) { }
 
     renderDashboard();
   </script>

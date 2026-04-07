@@ -539,12 +539,31 @@
     .sw-empty-msg .emoji { font-size: 36px; margin-bottom: 10px; }
 
     /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .sidebar {
+        position: fixed;
+        right: -320px;
+        top: 60px;
+        bottom: 0;
+        z-index: 500;
+        transition: right 0.3s ease;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+      }
+      .sidebar.active {
+        right: 0;
+      }
+      .mobile-toggle {
+        display: flex !important;
+      }
+    }
+
     @media (max-width: 768px) {
-      .sidebar { display: none; }
-      .action-bar { gap: 10px; padding: 12px 16px; }
-      .act-btn { padding: 10px 18px; font-size: 13px; }
-      .topbar { padding: 12px 16px; }
+      .action-bar { gap: 8px; padding: 12px 10px; }
+      .act-btn { padding: 10px 16px; font-size: 12px; }
+      .topbar { padding: 10px 16px; }
       .class-name { display: none; }
+      .user-info { display: none; }
+      .avatar { width: 32px; height: 32px; font-size: 12px; }
     }
   </style>
 </head>
@@ -553,14 +572,21 @@
 
   <!-- ═══ TOP BAR ═══ -->
   <div class="topbar">
-    <button class="exit-btn" onclick="showExitConfirm()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
-        <polyline points="16 17 21 12 16 7" />
-        <line x1="21" y1="12" x2="9" y2="12" />
-      </svg>
-      Exit Session
-    </button>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button class="exit-btn" onclick="showExitConfirm()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+        <span class="exit-text">Exit</span>
+      </button>
+      <button class="mobile-toggle" onclick="toggleSidebar()" style="display:none; background:rgba(255,255,255,0.1); border:1.5px solid rgba(255,255,255,0.2); color:white; border-radius:50%; width:34px; height:34px; align-items:center; justify-content:center; cursor:pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
 
     <div class="topbar-center">
       <div class="live-badge">
@@ -786,7 +812,7 @@
       } catch (err) { console.error("Error polling doubts:", err); }
     }
 
-    let sessionStartTime = null;
+    let sessionStartTime = Date.now(); // Default to now
 
     window.addEventListener('DOMContentLoaded', () => {
       try {
@@ -816,6 +842,7 @@
         }).catch(e => {});
       }
 
+      // Initialize session on backend
       fetch('http://localhost:5001/start_session', { 
         method: 'POST', 
         headers: { 'Content-Type': 'application/json' }, 
@@ -827,13 +854,13 @@
       })
       .then(r => r.json())
       .then(data => {
-        if (data.startTime) {
-          sessionStartTime = data.startTime * 1000; // Convert to ms
+        if (data.success && data.startTime) {
+          sessionStartTime = data.startTime * 1000; // Use backend timestamp
+          console.log('Session started on backend at:', new Date(sessionStartTime));
         }
       })
       .catch(e => {
-        console.error('Failed to start session on backend:', e);
-        sessionStartTime = Date.now(); // Fallback
+        console.warn('Backend session start failed, using local time:', e);
       });
 
       registerLiveSession(courseId, topic);
@@ -841,20 +868,36 @@
       pollParticipants();
       participantPollInt = setInterval(pollParticipants, 2000);
       
+      // Timer Loop
       timer = setInterval(() => { 
-        if (!sessionStartTime) return;
         const now = Date.now();
-        const elapsedMs = now - sessionStartTime;
+        const elapsedMs = Math.max(0, now - sessionStartTime);
         secs = Math.floor(elapsedMs / 1000);
         const m = Math.floor(secs / 60), s = secs % 60; 
-        document.getElementById('statTime').textContent = m + ':' + String(s).padStart(2, '0'); 
+        const timeStr = m + ':' + String(s).padStart(2, '0');
+        const timeEl = document.getElementById('statTime');
+        if (timeEl) timeEl.textContent = timeStr;
       }, 1000);
+
       pollDoubts();
       pollInt = setInterval(pollDoubts, 3000);
     });
 
-    function openModal(type) { if (type === 'upload') loadScheduledWorkModal(); document.getElementById('modal-' + type).classList.add('active'); }
-    function closeModal(type) { document.getElementById('modal-' + type).classList.remove('active'); }
+    function openModal(type) { 
+      const el = document.getElementById('modal-' + type);
+      if (!el) return;
+      if (type === 'upload') loadScheduledWorkModal(); 
+      el.classList.add('active'); 
+    }
+    
+    function closeModal(type) { 
+      const el = document.getElementById('modal-' + type);
+      if (el) el.classList.remove('active'); 
+    }
+
+    function toggleSidebar() {
+      document.querySelector('.sidebar').classList.toggle('active');
+    }
 
     async function submitPoll() {
       const q = document.getElementById('pollQ').value;
@@ -1016,7 +1059,6 @@
       el.scrollTop = el.scrollHeight;
       msgCount++; document.getElementById('statMsgs').textContent = msgCount;
       loadScheduledWorkModal();
-    }
     }
 
     function showExitConfirm() { document.getElementById('exitConfirm').classList.add('active'); }

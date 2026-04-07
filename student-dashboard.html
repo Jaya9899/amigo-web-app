@@ -1173,76 +1173,85 @@
       await loadCourses();
     }
 
+    let liveSessions = [];
+    let localLive = [];
+
     try {
       // PRIMARY: Read from backend
       const res = await fetch('http://localhost:5001/get_live_sessions');
-      const data = await res.json();
-      const liveSessions = data.live_sessions || [];
-      
-      // SECONDARY: Also check localStorage (for same-browser testing)
-      const localLive = JSON.parse(localStorage.getItem('amigo_live_sessions') || '[]');
-      
-      // Combine unique sessions
-      const allLive = [...liveSessions];
-      localLive.forEach(ls => {
-        if (!allLive.some(s => String(s.classId) === String(ls.classId))) {
-          allLive.push(ls);
-        }
-      });
-
-      if (allLive.length > 0) {
-        console.log('📡 Sync: Found', allLive.length, 'live sessions on backend/local');
-      }
-
-      let changed = false;
-      const newLiveIds = new Set();
-
-      courses.forEach(c => {
-        let isActive = false;
-        const cIdStr = String(c.id).toLowerCase().trim();
-        const cRoomIdStr = String(c.classroomId || c.id).toLowerCase().trim();
-
-        for (const session of allLive) {
-          const sessionIdStr = String(session.classId).toLowerCase().trim();
-          const sessionTopic = (session.topic || '').toLowerCase().trim();
-          const sessionCourseId = (session.course_id || '').toLowerCase().trim();
-          
-          // Match by ID, Classroom ID, or Name/Topic fallback
-          if (cIdStr === sessionIdStr || 
-              cRoomIdStr === sessionIdStr || 
-              (sessionCourseId && (cIdStr === sessionCourseId || cRoomIdStr === sessionCourseId)) ||
-              (sessionTopic && (c.name.toLowerCase().includes(sessionTopic) || sessionTopic.includes(c.name.toLowerCase())))) {
-            isActive = true;
-            newLiveIds.add(String(c.id));
-            break;
-          }
-        }
-
-        const newStatus = isActive ? 'live' : 'ended';
-        if (c.status !== newStatus) {
-          console.log(`🔄 Status for "${c.name}" changed: ${c.status} -> ${newStatus}`);
-          c.status = newStatus;
-          changed = true;
-        }
-      });
-
-      // Show toast notification for newly live sessions
-      newLiveIds.forEach(id => {
-        if (!_previousLiveIds.has(id)) {
-          const course = courses.find(c => String(c.id) === id);
-          if (course) {
-            showToast(`🟢 ${course.name} is LIVE — Join now!`);
-          }
-        }
-      });
-      _previousLiveIds = newLiveIds;
-
-      if (changed) {
-        updateStats();
-        renderTable();
+      if (res.ok) {
+        const data = await res.json();
+        liveSessions = data.live_sessions || [];
       }
     } catch (e) {
-      console.warn('Sync failed:', e);
+      console.warn('Backend live sessions unreachable:', e);
+    }
+
+    try {
+      // SECONDARY: Also check localStorage (for same-browser testing)
+      localLive = JSON.parse(localStorage.getItem('amigo_live_sessions') || '[]');
+    } catch (e) {
+      console.warn('Failed to parse local live sessions:', e);
+    }
+
+    // Combine unique sessions
+    const allLive = [...liveSessions];
+    localLive.forEach(ls => {
+      if (!allLive.some(s => String(s.classId) === String(ls.classId))) {
+        allLive.push(ls);
+      }
+    });
+
+    if (allLive.length > 0) {
+      // console.log('📡 Sync: Found', allLive.length, 'live sessions');
+    }
+
+    let changed = false;
+    const newLiveIds = new Set();
+
+    courses.forEach(c => {
+      let isActive = false;
+      const cIdStr = String(c.id).toLowerCase().trim();
+      const cRoomIdStr = String(c.classroomId || c.id).toLowerCase().trim();
+
+      for (const session of allLive) {
+        const sessionIdStr = String(session.classId).toLowerCase().trim();
+        const sessionTopic = (session.topic || '').toLowerCase().trim();
+        const sessionCourseId = (session.course_id || '').toLowerCase().trim();
+        
+        // Match by ID, Classroom ID, or Name/Topic fallback
+        if (cIdStr === sessionIdStr || 
+            cRoomIdStr === sessionIdStr || 
+            (sessionCourseId && (cIdStr === sessionCourseId || cRoomIdStr === sessionCourseId)) ||
+            (sessionTopic && (c.name.toLowerCase().includes(sessionTopic) || sessionTopic.includes(c.name.toLowerCase())))) {
+          isActive = true;
+          newLiveIds.add(String(c.id));
+          break;
+        }
+      }
+
+      const newStatus = isActive ? 'live' : 'ended';
+      if (c.status !== newStatus) {
+        console.log(`🔄 Status for "${c.name}" changed: ${c.status} -> ${newStatus}`);
+        c.status = newStatus;
+        changed = true;
+      }
+    });
+
+    // Show toast notification for newly live sessions
+    newLiveIds.forEach(id => {
+      if (!_previousLiveIds.has(id)) {
+        const course = courses.find(c => String(c.id) === id);
+        if (course) {
+          showToast(`🟢 ${course.name} is LIVE — Join now!`);
+        }
+      }
+    });
+    _previousLiveIds = newLiveIds;
+
+    if (changed) {
+      updateStats();
+      renderTable();
     }
   }
 
@@ -1296,11 +1305,11 @@
     filtered.forEach((c, i) => {
       const isLive = c.status === 'live';
 
-      // JOIN button
-      const joinBtnClass = isLive ? 'btn-join-live' : 'btn-join-inactive';
-      const joinIcon     = isLive ? '▶' : '🔒';
-      const joinDisabled = isLive ? '' : 'disabled';
-      const joinOnclick  = isLive ? `onclick="joinClass('${c.id}')"` : '';
+      // JOIN button - NOW ALWAYS ACTIVE
+      const joinBtnClass = 'btn-join-live';
+      const joinIcon     = '▶';
+      const joinDisabled = '';
+      const joinOnclick  = `onclick="joinClass('${c.id}')"`;
 
       // POST DOUBT button
       const doubtOk      = !isLive;

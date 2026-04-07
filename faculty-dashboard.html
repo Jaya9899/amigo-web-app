@@ -9,6 +9,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;700&display=swap"
     rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --cream: #F5F0E8;
@@ -1962,16 +1963,37 @@
       <!-- Analytics -->
       <div style="margin-top:40px;">
         <h2 class="section-title">✨ Recent Class Analytics</h2>
-        <div id="analyticsContent" class="analytics-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+        <div id="analyticsContent" class="analytics-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
           <!-- Will be populated by renderAnalytics -->
+        </div>
+        
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; margin-top:20px;">
+          <div class="stat-card" style="padding:24px; background:white; border-radius:16px;">
+            <h4 style="margin-bottom:16px; font-family:'Fraunces', serif;">Engagement Trend</h4>
+            <canvas id="engagementChart"></canvas>
+          </div>
+          <div class="stat-card" style="padding:24px; background:white; border-radius:16px;">
+            <h4 style="margin-bottom:16px; font-family:'Fraunces', serif;">Quiz Performance</h4>
+            <canvas id="quizChart"></canvas>
+          </div>
+          <div class="stat-card" style="padding:24px; background:white; border-radius:16px;">
+            <h4 style="margin-bottom:16px; font-family:'Fraunces', serif;">Doubts Activity</h4>
+            <canvas id="doubtsChart"></canvas>
+          </div>
+          <div class="stat-card" style="padding:24px; background:white; border-radius:16px;">
+            <h4 style="margin-bottom:16px; font-family:'Fraunces', serif;">Attendance Overview</h4>
+            <canvas id="attendanceChart"></canvas>
+          </div>
         </div>
       </div>
 
       <script>
+        let charts = {};
+
         function renderAnalytics() {
           const container = document.getElementById('analyticsContent');
-          // Dummy data representing class engagement
-          const data = {
+          // Dummy summary data
+          const summary = {
             engagement: 88,
             avgQuizScore: 76,
             doubtsResolved: 14,
@@ -1980,23 +2002,98 @@
 
           container.innerHTML = `
             <div class="stat-card" style="padding:20px; background:white; border-radius:12px; border:1px solid rgba(0,0,0,0.05);">
-              <h4 style="margin-bottom:8px;">Avg Engagement</h4>
-              <div style="font-size:24px; font-weight:700; color:var(--success);">${data.engagement}%</div>
+              <h4 style="margin-bottom:8px; font-size:12px; color:var(--text-muted); text-transform:uppercase;">Avg Engagement</h4>
+              <div style="font-size:28px; font-weight:900; color:var(--success); font-family:'Fraunces', serif;">${summary.engagement}%</div>
+              <div style="font-size:11px; color:var(--success); margin-top:4px;">↑ 4% from last week</div>
             </div>
             <div class="stat-card" style="padding:20px; background:white; border-radius:12px; border:1px solid rgba(0,0,0,0.05);">
-              <h4 style="margin-bottom:8px;">Avg Quiz Score</h4>
-              <div style="font-size:24px; font-weight:700; color:var(--sky);">${data.avgQuizScore}%</div>
+              <h4 style="margin-bottom:8px; font-size:12px; color:var(--text-muted); text-transform:uppercase;">Avg Quiz Score</h4>
+              <div style="font-size:28px; font-weight:900; color:var(--sky); font-family:'Fraunces', serif;">${summary.avgQuizScore}%</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Steady performance</div>
             </div>
             <div class="stat-card" style="padding:20px; background:white; border-radius:12px; border:1px solid rgba(0,0,0,0.05);">
-              <h4 style="margin-bottom:8px;">Doubts Resolved</h4>
-              <div style="font-size:24px; font-weight:700; color:var(--peach);">${data.doubtsResolved}</div>
+              <h4 style="margin-bottom:8px; font-size:12px; color:var(--text-muted); text-transform:uppercase;">Doubts Resolved</h4>
+              <div style="font-size:28px; font-weight:900; color:var(--peach); font-family:'Fraunces', serif;">${summary.doubtsResolved}</div>
+              <div style="font-size:11px; color:var(--peach); margin-top:4px;">92% resolution rate</div>
             </div>
             <div class="stat-card" style="padding:20px; background:white; border-radius:12px; border:1px solid rgba(0,0,0,0.05);">
-              <h4 style="margin-bottom:8px;">Active Students</h4>
-              <div style="font-size:24px; font-weight:700; color:var(--dark);">${data.activeStudents}</div>
+              <h4 style="margin-bottom:8px; font-size:12px; color:var(--text-muted); text-transform:uppercase;">Active Students</h4>
+              <div style="font-size:28px; font-weight:900; color:var(--dark); font-family:'Fraunces', serif;">${summary.activeStudents}</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Out of 36 enrolled</div>
             </div>
           `;
+
+          // Initialize Charts with dummy trend data
+          initCharts();
         }
+
+        function initCharts() {
+          // Destroy existing charts to avoid overlap
+          Object.values(charts).forEach(chart => chart.destroy());
+
+          const ctxEngagement = document.getElementById('engagementChart').getContext('2d');
+          charts.engagement = new Chart(ctxEngagement, {
+            type: 'line',
+            data: {
+              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+              datasets: [{
+                label: 'Engagement (%)',
+                data: [65, 78, 82, 75, 88, 92],
+                borderColor: '#38A169',
+                backgroundColor: 'rgba(56, 161, 105, 0.1)',
+                fill: true,
+                tension: 0.4
+              }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+          });
+
+          const ctxQuiz = document.getElementById('quizChart').getContext('2d');
+          charts.quiz = new Chart(ctxQuiz, {
+            type: 'bar',
+            data: {
+              labels: ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4', 'Quiz 5'],
+              datasets: [{
+                label: 'Avg Score (%)',
+                data: [72, 68, 85, 74, 76],
+                backgroundColor: '#B8D4E8',
+                borderRadius: 8
+              }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+          });
+
+          const ctxDoubts = document.getElementById('doubtsChart').getContext('2d');
+          charts.doubts = new Chart(ctxDoubts, {
+            type: 'doughnut',
+            data: {
+              labels: ['Resolved', 'Pending', 'Escalated'],
+              datasets: [{
+                data: [45, 8, 3],
+                backgroundColor: ['#B8D4B0', '#F2C9A0', '#E53E3E'],
+                borderWidth: 0
+              }]
+            },
+            options: { responsive: true, cutout: '70%' }
+          });
+
+          const ctxAttendance = document.getElementById('attendanceChart').getContext('2d');
+          charts.attendance = new Chart(ctxAttendance, {
+            type: 'line',
+            data: {
+              labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+              datasets: [{
+                label: 'Attendance',
+                data: [30, 34, 32, 35],
+                borderColor: '#1A1A1A',
+                borderDash: [5, 5],
+                fill: false
+              }]
+            },
+            options: { responsive: true }
+          });
+        }
+
         // Run on load
         window.addEventListener('DOMContentLoaded', renderAnalytics);
       </script>

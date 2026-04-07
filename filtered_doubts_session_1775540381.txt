@@ -1,0 +1,32 @@
+
+--- Course: cls_seed_001 ---
+Total Accepted: 1
+Total Rejected: 0
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is binary search? (file: None, link: None)
+
+--- Course: cls_seed_001 ---
+Total Accepted: 1
+Total Rejected: 1
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is binary search? (file: None, link: None)
+
+--- Course: cls_seed_001 ---
+Total Accepted: 1
+Total Rejected: 2
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is binary search? (file: None, link: None)
+
+--- Course: cls_seed_001 ---
+Total Accepted: 1
+Total Rejected: 3
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is binary search? (file: None, link: None)

@@ -409,6 +409,125 @@
     animation: dotPulse 2s infinite;
   }
 
+  /* ─── POLL MODAL ─── */
+  .poll-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(14,14,18,0.85);
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .poll-modal-overlay.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .poll-card {
+    background: #1A1A1F;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 28px;
+    width: 100%;
+    max-width: 440px;
+    padding: 32px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .poll-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 100px;
+    background: rgba(168,216,200,0.15);
+    color: var(--mint);
+    margin-bottom: 20px;
+  }
+
+  .poll-q {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFF;
+    line-height: 1.3;
+    margin-bottom: 24px;
+    letter-spacing: -0.5px;
+  }
+
+  .poll-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .poll-opt {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    color: rgba(255,255,255,0.8);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .poll-opt:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: var(--mint);
+    color: #FFF;
+    transform: translateY(-2px);
+  }
+
+  .poll-opt.selected {
+    background: var(--mint);
+    color: var(--dark);
+    border-color: var(--mint);
+  }
+
+  .poll-timer {
+    margin-top: 24px;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .poll-timer-bar {
+    height: 100%;
+    background: var(--mint);
+    width: 100%;
+    transition: width 1s linear;
+  }
+
+  .poll-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+  }
+
   /* chat suggestions */
   .suggestions {
     max-width: 860px;
@@ -750,76 +869,6 @@
     color: rgba(255,255,255,0.4);
     font-weight: 600;
   }
-
-  /* ── CHAT HISTORY ── */
-  .chat-history {
-    width: 100%;
-    max-width: 860px;
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 20px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    z-index: 10;
-  }
-  /* Hide scrollbar for clean look */
-  .chat-history::-webkit-scrollbar { display: none; }
-  .chat-history { -ms-overflow-style: none; scrollbar-width: none; }
-
-  .chat-message {
-    max-width: 85%;
-    padding: 14px 18px;
-    border-radius: 16px;
-    font-size: 14px;
-    line-height: 1.5;
-    animation: fadeUp 0.3s ease both;
-  }
-
-  .my-message {
-    align-self: flex-end;
-    background: rgba(168,216,200,0.15);
-    border: 1px solid rgba(168,216,200,0.3);
-    color: rgba(255,255,255,0.9);
-    border-bottom-right-radius: 4px;
-  }
-
-  .ai-message {
-    align-self: flex-start;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.85);
-    border-bottom-left-radius: 4px;
-  }
-
-  .ai-message-rejected {
-    align-self: flex-start;
-    background: rgba(239,68,68,0.1);
-    border: 1px solid rgba(239,68,68,0.3);
-    color: #FCA5A5;
-    border-bottom-left-radius: 4px;
-  }
-
-  .chat-auth {
-    font-size: 11px;
-    font-weight: 500;
-    margin-bottom: 4px;
-    opacity: 0.6;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-
-  .chat-text {
-    word-wrap: break-word;
-  }
-
-  .chat-time {
-    font-size: 10px;
-    opacity: 0.4;
-    margin-top: 6px;
-    text-align: right;
-  }
 </style>
 </head>
 <body>
@@ -882,10 +931,6 @@
 
 
   <div class="helper-text" id="helperText">Your AI classroom companion is ready &nbsp;·&nbsp; Ask any doubt below</div>
-
-  <div class="chat-history" id="chatHistory">
-    <!-- Chat messages will be injected here -->
-  </div>
 </div>
 
 <!-- ── DOUBT BAR ── -->
@@ -918,6 +963,24 @@
   </div>
 </div>
 
+<!-- ─── POLL/QUIZ MODAL ─── -->
+<div class="poll-modal-overlay" id="pollModal">
+  <div class="poll-card">
+    <div class="poll-type-badge" id="pollBadge">📊 ACTIVE POLL</div>
+    <div class="poll-q" id="pollQuestion">How are you finding the class today?</div>
+    <div class="poll-options" id="pollOptions">
+      <!-- Options injected here -->
+    </div>
+    <div class="poll-timer">
+      <div class="poll-timer-bar" id="pollTimerBar"></div>
+    </div>
+    <div class="poll-footer">
+      <span id="pollTimerText">60s remaining</span>
+      <span>Amigo Real-time</span>
+    </div>
+  </div>
+</div>
+
 <!-- ── PROFILE SIDEBAR ── -->
 <div class="sidebar" id="sidebar">
   <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
@@ -926,20 +989,6 @@
     <div class="my-avatar-big">🎓</div>
     <div class="my-name">Rohan Kumar</div>
     <div class="my-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="96e4f9fef7f8b8fdd6f8ffe2e1b8f7f5b8fff8">[email&#160;protected]</a></div>
-    <div class="stat-row">
-      <div class="stat-pill">
-        <div class="sn">87%</div>
-        <div class="sl">Attend.</div>
-      </div>
-      <div class="stat-pill">
-        <div class="sn">12</div>
-        <div class="sl">Doubts</div>
-      </div>
-      <div class="stat-pill">
-        <div class="sn">A+</div>
-        <div class="sl">Grade</div>
-      </div>
-    </div>
   </div>
 
   <div class="sidebar-title">In this session</div>
@@ -1007,10 +1056,46 @@
   </div>
 </div>
 
+<!-- ── SESSION ENDED OVERLAY ── -->
+<div class="fg-overlay" id="sessionEndedOverlay">
+  <div class="fg-card">
+    <div class="fg-badge"><div class="fg-badge-dot" style="background:#ff4d4d"></div>Session Status</div>
+    <div class="fg-headline">Class has ended 🎬</div>
+    <div class="fg-msg">The faculty has closed this live session. Your attendance and engagement data have been saved.<br><br>Redirecting you to your dashboard...</div>
+    <div class="fg-streak" style="margin-top:20px;">🐼 Amigo is waiting for you there!</div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
+  // ── SESSION ENDED DETECTION ──
+  function handleSessionEnd() {
+    if (document.getElementById('sessionEndedOverlay').classList.contains('visible')) return;
+    
+    document.getElementById('sessionEndedOverlay').classList.add('visible');
+    // Clear intervals
+    if (typeof heartbeatInt !== 'undefined') clearInterval(heartbeatInt);
+    
+    setTimeout(() => {
+      window.location.href = 'student-dashboard.html';
+    }, 4000);
+  }
+
+  // Listen for storage changes (teacher removing session from localStorage)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'amigo_live_sessions' && currentCourseId) {
+      try {
+        const liveSessions = JSON.parse(e.newValue || '[]');
+        const isStillLive = liveSessions.some(s => String(s.classId) === String(currentCourseId));
+        if (!isStillLive) {
+          handleSessionEnd();
+        }
+      } catch (err) { console.error('Storage check failed', err); }
+    }
+  });
+
   // ── FOCUS GUARD — tab/window switch detection ──
   const FG_MESSAGES = [
     {
@@ -1110,6 +1195,47 @@
 
   let currentCourseId = null;
   let currentTopic = 'A classroom lecture about a specific academic subject';
+  let heartbeatInt = null;
+
+  // ─── HEARTBEAT / STATUS REPORTING ──────────────────────
+  function sendHeartbeat() {
+    if (!currentCourseId) return;
+    
+    const studentEmail = (localStorage.getItem('amigo_email') || '').toLowerCase();
+    const studentName = localStorage.getItem('amigo_name') || 'Student';
+    // Status is 'passive' if Focus Guard overlay is visible or tab is hidden
+    const status = (fgVisible || document.hidden) ? 'passive' : 'active';
+    
+    try {
+      const participants = JSON.parse(localStorage.getItem('amigo_session_participants') || '[]');
+      const now = new Date().toISOString();
+      
+      // Find or add this student's entry
+      let found = false;
+      for (let p of participants) {
+        if (String(p.classId) === String(currentCourseId) && p.email.toLowerCase() === studentEmail) {
+          p.lastSeen = now;
+          p.status = status;
+          p.name = studentName;
+          found = true;
+          break;
+        }
+      }
+      
+      if (!found) {
+        participants.push({
+          classId: String(currentCourseId),
+          email: studentEmail,
+          name: studentName,
+          status: status,
+          lastSeen: now,
+          joinedAt: now
+        });
+      }
+      
+      localStorage.setItem('amigo_session_participants', JSON.stringify(participants));
+    } catch (e) { console.error('Heartbeat failed:', e); }
+  }
 
   // ─── AUTO-EXIT POLLING ──────────────────────────────────
   async function checkSessionStatus() {
@@ -1120,16 +1246,125 @@
       if (data.active === false) {
         showToast('🛑 Session has ended. Redirecting...');
         setTimeout(() => {
+          // If we are the faculty, go to dashboard.
+          // If we are a student, we should have been caught by the 'storage' event listener
+          // but just in case, ensure we aren't redirecting faculty to student dashboard.
           const role = localStorage.getItem('amigo_role');
-          if (role === 'faculty') {
-            window.location.href = 'faculty-dashboard.html';
-          } else {
-            window.location.href = 'student-dashboard.html';
-          }
+          window.location.href = (role === 'faculty') ? 'faculty-dashboard.html' : 'student-dashboard.html';
         }, 2000);
       }    } catch (e) {
       console.error('Failed to check session status:', e);
     }
+  }
+
+  // ─── POLL/QUIZ POLLING ──────────────────────────────────
+  let activePollId = null;
+  let pollCountdown = null;
+
+  async function checkActiveItems() {
+    if (!currentCourseId) return;
+    try {
+      const res = await fetch(`http://localhost:8001/student/active/${currentCourseId}`, {
+        headers: { 'x-role': 'student' }
+      });
+      const data = await res.json();
+      
+      if (data.active_count > 0) {
+        const item = data.items[0]; // Get the most recent active item
+        if (activePollId !== item.id) {
+          displayActiveItem(item);
+        }
+      } else {
+        // No active items, close modal if it was open
+        closePollModal();
+      }
+    } catch (e) {
+      console.warn('Poll API check failed:', e);
+    }
+  }
+
+  function displayActiveItem(item) {
+    activePollId = item.id;
+    const modal = document.getElementById('pollModal');
+    const badge = document.getElementById('pollBadge');
+    const question = document.getElementById('pollQuestion');
+    const optionsContainer = document.getElementById('pollOptions');
+    const timerText = document.getElementById('pollTimerText');
+    const timerBar = document.getElementById('pollTimerBar');
+
+    badge.textContent = item.type === 'poll' ? '📊 ACTIVE POLL' : '🧠 LIVE QUIZ';
+    badge.style.background = item.type === 'poll' ? 'rgba(168,216,200,0.15)' : 'rgba(184,212,232,0.15)';
+    badge.style.color = item.type === 'poll' ? 'var(--mint)' : 'var(--sky)';
+    
+    question.textContent = item.question;
+    optionsContainer.innerHTML = '';
+
+    item.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'poll-opt';
+      btn.innerHTML = `<span>${opt}</span><span style="opacity:0.3; font-size:12px;">${String.fromCharCode(65 + idx)}</span>`;
+      btn.onclick = () => submitResponse(item.type, item.id, idx, btn);
+      optionsContainer.appendChild(btn);
+    });
+
+    // Timer logic
+    let remaining = item.duration_seconds || 30;
+    const total = remaining;
+    
+    clearInterval(pollCountdown);
+    modal.classList.add('active');
+
+    pollCountdown = setInterval(() => {
+      remaining--;
+      timerText.textContent = `${remaining}s remaining`;
+      timerBar.style.width = `${(remaining / total) * 100}%`;
+      
+      if (remaining <= 0) {
+        clearInterval(pollCountdown);
+        setTimeout(closePollModal, 2000);
+      }
+    }, 1000);
+  }
+
+  async function submitResponse(type, id, index, btn) {
+    // UI Feedback
+    const allBtns = document.querySelectorAll('.poll-opt');
+    allBtns.forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    allBtns.forEach(b => b.disabled = true);
+
+    const studentId = localStorage.getItem('amigo_email') || 'student@nitw.ac.in';
+    const studentName = localStorage.getItem('amigo_name') || 'Student';
+
+    try {
+      const res = await fetch(`http://localhost:8001/student/${type}/${id}/respond`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-role': 'student' },
+        body: JSON.stringify({
+          student_id: studentId,
+          student_name: studentName,
+          chosen_option_index: index
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(`✅ ${type === 'quiz' ? 'Answer' : 'Vote'} submitted!`);
+        if (type === 'quiz') {
+          // Quiz feedback logic could go here
+        }
+      } else {
+        showToast('❌ ' + data.detail);
+      }
+    } catch (e) {
+      showToast('❌ Failed to send response.');
+    }
+  }
+
+  function closePollModal() {
+    const modal = document.getElementById('pollModal');
+    modal.classList.remove('active');
+    activePollId = null;
+    clearInterval(pollCountdown);
   }
 
   // ─── INITIALIZATION ─────────────────────────────────────
@@ -1137,6 +1372,15 @@
     const params = new URLSearchParams(window.location.search);
     currentTopic = params.get('topic') || 'A classroom lecture about a specific academic subject';
     currentCourseId = params.get('id');
+
+    // Update student name from localStorage
+    const savedName = localStorage.getItem('amigo_name') || 'Student';
+    document.querySelectorAll('.profile-name, .my-name').forEach(el => {
+      el.textContent = savedName;
+    });
+    const savedEmail = localStorage.getItem('amigo_email') || 'student@nitw.ac.in';
+    const emailEl = document.querySelector('.my-email');
+    if (emailEl) emailEl.textContent = savedEmail;
 
     if (currentTopic) {
       document.getElementById('sessionSubject').textContent = currentTopic;
@@ -1147,8 +1391,16 @@
         // In a real app, we might fetch course details here
         document.getElementById('sessionMeta').textContent = `Course ID: ${currentCourseId} · B.Tech CSE · Section A`;
         
+        // Start heartbeat immediately and then every 3 seconds
+        sendHeartbeat();
+        heartbeatInt = setInterval(sendHeartbeat, 3000);
+
         // Start polling for session status
         setInterval(checkSessionStatus, 5000);
+
+        // Start polling for active polls/quizzes
+        checkActiveItems();
+        setInterval(checkActiveItems, 4000);
       }
 
       // Also notify backend in case it restarted or for robustness
@@ -1167,6 +1419,25 @@
 
     showToast('✦ Sending doubt...');
     
+    const studentEmail = (localStorage.getItem('amigo_email') || '').toLowerCase();
+    const studentName = localStorage.getItem('amigo_name') || 'Student';
+    const now = new Date().toISOString();
+
+    // Prepare doubt object for localStorage (sync with dashboards)
+    const newDoubt = {
+      id: 'doubt_' + Date.now(),
+      classId: String(currentCourseId),
+      courseId: currentCourseId,
+      courseName: currentTopic,
+      studentEmail,
+      studentName,
+      text,
+      source: 'live',
+      status: 'pending',
+      createdAt: now,
+      submittedAt: now
+    };
+
     try {
       const res = await fetch('http://localhost:5001/submit_doubts', {
         method: 'POST',
@@ -1174,7 +1445,8 @@
         body: JSON.stringify({ 
           doubt: text,
           topic: currentTopic || undefined,
-          course_id: currentCourseId || undefined
+          course_id: currentCourseId || undefined,
+          source: 'live'
         })
       });
 
@@ -1189,6 +1461,14 @@
       if (data.accepted) {
         showToast('✦ Doubt sent!');
         input.value = '';
+        
+        // Save to localStorage only if accepted by pipeline
+        try {
+          const allDoubts = JSON.parse(localStorage.getItem('amigo_doubts') || '[]');
+          allDoubts.push(newDoubt);
+          localStorage.setItem('amigo_doubts', JSON.stringify(allDoubts));
+        } catch (e) { console.error('Failed to save doubt to localStorage:', e); }
+
       } else {
         showToast('✦ Filtered: ' + (data.reason || 'not relevant'));
       }

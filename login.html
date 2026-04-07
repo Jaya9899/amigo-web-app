@@ -866,8 +866,21 @@
     }
 
     // Check if a student email is enrolled in any classroom
-    function isStudentEnrolled(email) {
-      const classrooms = getClassrooms();
+    async function isStudentEnrolled(email) {
+      let classrooms = getClassrooms();
+      
+      // If local is empty, try backend
+      if (classrooms.length === 0) {
+        try {
+          const res = await fetch('http://localhost:5001/get_classrooms');
+          const data = await res.json();
+          if (data.classrooms && data.classrooms.length > 0) {
+            classrooms = data.classrooms;
+            localStorage.setItem('amigo_classrooms', JSON.stringify(classrooms));
+          }
+        } catch (e) { console.warn('Backend classrooms unreachable during login check'); }
+      }
+      
       return classrooms.some(c => c.students && c.students.some(s => s.email.toLowerCase() === email));
     }
 

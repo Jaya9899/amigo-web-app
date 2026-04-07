@@ -1,0 +1,25 @@
+
+--- Course: cls_seed_003 ---
+Total Accepted: 1
+Total Rejected: 0
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is data structures? (file: None, link: None)
+
+--- Course: cls_seed_001 ---
+Total Accepted: 1
+Total Rejected: 0
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is software engineering? (file: None, link: None)
+
+--- Course: cls_seed_003 ---
+Total Accepted: 2
+Total Rejected: 0
+
+--- ACCEPTED DOUBTS CLUSTERS ---
+--- UNCLUSTERED ---
+ - what is data structures? (file: None, link: None)
+ - what is binary search? (file: None, link: None)

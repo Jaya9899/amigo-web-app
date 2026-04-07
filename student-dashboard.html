@@ -1113,14 +1113,29 @@
   }
 
   // ─── LOAD ENROLLED COURSES ───────────────────────────────
-  function loadCourses() {
+  async function loadCourses() {
     const studentEmail = (localStorage.getItem('amigo_email') || '').toLowerCase();
-    const allClassrooms = getClassrooms();
+    
+    // PRIMARY: Get classrooms from backend
+    let allClassrooms = [];
+    try {
+      const res = await fetch('http://localhost:5001/get_classrooms');
+      const data = await res.json();
+      allClassrooms = data.classrooms || [];
+      console.log('📡 Fetched classrooms from backend:', allClassrooms.length);
+      
+      // Update localStorage with these classrooms so other pages (like login/enrollment checks) see them
+      if (allClassrooms.length > 0) {
+        localStorage.setItem('amigo_classrooms', JSON.stringify(allClassrooms));
+      }
+    } catch (e) {
+      console.warn('Backend classrooms unreachable, falling back to localStorage');
+      allClassrooms = getClassrooms();
+    }
+
     const enrolled = allClassrooms.filter(cls =>
       cls.students && cls.students.some(s => s.email.toLowerCase() === studentEmail)
     );
-
-    console.log('📚 loadCourses | Student email:', studentEmail, '| Enrolled classrooms count:', enrolled.length, '| All classrooms:', allClassrooms);
 
     if (enrolled.length > 0) {
       courses = enrolled.map((cls, i) => ({
@@ -1136,7 +1151,6 @@
         status: 'ended', // Default to ended, sync will update to live
         classroomId: cls.id
       }));
-      console.log('✅ Using enrolled classrooms. Courses:', courses.map(c => ({name: c.name, id: c.id, classroomId: c.classroomId})));
     } else {
       // Use static courses if not enrolled in any real classroom
       // Add classroomId to STATIC_COURSES for better matching
@@ -1145,31 +1159,39 @@
         classroomId: sc.id,
         status: 'ended'
       }));
-      console.log('⚠️  Using STATIC_COURSES (no enrollment). Courses:', courses.map(c => ({name: c.name, id: c.id, classroomId: c.classroomId})));
     }
+    renderTable();
+    updateStats();
   }
 
-  // ─── SYNC ACTIVE SESSIONS (localStorage-first, backend fallback) ──
+  // ─── SYNC ACTIVE SESSIONS (backend-first) ──
   let _previousLiveIds = new Set();
 
-  function syncActiveSessions() {
+  async function syncActiveSessions() {
     // Ensure courses are loaded
     if (courses.length === 0) {
-      console.log('⚠️  Courses array is empty, loading courses...');
-      loadCourses();
+      await loadCourses();
     }
 
-    // PRIMARY: Read from localStorage (instant, works across tabs)
     try {
-      const liveSessions = JSON.parse(localStorage.getItem('amigo_live_sessions') || '[]');
-      console.log('📡 Live sessions from localStorage:', liveSessions);
-      console.log('🎓 Current courses array (count:', courses.length, '):', courses.map(c => ({name: c.name, id: c.id, classroomId: c.classroomId, status: c.status})));
+      // PRIMARY: Read from backend
+      const res = await fetch('http://localhost:5001/get_live_sessions');
+      const data = await res.json();
+      const liveSessions = data.live_sessions || [];
+      
+      // SECONDARY: Also check localStorage (for same-browser testing)
+      const localLive = JSON.parse(localStorage.getItem('amigo_live_sessions') || '[]');
+      
+      // Combine unique sessions
+      const allLive = [...liveSessions];
+      localLive.forEach(ls => {
+        if (!allLive.some(s => String(s.classId) === String(ls.classId))) {
+          allLive.push(ls);
+        }
+      });
 
-      if (liveSessions.length === 0) {
-        console.log('⚠️  No live sessions in localStorage');
-      }
-      if (courses.length === 0) {
-        console.log('⚠️  No courses loaded');
+      if (allLive.length > 0) {
+        console.log('📡 Sync: Found', allLive.length, 'live sessions on backend/local');
       }
 
       let changed = false;
@@ -1177,43 +1199,39 @@
 
       courses.forEach(c => {
         let isActive = false;
-        
-        // Check all possible ID formats
         const cIdStr = String(c.id).toLowerCase().trim();
         const cRoomIdStr = String(c.classroomId || c.id).toLowerCase().trim();
-        
-        console.log(`  🔍 Checking course "${c.name}" | id="${c.id}" (${cIdStr}) | classroomId="${c.classroomId}" (${cRoomIdStr})`);
-        
-        // Match against any live session
-        for (const session of liveSessions) {
+
+        for (const session of allLive) {
           const sessionIdStr = String(session.classId).toLowerCase().trim();
-          console.log(`    🆚 vs session classId="${session.classId}" (${sessionIdStr})`);
+          const sessionTopic = (session.topic || '').toLowerCase().trim();
+          const sessionCourseId = (session.course_id || '').toLowerCase().trim();
           
-          if (cIdStr === sessionIdStr || cRoomIdStr === sessionIdStr) {
+          // Match by ID, Classroom ID, or Name/Topic fallback
+          if (cIdStr === sessionIdStr || 
+              cRoomIdStr === sessionIdStr || 
+              (sessionCourseId && (cIdStr === sessionCourseId || cRoomIdStr === sessionCourseId)) ||
+              (sessionTopic && (c.name.toLowerCase().includes(sessionTopic) || sessionTopic.includes(c.name.toLowerCase())))) {
             isActive = true;
-            console.log(`    ✅ MATCH FOUND!`);
+            newLiveIds.add(String(c.id));
             break;
-          } else {
-            console.log(`    ❌ No match`);
           }
         }
-        
+
         const newStatus = isActive ? 'live' : 'ended';
-        if (isActive) newLiveIds.add(String(c.id));
-        
         if (c.status !== newStatus) {
-          console.log(`🔄 Status changed for "${c.name}": ${c.status} → ${newStatus}`);
+          console.log(`🔄 Status for "${c.name}" changed: ${c.status} -> ${newStatus}`);
           c.status = newStatus;
           changed = true;
         }
       });
 
-      // Show toast notification for newly live sessions and suggest joining
+      // Show toast notification for newly live sessions
       newLiveIds.forEach(id => {
         if (!_previousLiveIds.has(id)) {
           const course = courses.find(c => String(c.id) === id);
           if (course) {
-            showToast('🟢 ' + course.name + ' is LIVE — Join now!');
+            showToast(`🟢 ${course.name} is LIVE — Join now!`);
           }
         }
       });
@@ -1224,31 +1242,8 @@
         renderTable();
       }
     } catch (e) {
-      console.error('Failed to read live sessions from localStorage:', e);
+      console.warn('Sync failed:', e);
     }
-
-    // FALLBACK: Also try backend (for sessions started before this feature)
-    fetch('http://localhost:5001/active_sessions')
-      .then(r => r.json())
-      .then(data => {
-        if (data.active_sessions) {
-          let changed = false;
-          courses.forEach(c => {
-            if (c.status !== 'live') {
-              const isActive = data.active_sessions.includes(String(c.id)) || data.active_sessions.includes(String(c.classroomId));
-              if (isActive) {
-                c.status = 'live';
-                changed = true;
-              }
-            }
-          });
-          if (changed) {
-            updateStats();
-            renderTable();
-          }
-        }
-      })
-      .catch(() => { /* backend unavailable, localStorage is enough */ });
   }
 
   function parseDays(schedule) {
@@ -1285,7 +1280,7 @@
       tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:48px 20px;color:var(--text-muted);">
         <div style="font-size:40px;margin-bottom:12px;">📭</div>
         <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-bottom:6px;color:var(--soft-dark);">No classrooms yet</div>
-        <div>You haven't been enrolled in any classroom by a faculty member yet.</div>
+        <div>You haven't been enrolled in any classroom yet. Use the "Join New Class" button above to enroll using a classroom code.</div>
       </td></tr>`;
       return;
     }
@@ -1310,7 +1305,8 @@
       // POST DOUBT button
       const doubtOk      = !isLive;
       const doubtClass   = doubtOk ? 'btn-doubt-available' : 'btn-doubt-unavailable';
-      const doubtIcon    = doubtOk ? '💬' : '🔴';
+      const doubtIcon    = doubtOk ? '💬' : '🔒';
+      const doubtText    = doubtOk ? 'Post Doubt' : 'Session Live';
       const doubtDisabled = doubtOk ? '' : 'disabled';
       const doubtOnclick  = doubtOk ? `onclick="openDoubtModal('${c.id}')"` : '';
 
@@ -1365,7 +1361,7 @@
           </td>
           <td class="btn-col" data-label="Post Doubt">
             <div class="actions-wrap">
-              <button class="action-btn ${doubtClass}" ${doubtDisabled} ${doubtOnclick}>${doubtIcon} Post Doubt</button>
+              <button class="action-btn ${doubtClass}" ${doubtDisabled} ${doubtOnclick} title="${isLive ? 'Use the live doubt bar during session' : 'Ask a question post-class'}">${doubtIcon} ${doubtText}</button>
             </div>
           </td>
           <td class="btn-col" data-label="My Doubts">
@@ -1482,6 +1478,7 @@
       text,
       fileUrl:     fileName || null,
       link:        linkValue || null,
+      source:      'dashboard',
       status:      'pending',
       // Teacher dashboard reads createdAt
       createdAt:   now,
@@ -1510,7 +1507,8 @@
           topic:     activeDoubtCourse ? activeDoubtCourse.name : undefined,
           course_id: activeDoubtCourse ? String(activeDoubtCourse.id) : 'default',
           file_url:  fileName,
-          link:      linkValue || null
+          link:      linkValue || null,
+          source:    'dashboard'
         })
       });
 

@@ -22,6 +22,7 @@ class DoubtSubmission:
     """Result of submitting a single doubt through the pipeline."""
     text: str
     accepted: bool
+    source: str = "live"  # "live" or "dashboard"
     doubt_id: int | None = None
     rejection_reason: str = ""
     mod_result: ModResult | None = None
@@ -99,7 +100,7 @@ class DoubtPipeline:
                 return True
         return False
 
-    def submit_doubt(self, text: str, file_url: str = None, link: str = None) -> DoubtSubmission:
+    def submit_doubt(self, text: str, file_url: str = None, link: str = None, source: str = "live") -> DoubtSubmission:
         """
         Process a single student doubt through the full pipeline.
         
@@ -117,6 +118,7 @@ class DoubtPipeline:
             sub = DoubtSubmission(
                 text=text,
                 accepted=False,
+                source=source,
                 rejection_reason=f"[{mod_result.label}] {mod_result.reason}",
                 mod_result=mod_result,
                 file_url=file_url,
@@ -132,6 +134,7 @@ class DoubtPipeline:
             sub = DoubtSubmission(
                 text=text,
                 accepted=False,
+                source=source,
                 rejection_reason=f"Off-topic for \"{topic_result.topic}\" (similarity: {topic_result.similarity:.2f})",
                 topic_result=topic_result,
                 file_url=file_url,
@@ -147,6 +150,7 @@ class DoubtPipeline:
         sub = DoubtSubmission(
             text=text,
             accepted=True,
+            source=source,
             doubt_id=doubt_id,
             mod_result=mod_result,
             topic_result=topic_result,
